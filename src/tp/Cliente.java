@@ -1,0 +1,179 @@
+package tp;
+
+import java.util.Scanner;
+
+public class Cliente implements EventListener {
+    private static int contadorId = 0;
+    private int id;
+    private String nombre;
+    private long cuit;
+    private String email;
+    private Direccion direccion;
+    private Coordenada coordenadas;
+
+    //constructor
+    public Cliente(String nombre, long cuit, String email, Direccion direccion, Coordenada coordenadas) {
+        setId();
+        setNombre(nombre);
+        setCuit(cuit);
+        setEmail(email);
+        setDireccion(direccion);
+        setCoordenadas(coordenadas);
+    }
+
+    //getters-setter
+    public void setId() {
+        this.id = ++contadorId;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    public void setCuit(long cuit) {
+        this.cuit = cuit;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+    public void setCoordenadas(Coordenada coordenadas) {
+        this.coordenadas = coordenadas;
+    }
+
+    public int getId() {
+        return id;
+    }
+    public long getCuit() {
+        return cuit;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public Direccion getDireccion() {
+        return direccion;
+    }
+    public Coordenada getCoordenadas() {
+        return coordenadas;
+    }
+    public String getNombre() {
+        return nombre;
+    }
+
+    //metodos
+    public void printAll(){
+        System.out.println("ID: " + getId());
+        System.out.println("Nombre: " + getNombre());
+        System.out.println("Cuit: " + getCuit());
+        System.out.println("Email: " + getEmail());
+        System.out.println("Direccion(" + "Calle:" + this.direccion.getCalle() + ", Altura:" + this.direccion.getAltura() + ", Ciudad:" + this.direccion.getCiudad() + ", Pais:" + this.direccion.getPais()  +")");
+        System.out.println("Coordenadas(" + "Lat:" + this.coordenadas.getLat() + ", Lng:" + this.coordenadas.getLng()+")");
+
+    }
+    public boolean nombreIgual(String nom){
+        return this.getNombre().equalsIgnoreCase(nom);
+    }
+    public boolean cuitIgual(long cuit){
+        return this.getCuit() == cuit;
+    }
+    public boolean idIgual(int id){
+        return this.getId() == id;
+    }
+
+    public Pedido generarPedido(Vendedor vendedor){
+        Pedido pedido = new Pedido(this);
+        System.out.println("Los items disponibles del vendedor "+ vendedor.getNombre() + " son: ");
+        vendedor.printAllItemMenu();
+        System.out.println("Elija los productos que desee, poner 0 para finalizar: ");
+        int idProducto = -1;
+
+        while (idProducto == -1) {
+            System.out.print("Ingrese el ID del producto: ");
+            Scanner sc = new Scanner(System.in);
+            idProducto = sc.nextInt();
+
+            if (idProducto != 0) {
+                try {
+                    // Intenta obtener el producto por su ID
+                    ItemMenu item = vendedor.getItemMenu(idProducto);
+
+                    ItemPedido itemPedido = new ItemPedido(item, pedido);
+                    pedido.addItemPedido(itemPedido);
+                    System.out.println("Producto agregado al pedido: " + item.getNombre());
+                    idProducto = -1;
+
+                } catch (ItemNoEncontradoException e) {
+                    // Captura la excepción si no se encuentra el producto
+                    System.out.println("No existe producto con ese id, ingreselo nuevamente.");
+                    idProducto = -1;
+                }
+            }
+
+        }
+        this.metodoPago(pedido);
+        System.out.println("Pedido generado con éxito.");
+        vendedor.addPedido(pedido);
+
+        return pedido;
+
+    }
+
+    public void metodoPago(Pedido pedido){
+        System.out.println("Elegir metodo de pago: |  1=Transferencia  |  2=MercadoPago  |  3=Efectivo  |");
+
+        while (true) {
+            Scanner sc = new Scanner(System.in);
+            int i  = sc.nextInt();
+            sc.nextLine();
+
+            if (i == 1) {
+                pedido.pagarTransferencia();
+                pedido.getMetodoPago().obtenerInformacion();
+                break;
+            } else if (i == 2) {
+                pedido.pagarMercadoPago();
+                pedido.getMetodoPago().obtenerInformacion();
+                break;
+            } else if(i == 3){
+                pedido.pagarEfectivo();
+                pedido.getMetodoPago().obtenerInformacion();
+                break;
+            } else {
+                System.out.println("Metodo incorrecto ingrese uno valido.");
+                System.out.println("Elegir metodo de pago:  1=Transferencia  |  2=MercadoPago  |  3=Efectivo");
+            }
+
+        }
+    }
+
+    @Override
+    public void update(Pedido p) {
+
+        System.out.println("Su pedido " + p.getId() + "se encuentra en estado:" + p.getEstado().stringEstado());
+
+        if (p.estado() == TipoEstado.ENVIADO){
+            System.out.println("Elegir metodo de pago: ");
+
+            while(true){
+                System.out.println(" 1=Transferencia  |  2=MercadoPago  |  3=Efectivo");
+                Scanner sc = new Scanner(System.in);
+                int i  = sc.nextInt();
+                if (i == 1) {
+                    p.pagarMercadoPago();
+                    break;
+                }
+                else if(i == 2){
+                    p.pagarTransferencia();
+                    break;
+                }
+                else if (i == 3){
+                    p.pagarEfectivo();
+                    break;
+                }
+                else{
+                    System.out.println("Ingrese un metodo de pago correcto");
+                }
+            }
+        }
+    }
+}
