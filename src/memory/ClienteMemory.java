@@ -54,17 +54,17 @@ public class ClienteMemory implements ClienteDAO {
         return clientesFiltrados;
     }
     @Override
-    public List<Cliente> filtrarClientePorId(int id) throws ClienteNoEncontradoException{
+    public Cliente filtrarClientePorId(int id) throws ClienteNoEncontradoException{
         
-        List<Cliente> clientesFiltrados = clientes.stream()
+        Cliente clienteFiltrados = clientes.stream()
                 .filter(c -> c.getId() == id)
-                .collect(Collectors.toList());
+                .findFirst().orElse(null);
         
-        if(clientesFiltrados.isEmpty()){
+        if(clienteFiltrados == null){
             throw new ClienteNoEncontradoException("No se encontraron clientes con id:" + id);
         }
         
-        return clientesFiltrados;
+        return clienteFiltrados;
     }
     
     

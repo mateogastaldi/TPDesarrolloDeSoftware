@@ -23,6 +23,7 @@ public class VendedorMemory implements VendedorDAO {
     }
 
     //getters
+    @Override
     public List<Vendedor> getVendedores(){
         return this.vendedores;
     }
@@ -39,6 +40,7 @@ public class VendedorMemory implements VendedorDAO {
     }
 
     //metodos
+    @Override
     public void addVendedor(Vendedor v){
         this.vendedores.add(v);
     }
@@ -68,4 +70,5 @@ public class VendedorMemory implements VendedorDAO {
 
         return vendedoresFiltrados;
     }
+
 }

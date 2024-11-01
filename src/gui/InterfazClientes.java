@@ -12,6 +12,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.Iterator;
 import java.util.List;
+import java.awt.event.ActionEvent;
+
+
 
 /**
  *
@@ -26,6 +29,8 @@ public class InterfazClientes extends javax.swing.JFrame {
         initComponents();
     }
 
+
+
     public void mostrar(String nombre){
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Nombre");
@@ -34,7 +39,41 @@ public class InterfazClientes extends javax.swing.JFrame {
         model.addColumn("Ciudad");
         model.addColumn("Calle");
         model.addColumn("Altura");
-        model.addColumn("Acciones");
+        model.addColumn("Editar");
+        model.addColumn("Eliminar");
+
+        //Acciones de los botones de la tabla
+        Action actionEditar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+
+                // Obtiene el ID del cliente desde la tabla en la columna correspondiente
+                Object clienteId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                // Recupera los datos completos del cliente con el ID obtenido
+                Cliente cliente = ClienteMemory.getInstance().filtrarClientePorId((int) clienteId);
+
+                // Crea y muestra una nueva interfaz para editar los datos del cliente
+                if (cliente != null) {
+                    InterfazClienteEditar editarClienteFrame = new InterfazClienteEditar(cliente);
+                    editarClienteFrame.setVisible(true);
+                }
+            }
+        };
+        Action actionEliminar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+
+                // Obtiene el ID del cliente desde la tabla en la columna correspondiente
+                Object clienteId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                ClienteMemory.getInstance().eliminarCliente((int) clienteId);
+            };
+        };
 
         if(nombre != null){
             try{
@@ -50,6 +89,7 @@ public class InterfazClientes extends javax.swing.JFrame {
                             cliente.getDireccion().getCalle(),
                             cliente.getDireccion().getAltura()
                     });
+
 
                 }
 
@@ -72,6 +112,7 @@ public class InterfazClientes extends javax.swing.JFrame {
                             cliente.getDireccion().getCalle(),
                             cliente.getDireccion().getAltura()
                     });
+
     
                 }
 
@@ -80,7 +121,13 @@ public class InterfazClientes extends javax.swing.JFrame {
 
             }
         }
+        // Crear la tabla con el modelo
         tablaClientes.setModel(model);
+        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaClientes,actionEditar,6);
+        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaClientes,actionEliminar,7);
+
+
+
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

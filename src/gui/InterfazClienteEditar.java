@@ -4,17 +4,23 @@
  */
 package gui;
 
+import tp.Cliente;
+import tp.Direccion;
+
 /**
  *
  * @author mateo
  */
 public class InterfazClienteEditar extends javax.swing.JFrame {
 
+    private Cliente cliente;
+
     /**
      * Creates new form InterfazVendedores
      */
-    public InterfazClienteEditar() {
+    public InterfazClienteEditar(Cliente cliente) {
         initComponents();
+        this.cliente = cliente;
     }
 
     /**
@@ -30,21 +36,26 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        editarPais = new javax.swing.JTextField();
+        editarNombre = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        editarCiudad = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        editarCalle = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        editarAltura = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        editarCuit = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        botonConfirmarEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                formKeyTyped(evt);
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(222, 222, 222));
 
@@ -68,21 +79,21 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
         jLabel1.setText("Nombre:");
         jLabel1.setToolTipText("");
 
-        jTextField2.setBackground(new java.awt.Color(222, 222, 222));
-        jTextField2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        editarPais.setBackground(new java.awt.Color(222, 222, 222));
+        editarPais.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        editarPais.setForeground(new java.awt.Color(0, 0, 0));
+        editarPais.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                editarPaisActionPerformed(evt);
             }
         });
 
-        jTextField3.setBackground(new java.awt.Color(222, 222, 222));
-        jTextField3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jTextField3.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        editarNombre.setBackground(new java.awt.Color(222, 222, 222));
+        editarNombre.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        editarNombre.setForeground(new java.awt.Color(0, 0, 0));
+        editarNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                editarNombreActionPerformed(evt);
             }
         });
 
@@ -98,12 +109,12 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
         jLabel4.setText("Calle:");
         jLabel4.setToolTipText("");
 
-        jTextField4.setBackground(new java.awt.Color(222, 222, 222));
-        jTextField4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jTextField4.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        editarCiudad.setBackground(new java.awt.Color(222, 222, 222));
+        editarCiudad.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        editarCiudad.setForeground(new java.awt.Color(0, 0, 0));
+        editarCiudad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                editarCiudadActionPerformed(evt);
             }
         });
 
@@ -113,12 +124,12 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
         jLabel5.setText("Ciudad:");
         jLabel5.setToolTipText("");
 
-        jTextField5.setBackground(new java.awt.Color(222, 222, 222));
-        jTextField5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jTextField5.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        editarCalle.setBackground(new java.awt.Color(222, 222, 222));
+        editarCalle.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        editarCalle.setForeground(new java.awt.Color(0, 0, 0));
+        editarCalle.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                editarCalleActionPerformed(evt);
             }
         });
 
@@ -128,12 +139,17 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
         jLabel6.setText("Altura:");
         jLabel6.setToolTipText("");
 
-        jTextField6.setBackground(new java.awt.Color(222, 222, 222));
-        jTextField6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jTextField6.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        editarAltura.setBackground(new java.awt.Color(222, 222, 222));
+        editarAltura.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        editarAltura.setForeground(new java.awt.Color(0, 0, 0));
+        editarAltura.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                editarAlturaActionPerformed(evt);
+            }
+        });
+        editarAltura.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                editarAlturaKeyTyped(evt);
             }
         });
 
@@ -143,23 +159,28 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
         jLabel7.setText("CUIT:");
         jLabel7.setToolTipText("");
 
-        jTextField7.setBackground(new java.awt.Color(222, 222, 222));
-        jTextField7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jTextField7.setForeground(new java.awt.Color(0, 0, 0));
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        editarCuit.setBackground(new java.awt.Color(222, 222, 222));
+        editarCuit.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        editarCuit.setForeground(new java.awt.Color(0, 0, 0));
+        editarCuit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                editarCuitActionPerformed(evt);
+            }
+        });
+        editarCuit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                editarCuitKeyTyped(evt);
             }
         });
 
         jButton1.setBackground(new java.awt.Color(161, 19, 32));
         jButton1.setText("Cancelar");
 
-        jButton2.setBackground(new java.awt.Color(65, 105, 225));
-        jButton2.setText("Confirmar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        botonConfirmarEditar.setBackground(new java.awt.Color(65, 105, 225));
+        botonConfirmarEditar.setText("Confirmar");
+        botonConfirmarEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                botonConfirmarEditarActionPerformed(evt);
             }
         });
 
@@ -185,17 +206,17 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(botonConfirmarEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(22, 22, 22))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(65, 65, 65)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(editarPais, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editarCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editarCalle, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editarAltura, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editarCuit, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 289, Short.MAX_VALUE))))
         );
         jPanel3Layout.setVerticalGroup(
@@ -207,32 +228,32 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editarNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editarPais, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(editarCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(editarCalle, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(editarAltura, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(editarCuit, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(46, 46, 46))
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(botonConfirmarEditar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -270,79 +291,89 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void editarPaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarPaisActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_editarPaisActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void editarNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_editarNombreActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void editarCiudadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarCiudadActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_editarCiudadActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void editarCalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarCalleActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_editarCalleActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void editarAlturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarAlturaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_editarAlturaActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void editarCuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarCuitActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_editarCuitActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void botonConfirmarEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarEditarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        String nombre = editarNombre.getText();
+        String pais = editarPais.getText();
+        String ciudad = editarCiudad.getText();
+        String calle = editarCalle.getText();
+        int altura;
+        if(editarAltura.getText().equals("")){
+             altura = -1;
+
+        }else  { altura = Integer.parseInt(editarAltura.getText());}
+        long cuit;
+        if(editarCuit.getText().equals("")){
+             cuit = -1;
+        }else  { cuit = Long.parseLong(editarCuit.getText());}
+        if(pais.equals("")) pais = cliente.getDireccion().getPais();
+        if(altura == -1) altura = cliente.getDireccion().getAltura();
+        if(ciudad.equals("")) ciudad = cliente.getDireccion().getCiudad();
+        if(calle.equals("")) calle = cliente.getDireccion().getCalle();
+        Direccion direccion = new Direccion(calle,altura,ciudad,pais);
+
+
+        cliente.modificarAtributos(nombre,cuit,direccion);
+        InterfazClientes clientesFrame = new InterfazClientes();
+        clientesFrame.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_botonConfirmarEditarActionPerformed
+
+    private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if(!(Character.isLetter(c)) && c!=' ') evt.consume();
+    }//GEN-LAST:event_formKeyTyped
+
+    private void editarAlturaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_editarAlturaKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if( c<'0' || c>'9') evt.consume();
+    }//GEN-LAST:event_editarAlturaKeyTyped
+
+    private void editarCuitKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_editarCuitKeyTyped
+        char c = evt.getKeyChar();
+        if( c<'0' || c>'9') evt.consume();
+    }//GEN-LAST:event_editarCuitKeyTyped
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfazClienteEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfazClienteEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfazClienteEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfazClienteEditar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new InterfazClienteEditar().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonConfirmarEditar;
+    private javax.swing.JTextField editarAltura;
+    private javax.swing.JTextField editarCalle;
+    private javax.swing.JTextField editarCiudad;
+    private javax.swing.JTextField editarCuit;
+    private javax.swing.JTextField editarNombre;
+    private javax.swing.JTextField editarPais;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -352,11 +383,5 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
     // End of variables declaration//GEN-END:variables
 }
