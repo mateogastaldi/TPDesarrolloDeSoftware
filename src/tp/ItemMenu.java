@@ -9,7 +9,7 @@ public abstract class ItemMenu {
     private boolean aptoVegano;
     private boolean aptoCeliaco;
     private Categoria categoria;
-    private  Vendedor vendedor;
+    private Vendedor vendedor;
 
     //constructor
     public ItemMenu(String nombre, String descripcion, double precio,boolean aptoVegano, boolean aptoCeliaco, Categoria categoria, Vendedor vendedor) {

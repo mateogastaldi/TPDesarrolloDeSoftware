@@ -1,5 +1,6 @@
 package tp;
 
+import exceptions.ItemPedidoNoEncontradoException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -66,9 +67,9 @@ public class Vendedor {
     public ArrayList<ItemMenu> getItemMenu(){return this.itemMenu;}
     public ArrayList<Pedido> getPedidos(){return this.pedidos;}
 
-    public ItemMenu getItemMenu(int id) throws ItemNoEncontradoException {
+    public ItemMenu getItemMenu(int id) throws ItemPedidoNoEncontradoException {
         for(ItemMenu item: this.itemMenu) if(item.getId() == id) return item;
-        throw new ItemNoEncontradoException("no encontrado");
+        throw new ItemPedidoNoEncontradoException("no encontrado");
     }
 
     private void setId() {this.id = ++contadorId;}

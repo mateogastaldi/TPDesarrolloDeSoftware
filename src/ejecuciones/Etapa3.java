@@ -1,5 +1,6 @@
 package ejecuciones;
 
+import memory.ItemPedidoMemory;
 import tp.*;
 
 import java.lang.reflect.Array;
@@ -124,7 +125,7 @@ public class Etapa3 {
 
         //Printeo de los pedidos en la lista de ItemPedidoMemory antes de ser filtrados
         System.out.println("Items pedidos antes de ser filtrados: ");
-        ItemPedidoMemory.getInstance().printPedidos();
+        //ItemPedidoMemory.getInstance().printPedidos();
 
         //Filtra e imprime el nombre de los items cuyo cliente tenga el nombre ingresado
         System.out.println("Filtrado por nombre del cliente\nIngrese un nombre del cliente: ");

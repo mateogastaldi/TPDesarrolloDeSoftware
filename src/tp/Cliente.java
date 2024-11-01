@@ -1,5 +1,6 @@
 package tp;
 
+import exceptions.ItemPedidoNoEncontradoException;
 import java.util.Scanner;
 
 public class Cliente implements EventListener {
@@ -102,7 +103,7 @@ public class Cliente implements EventListener {
                     System.out.println("Producto agregado al pedido: " + item.getNombre());
                     idProducto = -1;
 
-                } catch (ItemNoEncontradoException e) {
+                } catch (ItemPedidoNoEncontradoException e) {
                     // Captura la excepción si no se encuentra el producto
                     System.out.println("No existe producto con ese id, ingreselo nuevamente.");
                     idProducto = -1;
