@@ -147,6 +147,15 @@ public class Cliente implements EventListener {
         }
     }
 
+    public void modificarAtributos(String nombre, long cuit, Direccion direccion){
+
+        if(!nombre.equals("")) setNombre(nombre);
+        if(cuit != -1) setCuit(cuit);
+        setDireccion(direccion);
+
+
+    }
+
     @Override
     public void update(Pedido p) {
 

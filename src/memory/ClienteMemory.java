@@ -66,6 +66,16 @@ public class ClienteMemory implements ClienteDAO {
         
         return clienteFiltrados;
     }
-    
-    
+
+    @Override
+    public void eliminarCliente(int id) throws ClienteNoEncontradoException {
+        Cliente cliente = clientes.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+
+        if(cliente == null){
+            ClienteNoEncontradoException exc = new ClienteNoEncontradoException("Cliente no encontrado");
+        }
+        else {
+            clientes.remove(cliente);
+        }
+    }
 }
