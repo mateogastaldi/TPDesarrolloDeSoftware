@@ -1,5 +1,7 @@
 package tp;
 
+import exceptions.cliente.direccion.DireccionNoCreadaException;
+
 public class Direccion {
     //atributos
     private String calle;

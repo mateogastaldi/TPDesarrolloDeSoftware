@@ -2,7 +2,7 @@
 package memory;
 
 import DAO.ItemsMenuDAO;
-import exceptions.ItemMenuNoEncontradoException;
+import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import tp.ItemMenu;
 
 import java.util.ArrayList;

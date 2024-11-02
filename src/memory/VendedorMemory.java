@@ -3,7 +3,7 @@ package memory;
 
 import DAO.VendedorDAO;
 import tp.Vendedor;
-import exceptions.VendedorNoEncontradoException;
+import exceptions.vendedor.VendedorNoEncontradoException;
 
 import java.util.ArrayList;
 import java.util.List;

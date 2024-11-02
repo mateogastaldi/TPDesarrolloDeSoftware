@@ -2,7 +2,7 @@
 package DAO;
 
 import java.util.List;
-import exceptions.ClienteNoEncontradoException;
+import exceptions.cliente.ClienteNoEncontradoException;
 import tp.Cliente;
 
 public interface ClienteDAO {

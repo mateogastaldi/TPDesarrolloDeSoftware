@@ -5,7 +5,7 @@ import DAO.ItemPedidoDAO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import exceptions.ItemPedidoNoEncontradoException;
+import exceptions.itemPedido.ItemPedidoNoEncontradoException;
 import tp.ItemPedido;
 
 public class ItemPedidoMemory implements ItemPedidoDAO{

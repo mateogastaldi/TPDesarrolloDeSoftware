@@ -3,7 +3,7 @@ package DAO;
 
 import java.util.List;
 import tp.Pedido;
-import exceptions.PedidoNoEncontradoException;
+import exceptions.Pedido.PedidoNoEncontradoException;
 
 public interface PedidosDAO {
     List<Pedido> getPedido() throws PedidoNoEncontradoException;

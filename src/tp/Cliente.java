@@ -1,6 +1,6 @@
 package tp;
 
-import exceptions.ItemPedidoNoEncontradoException;
+import exceptions.itemPedido.ItemPedidoNoEncontradoException;
 import java.util.Scanner;
 
 public class Cliente implements EventListener {

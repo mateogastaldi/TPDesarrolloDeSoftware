@@ -4,8 +4,7 @@
  */
 package gui.cliente;
 
-import DAO.ClienteDAO;
-import exceptions.ClienteNoEncontradoException;
+import exceptions.cliente.ClienteNoEncontradoException;
 import gui.ButtonColumn;
 import gui.itemMenu.InterfazItemsMenu;
 import gui.pedido.InterfazPedidos;

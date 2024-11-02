@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import tp.Cliente;
 import java.util.stream.Collectors;
-import exceptions.ClienteNoEncontradoException;
+import exceptions.cliente.ClienteNoEncontradoException;
 import DAO.ClienteDAO;
 
 public class ClienteMemory implements ClienteDAO {

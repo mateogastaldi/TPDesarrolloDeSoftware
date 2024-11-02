@@ -1,4 +1,4 @@
-package exceptions;
+package exceptions.vendedor;
 
 public class VendedorNoEncontradoException extends RuntimeException{
     public VendedorNoEncontradoException(String message) {super(message);}

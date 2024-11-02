@@ -1,7 +1,7 @@
 
 package DAO;
 
-import exceptions.VendedorNoEncontradoException;
+import exceptions.vendedor.VendedorNoEncontradoException;
 import tp.Vendedor;
 
 import java.util.List;

@@ -4,7 +4,7 @@ package DAO;
 import java.util.List;
 
 import tp.ItemMenu;
-import exceptions.ItemMenuNoEncontradoException;
+import exceptions.itemMenu.ItemMenuNoEncontradoException;
 
 public interface ItemsMenuDAO{
     List<ItemMenu> getItemMenus() throws ItemMenuNoEncontradoException;
