@@ -1,6 +1,6 @@
 package ejecuciones;
 
-import gui.InterfazClientes;
+import gui.cliente.InterfazClientes;
 
 public class Etapa6 {
     public static void ejecutar() {

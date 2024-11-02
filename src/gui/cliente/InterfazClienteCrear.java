@@ -2,15 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package gui;
+package gui.cliente;
 
 import memory.ClienteMemory;
 import tp.Cliente;
 import tp.Coordenada;
 import tp.Direccion;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  *
@@ -212,6 +209,11 @@ public class InterfazClienteCrear extends javax.swing.JFrame {
 
         botonCancelar.setBackground(new java.awt.Color(161, 19, 32));
         botonCancelar.setText("Cancelar");
+        botonCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonCancelarActionPerformed(evt);
+            }
+        });
 
         botonConfirmar.setBackground(new java.awt.Color(65, 105, 225));
         botonConfirmar.setText("Confirmar");
@@ -491,6 +493,13 @@ public class InterfazClienteCrear extends javax.swing.JFrame {
         char c = evt.getKeyChar();
         if( (c<'0' || c>'9') && c!='.') evt.consume();
     }//GEN-LAST:event_lonClienteKeyTyped
+
+    private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarActionPerformed
+        // TODO add your handling code here:
+        InterfazClientes intClientes = new InterfazClientes();
+        intClientes.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_botonCancelarActionPerformed
 
    
 

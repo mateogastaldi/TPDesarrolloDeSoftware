@@ -112,6 +112,11 @@ public class ButtonColumn extends AbstractCellEditor
 */
 	}
 
+	public void setIcon(Icon icon){
+		renderButton.setIcon(icon);
+		editButton.setIcon(icon);
+	}
+
 	@Override
 	public Component getTableCellEditorComponent(
 		JTable table, Object value, boolean isSelected, int row, int column)

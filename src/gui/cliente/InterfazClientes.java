@@ -2,9 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package gui;
+package gui.cliente;
 
+import DAO.ClienteDAO;
 import exceptions.ClienteNoEncontradoException;
+import gui.ButtonColumn;
+import gui.itemMenu.InterfazItemsMenu;
+import gui.pedido.InterfazPedidos;
+import gui.vendedores.InterfazVendedores;
 import memory.ClienteMemory;
 import tp.Cliente;
 
@@ -13,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import java.util.Iterator;
 import java.util.List;
 import java.awt.event.ActionEvent;
-
 
 
 /**
@@ -67,13 +71,30 @@ public class InterfazClientes extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 JTable table = (JTable) e.getSource();
                 int modelRow = Integer.valueOf(e.getActionCommand());
-
                 // Obtiene el ID del cliente desde la tabla en la columna correspondiente
                 Object clienteId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
-                ClienteMemory.getInstance().eliminarCliente((int) clienteId);
+                int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Deseas eliminar el cliente?",
+                        "Confirmación de eliminación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                if(confirm == JOptionPane.YES_OPTION){
+
+                    try{
+                        ClienteMemory.getInstance().eliminarCliente((int) clienteId);
+
+
+                    }catch (ClienteNoEncontradoException ex){
+                        JOptionPane.showMessageDialog(null,ex.getMessage());
+                    }
+                }
             };
         };
+
+
 
         if(nombre != null){
             try{
@@ -125,6 +146,8 @@ public class InterfazClientes extends javax.swing.JFrame {
         tablaClientes.setModel(model);
         ButtonColumn buttonColumnEditar = new ButtonColumn(tablaClientes,actionEditar,6);
         ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaClientes,actionEliminar,7);
+
+
 
 
 

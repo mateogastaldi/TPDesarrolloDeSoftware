@@ -147,11 +147,12 @@ public class Cliente implements EventListener {
         }
     }
 
-    public void modificarAtributos(String nombre, long cuit, Direccion direccion){
+    public void modificarAtributos(String nombre, long cuit, Direccion direccion,String email,Coordenada coordenadas){
 
         if(!nombre.equals("")) setNombre(nombre);
         if(cuit != -1) setCuit(cuit);
         setDireccion(direccion);
+        setCoordenadas(coordenadas);
 
 
     }
