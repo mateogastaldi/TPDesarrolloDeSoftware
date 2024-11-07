@@ -4,6 +4,23 @@
  */
 package gui.itemMenu;
 
+import exceptions.cliente.ClienteNoEncontradoException;
+import exceptions.itemMenu.ItemMenuNoEncontradoException;
+import gui.ButtonColumn;
+import gui.cliente.InterfazClientes;
+import gui.pedido.InterfazPedidos;
+import gui.vendedores.InterfazVendedores;
+import memory.ClienteMemory;
+import memory.ItemsMenuMemory;
+import tp.Cliente;
+import tp.ItemMenu;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  *
  * @author mateo
@@ -34,7 +51,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         BotonCliente = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaItemsMenu = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         CrearNuevoItemMenu = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -64,10 +81,20 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         BotonPedidos.setBackground(new java.awt.Color(65, 105, 225));
         BotonPedidos.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         BotonPedidos.setText("Pedidos");
+        BotonPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonPedidosActionPerformed(evt);
+            }
+        });
 
         BotonCliente.setBackground(new java.awt.Color(65, 105, 225));
         BotonCliente.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         BotonCliente.setText("Clientes");
+        BotonCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonClienteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -99,26 +126,8 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(222, 222, 222));
         jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 128)));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Nombre", "ID", "Nombre Vendedor", "Precio", "Categoria", "Editar", "Eliminar"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
+        mostrar(null);
+        jScrollPane1.setViewportView(tablaItemsMenu);
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(155, 155, 155));
@@ -178,11 +187,12 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CrearNuevoItemMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BuscadorDeItemMenu))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(BuscarBoton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(CrearNuevoItemMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(BuscadorDeItemMenu)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -215,18 +225,157 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    public void mostrar(String nombre){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Nombre");
+        model.addColumn("ID");
+        model.addColumn("Nombre Vendedor");
+        model.addColumn("Precio");
+        model.addColumn("Categoria");
+        model.addColumn("Apto Vegano");
+        model.addColumn("Apto Celiaco");
+        model.addColumn("Editar");
+        model.addColumn("Eliminar");
+
+        //Acciones de los botones de la tabla
+        Action actionEditar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+
+                // Obtiene el ID del item menu desde la tabla en la columna correspondiente
+                Object itemMenuId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                // Recupera los datos completos del cliente con el ID obtenido
+                ItemMenu itemMenu = ItemsMenuMemory.getInstance().filtrarItemMenuPorId((int) itemMenuId);
+
+                // Crea y muestra una nueva interfaz para editar los datos del cliente
+                if (itemMenu != null) {
+                    InterfazItemsMenuEditar editarItemMenuInterfaz = new InterfazItemsMenuEditar(itemMenu);
+                    editarItemMenuInterfaz.setVisible(true);
+                }
+            }
+        };
+        Action actionEliminar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+                // Obtiene el ID del item Menu desde la tabla en la columna correspondiente
+                Object itemMenuId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Deseas eliminar el Item Menu?",
+                        "Confirmación de eliminación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                if(confirm == JOptionPane.YES_OPTION){
+
+                    try{
+                        ItemsMenuMemory.getInstance().eliminarItemMenu((int) itemMenuId);
+
+
+                    }catch (ItemMenuNoEncontradoException ex){
+                        JOptionPane.showMessageDialog(null,ex.getMessage());
+                    }
+                }
+            };
+        };
+
+
+
+        if(nombre != null){
+            try{
+                List<ItemMenu> itemsMenu = ItemsMenuMemory.getInstance().filtrarItemMenuPorNombre(nombre);
+                Iterator<ItemMenu> iterator = itemsMenu.iterator();
+                while(iterator.hasNext()){
+                    ItemMenu itemMenu = iterator.next();
+                    model.addRow(new Object[]{
+                            itemMenu.getNombre(),
+                            itemMenu.getId(),
+                            itemMenu.getVendedor().getNombre(),
+                            itemMenu.getPrecio(),
+                            itemMenu.getCategoria().getDescripcion(),
+                            itemMenu.getAptoVegano(),
+                            itemMenu.getAptoCeliaco(),
+                    });
+
+
+                }
+
+            }catch(ClienteNoEncontradoException e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+
+            }
+        }
+        else{
+            try{
+                List<Cliente> clientes = ClienteMemory.getInstance().getClientes();
+                Iterator<Cliente> iterator = clientes.iterator();
+                while(iterator.hasNext()){
+                    Cliente cliente = iterator.next();
+                    model.addRow(new Object[]{
+                            cliente.getNombre(),
+                            cliente.getId(),
+                            cliente.getDireccion().getPais(),
+                            cliente.getDireccion().getCiudad(),
+                            cliente.getDireccion().getCalle(),
+                            cliente.getDireccion().getAltura()
+                    });
+
+
+                }
+
+            }catch(ClienteNoEncontradoException e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+
+            }
+        }
+        // Crear la tabla con el modelo
+        tablaItemsMenu.setModel(model);
+        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaItemsMenu,actionEditar,6);
+        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaItemsMenu,actionEliminar,7);
+
+
+
+
+
+    }
 
     private void BotonVendedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVendedoresActionPerformed
         // TODO add your handling code here:
+        InterfazVendedores interfazVendedores = new InterfazVendedores();
+        interfazVendedores.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_BotonVendedoresActionPerformed
 
     private void CrearNuevoItemMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearNuevoItemMenuActionPerformed
         // TODO add your handling code here:
+        InterfazItemMenuCrear interfazItemMenuCrear = new InterfazItemMenuCrear();
+        interfazItemMenuCrear.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_CrearNuevoItemMenuActionPerformed
 
     private void BuscarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarBotonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BuscarBotonActionPerformed
+
+    private void BotonClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonClienteActionPerformed
+        // TODO add your handling code here:
+        InterfazClientes interfazClientes = new InterfazClientes();
+        interfazClientes.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_BotonClienteActionPerformed
+
+    private void BotonPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonPedidosActionPerformed
+        // TODO add your handling code here:
+        InterfazPedidos interfazPedidos = new InterfazPedidos();
+        interfazPedidos.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_BotonPedidosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -277,7 +426,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tablaItemsMenu;
     // End of variables declaration//GEN-END:variables
 }

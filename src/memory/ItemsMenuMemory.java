@@ -2,6 +2,7 @@
 package memory;
 
 import DAO.ItemsMenuDAO;
+import exceptions.cliente.ClienteNoEncontradoException;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import tp.ItemMenu;
 
@@ -55,13 +56,13 @@ public class ItemsMenuMemory implements ItemsMenuDAO {
         return itemsFiltrados;
     }
     @Override
-    public List<ItemMenu> filtrarItemMenuPorId(int id) throws ItemMenuNoEncontradoException{
+    public ItemMenu filtrarItemMenuPorId(int id) throws ItemMenuNoEncontradoException{
 
-        List<ItemMenu> itemsFiltrados = itemMenus.stream()
+        ItemMenu itemsFiltrados = itemMenus.stream()
                 .filter(i -> i.getId() == id)
-                .collect(Collectors.toList());
+                .findFirst().orElse(null);
 
-        if(itemsFiltrados.isEmpty()){
+        if(itemsFiltrados == null){
             throw new ItemMenuNoEncontradoException("No se encontraron items con id:" + id);
         }
 
@@ -138,5 +139,16 @@ public class ItemsMenuMemory implements ItemsMenuDAO {
         }
 
         return itemFiltrados;
+    }
+
+    public void eliminarItemMenu(int id) throws ItemMenuNoEncontradoException{
+        ItemMenu itemMenu = itemMenus.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+
+        if(itemMenu == null){
+            ItemMenuNoEncontradoException exc = new ItemMenuNoEncontradoException("Item no encontrado");
+        }
+        else {
+            itemMenus.remove(itemMenu);
+        }
     }
 }

@@ -139,6 +139,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Pedidos"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotonPedidosActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="BotonCliente">
               <Properties>
@@ -150,6 +153,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Clientes"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BotonClienteActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -195,11 +201,13 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jTextField1" min="-2" pref="44" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="CrearNuevoItemMenu" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                          <Component id="jLabel1" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="BuscarBoton" alignment="1" min="-2" pref="43" max="-2" attributes="0"/>
-                          <Component id="BuscadorDeItemMenu" alignment="3" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="CrearNuevoItemMenu" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                              <Component id="jLabel1" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                              <Component id="BuscadorDeItemMenu" alignment="3" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace pref="29" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="358" max="-2" attributes="0"/>
@@ -215,7 +223,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="jTable1">
+                <Component class="javax.swing.JTable" name="tablaItemsMenu">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="7" rowCount="4">

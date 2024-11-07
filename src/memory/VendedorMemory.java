@@ -58,13 +58,13 @@ public class VendedorMemory implements VendedorDAO {
         return vendedoresFiltrados;
     }
     @Override
-    public List<Vendedor> filtrarVendedorPorId(int id) throws VendedorNoEncontradoException{
+    public Vendedor filtrarVendedorPorId(int id) throws VendedorNoEncontradoException{
 
-        List<Vendedor> vendedoresFiltrados = vendedores.stream()
+        Vendedor vendedoresFiltrados = vendedores.stream()
                 .filter(v -> v.getId() == id)
-                .collect(Collectors.toList());
+                .findFirst().orElse(null);
 
-        if(vendedoresFiltrados.isEmpty()){
+        if(vendedoresFiltrados == null){
             throw new VendedorNoEncontradoException("No se encontraron vendedores con id:" + id);
         }
 
