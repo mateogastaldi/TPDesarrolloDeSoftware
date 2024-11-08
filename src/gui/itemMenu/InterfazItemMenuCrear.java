@@ -82,10 +82,10 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         aptoVeganoCheckBox = new javax.swing.JCheckBox();
         aptoCeliacoCheckBox = new javax.swing.JCheckBox();
+        DropDownListCategoria = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        DropDownListCategoria = new javax.swing.JComboBox<>(modeloDropDownListCategoria());
-        DropDownListVendedor = new javax.swing.JComboBox<>(modeloDropDownListVendedor());
+        DropDownListVendedor = new javax.swing.JComboBox<>();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -216,6 +216,11 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
         aptoVeganoCheckBox.setBackground(new java.awt.Color(222, 222, 222));
         aptoVeganoCheckBox.setForeground(new java.awt.Color(0, 0, 0));
         aptoVeganoCheckBox.setText("Apto Vegano");
+        aptoVeganoCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aptoVeganoCheckBoxActionPerformed(evt);
+            }
+        });
 
         aptoCeliacoCheckBox.setBackground(new java.awt.Color(222, 222, 222));
         aptoCeliacoCheckBox.setForeground(new java.awt.Color(0, 0, 0));
@@ -276,15 +281,13 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
                                 .addComponent(descripcionItem, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(aptoVeganoCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(DropDownListCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                        .addGap(107, 107, 107)
-                                        .addComponent(aptoCeliacoCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(aptoVeganoCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(DropDownListCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(aptoCeliacoCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(147, 147, 147)))
                 .addContainerGap())
         );
@@ -307,13 +310,18 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(DropDownListCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(DropDownListVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(aptoVeganoCheckBox)
-                    .addComponent(aptoCeliacoCheckBox))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 188, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DropDownListVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(aptoCeliacoCheckBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(aptoVeganoCheckBox)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 178, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -413,6 +421,10 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_aptoCeliacoCheckBoxActionPerformed
 
+    private void aptoVeganoCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aptoVeganoCheckBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_aptoVeganoCheckBoxActionPerformed
+
    
 
 
@@ -485,8 +497,8 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CuadroTitulo;
-    private javax.swing.JComboBox<Categoria> DropDownListCategoria;
-    private javax.swing.JComboBox<Vendedor> DropDownListVendedor;
+    private javax.swing.JComboBox<String> DropDownListCategoria;
+    private javax.swing.JComboBox<String> DropDownListVendedor;
     private javax.swing.JCheckBox aptoCeliacoCheckBox;
     private javax.swing.JCheckBox aptoVeganoCheckBox;
     private javax.swing.JButton botonCancelar;

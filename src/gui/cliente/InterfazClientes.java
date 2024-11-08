@@ -4,12 +4,13 @@
  */
 package gui.cliente;
 
+import DAO.FACTORY.DAOFactory;
 import exceptions.cliente.ClienteNoEncontradoException;
 import gui.ButtonColumn;
 import gui.itemMenu.InterfazItemsMenu;
 import gui.pedido.InterfazPedidos;
 import gui.vendedores.InterfazVendedores;
-import memory.ClienteMemory;
+
 import tp.Cliente;
 
 import javax.swing.*;
@@ -56,7 +57,7 @@ public class InterfazClientes extends javax.swing.JFrame {
                 Object clienteId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
                 // Recupera los datos completos del cliente con el ID obtenido
-                Cliente cliente = ClienteMemory.getInstance().filtrarClientePorId((int) clienteId);
+                Cliente cliente = DAOFactory.getInstance().getClienteDAO().filtrarClientePorId((int) clienteId);
 
                 // Crea y muestra una nueva interfaz para editar los datos del cliente
                 if (cliente != null) {
@@ -83,7 +84,7 @@ public class InterfazClientes extends javax.swing.JFrame {
                 if(confirm == JOptionPane.YES_OPTION){
 
                     try{
-                        ClienteMemory.getInstance().eliminarCliente((int) clienteId);
+                        DAOFactory.getInstance().getClienteDAO().eliminarCliente((int) clienteId);
 
 
                     }catch (ClienteNoEncontradoException ex){
@@ -97,7 +98,7 @@ public class InterfazClientes extends javax.swing.JFrame {
 
         if(nombre != null){
             try{
-                List<Cliente> clientes = ClienteMemory.getInstance().filtrarClientePorNombre(nombre);
+                List<Cliente> clientes = DAOFactory.getInstance().getClienteDAO().filtrarClientePorNombre(nombre);
                 Iterator<Cliente> iterator = clientes.iterator();
                 while(iterator.hasNext()){
                     Cliente cliente = iterator.next();
@@ -120,7 +121,7 @@ public class InterfazClientes extends javax.swing.JFrame {
         }
         else{
             try{
-                List<Cliente> clientes = ClienteMemory.getInstance().getClientes();
+                List<Cliente> clientes = DAOFactory.getInstance().getClienteDAO().getClientes();
                 Iterator<Cliente> iterator = clientes.iterator();
                 while(iterator.hasNext()){
                     Cliente cliente = iterator.next();

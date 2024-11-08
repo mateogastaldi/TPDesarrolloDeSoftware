@@ -2,20 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package gui.itemMenu;
+package gui.itemMenu.categoria;
 
-import DAO.CategoriaDAO;
 import DAO.FACTORY.DAOFactory;
-import DAO.ItemsMenuDAO;
-import DAO.VendedorDAO;
 import exceptions.cliente.ClienteNoEncontradoException;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
+import exceptions.itemMenu.categoria.CategoriaNoCreadaException;
+import exceptions.itemMenu.categoria.CategoriaNoEncontradaException;
 import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
 import gui.pedido.InterfazPedidos;
 import gui.vendedores.InterfazVendedores;
-import tp.Cliente;
-import tp.ItemMenu;
+import tp.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -27,12 +25,12 @@ import java.util.List;
  *
  * @author mateo
  */
-public class InterfazItemsMenu extends javax.swing.JFrame {
+public class InterfazCategoria extends javax.swing.JFrame {
 
     /**
      * Creates new form InterfazVendedores
      */
-    public InterfazItemsMenu() {initComponents();}
+    public InterfazCategoria() {initComponents();}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,14 +49,16 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         BotonCliente = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaItemsMenu = new javax.swing.JTable();
+        tablaCategoria = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
-        CrearNuevoItemMenu = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        BuscadorDeItemMenu = new javax.swing.JTextField();
+        nombreCategoria = new javax.swing.JTextField();
         BuscarBoton = new javax.swing.JButton();
         CrearNuevaCategoria = new javax.swing.JButton();
-        editarOEliminarCategoria = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        Buscador = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        dropDownListCategoria = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -128,50 +128,48 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(222, 222, 222));
         jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 128)));
 
-        tablaItemsMenu.setModel(new javax.swing.table.DefaultTableModel(
+        tablaCategoria.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Nombre", "ID", "Nombre Vendedor", "Precio", "Categoria", "Editar", "Eliminar"
+                "Nombre", "ID", "Tipo Item", "Editar", "Eliminar"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
-        jScrollPane1.setViewportView(tablaItemsMenu);
+        jScrollPane1.setViewportView(tablaCategoria);
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(155, 155, 155));
         jTextField1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField1.setText("Lista de Items Menu");
-
-        CrearNuevoItemMenu.setBackground(new java.awt.Color(65, 105, 225));
-        CrearNuevoItemMenu.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        CrearNuevoItemMenu.setText("Crear Nuevo ItemMenu");
-        CrearNuevoItemMenu.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CrearNuevoItemMenuActionPerformed(evt);
-            }
-        });
+        jTextField1.setText("Lista de Categorias");
 
         jLabel1.setBackground(new java.awt.Color(222, 222, 222));
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Buscador:");
+        jLabel1.setText("Nombre:");
 
-        BuscadorDeItemMenu.setBackground(new java.awt.Color(222, 222, 222));
-        BuscadorDeItemMenu.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        BuscadorDeItemMenu.setForeground(new java.awt.Color(155, 155, 155));
+        nombreCategoria.setBackground(new java.awt.Color(222, 222, 222));
+        nombreCategoria.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        nombreCategoria.setForeground(new java.awt.Color(155, 155, 155));
 
         BuscarBoton.setBackground(new java.awt.Color(65, 105, 225));
         BuscarBoton.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -191,12 +189,24 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
             }
         });
 
-        editarOEliminarCategoria.setBackground(new java.awt.Color(65, 105, 225));
-        editarOEliminarCategoria.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        editarOEliminarCategoria.setText("Editar o Eliminar Categoria ");
-        editarOEliminarCategoria.addActionListener(new java.awt.event.ActionListener() {
+        jLabel2.setBackground(new java.awt.Color(222, 222, 222));
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Buscador:");
+
+        Buscador.setBackground(new java.awt.Color(222, 222, 222));
+        Buscador.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        Buscador.setForeground(new java.awt.Color(155, 155, 155));
+
+        jLabel3.setBackground(new java.awt.Color(222, 222, 222));
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Tipo Item:");
+
+        dropDownListCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "PLATO", "BEBIDA" }));
+        dropDownListCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editarOEliminarCategoriaActionPerformed(evt);
+                dropDownListCategoriaActionPerformed(evt);
             }
         });
 
@@ -204,28 +214,29 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 861, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField1)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(CrearNuevaCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(CrearNuevoItemMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGap(270, 270, 270)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(editarOEliminarCategoria)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(0, 39, Short.MAX_VALUE)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BuscadorDeItemMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addComponent(Buscador, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nombreCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(dropDownListCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(CrearNuevaCategoria)))
                 .addContainerGap())
-            .addComponent(jScrollPane1)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,16 +245,23 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CrearNuevoItemMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BuscadorDeItemMenu)
-                    .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CrearNuevaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editarOEliminarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Buscador))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(CrearNuevaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dropDownListCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nombreCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -278,11 +296,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Nombre");
         model.addColumn("ID");
-        model.addColumn("Nombre Vendedor");
-        model.addColumn("Precio");
-        model.addColumn("Categoria");
-        model.addColumn("Apto Vegano");
-        model.addColumn("Apto Celiaco");
+        model.addColumn("Tipo Item");
         model.addColumn("Editar");
         model.addColumn("Eliminar");
 
@@ -293,16 +307,16 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 JTable table = (JTable) e.getSource();
                 int modelRow = Integer.valueOf(e.getActionCommand());
 
-                // Obtiene el ID del item menu desde la tabla en la columna correspondiente
-                Object itemMenuId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+                // Obtiene el ID de la categoria desde la tabla en la columna correspondiente
+                Object categoriaId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
-                // Recupera los datos completos del cliente con el ID obtenido
-                ItemMenu itemMenu = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorId((int) itemMenuId);
+                // Recupera los datos completos de la categoria con el ID obtenido
+                Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaId((int) categoriaId);
 
                 // Crea y muestra una nueva interfaz para editar los datos del cliente
-                if (itemMenu != null) {
-                    InterfazItemsMenuEditar editarItemMenuInterfaz = new InterfazItemsMenuEditar(itemMenu);
-                    editarItemMenuInterfaz.setVisible(true);
+                if (categoria != null) {
+                    InterfazCategoriaEditar interfazCategoriaEditar = new InterfazCategoriaEditar(categoria);
+                    interfazCategoriaEditar.setVisible(true);
                 }
             }
         };
@@ -311,12 +325,12 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 JTable table = (JTable) e.getSource();
                 int modelRow = Integer.valueOf(e.getActionCommand());
-                // Obtiene el ID del item Menu desde la tabla en la columna correspondiente
-                Object itemMenuId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+                // Obtiene el ID de la categoria desde la tabla en la columna correspondiente
+                Object categoriaId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
                 int confirm = JOptionPane.showConfirmDialog(
                         null,
-                        "¿Deseas eliminar el Item Menu?",
+                        "¿Deseas eliminar la categoria?",
                         "Confirmación de eliminación",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE
@@ -324,10 +338,10 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 if(confirm == JOptionPane.YES_OPTION){
 
                     try{
-                        DAOFactory.getInstance().getItemsMenuDAO().eliminarItemMenu((int) itemMenuId);
+                        DAOFactory.getInstance().getCategoriaDAO().eliminarCategoria((int) categoriaId);
 
 
-                    }catch (ItemMenuNoEncontradoException ex){
+                    }catch (CategoriaNoEncontradaException ex){
                         JOptionPane.showMessageDialog(null,ex.getMessage());
                     }
                 }
@@ -338,55 +352,49 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
         if(nombre != null){
             try{
-                List<ItemMenu> itemsMenu = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorNombre(nombre);
-                Iterator<ItemMenu> iterator = itemsMenu.iterator();
+                List<Categoria> categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre(nombre);
+                Iterator<Categoria> iterator = categoria.iterator();
                 while(iterator.hasNext()){
-                    ItemMenu itemMenu = iterator.next();
+                    Categoria cat = iterator.next();
                     model.addRow(new Object[]{
-                            itemMenu.getNombre(),
-                            itemMenu.getId(),
-                            itemMenu.getVendedor().getNombre(),
-                            itemMenu.getPrecio(),
-                            itemMenu.getCategoria().getDescripcion(),
-                            itemMenu.getAptoVegano(),
-                            itemMenu.getAptoCeliaco(),
+                            cat.getDescripcion(),
+                            cat.getId(),
+                            cat.getTipoItem().getClass().getName(),
                     });
 
 
                 }
 
-            }catch(ClienteNoEncontradoException e){
+            }catch(CategoriaNoEncontradaException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }
         }
         else{
             try{
-                List<Cliente> clientes = DAOFactory.getInstance().getClienteDAO().getClientes();
-                Iterator<Cliente> iterator = clientes.iterator();
+                List<Categoria> categorias = DAOFactory.getInstance().getCategoriaDAO().getCategorias();
+                Iterator<Categoria> iterator = categorias.iterator();
                 while(iterator.hasNext()){
-                    Cliente cliente = iterator.next();
+                    Categoria cat = iterator.next();
                     model.addRow(new Object[]{
-                            cliente.getNombre(),
-                            cliente.getId(),
-                            cliente.getDireccion().getPais(),
-                            cliente.getDireccion().getCiudad(),
-                            cliente.getDireccion().getCalle(),
-                            cliente.getDireccion().getAltura()
+                            cat.getDescripcion(),
+                            cat.getId(),
+                            cat.getTipoItem().getClass().getName(),
+
                     });
 
 
                 }
 
-            }catch(ClienteNoEncontradoException e){
+            }catch(CategoriaNoEncontradaException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }
         }
         // Crear la tabla con el modelo
-        tablaItemsMenu.setModel(model);
-        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaItemsMenu,actionEditar,6);
-        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaItemsMenu,actionEliminar,7);
+        tablaCategoria.setModel(model);
+        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaCategoria,actionEditar,6);
+        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaCategoria,actionEliminar,7);
 
 
 
@@ -400,13 +408,6 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         interfazVendedores.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_BotonVendedoresActionPerformed
-
-    private void CrearNuevoItemMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearNuevoItemMenuActionPerformed
-        // TODO add your handling code here:
-        InterfazItemMenuCrear interfazItemMenuCrear = new InterfazItemMenuCrear();
-        interfazItemMenuCrear.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_CrearNuevoItemMenuActionPerformed
 
     private void BuscarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarBotonActionPerformed
         // TODO add your handling code here:
@@ -428,11 +429,28 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
     private void CrearNuevaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearNuevaCategoriaActionPerformed
         // TODO add your handling code here:
+        try{
+            if(dropDownListCategoria.getSelectedIndex() == 0){
+                Categoria<Plato> categoriaPlato = new Categoria<>(nombreCategoria.getText(), Plato.class);
+                DAOFactory.getInstance().getCategoriaDAO().addCategoria(categoriaPlato);
+            }
+            else{
+                if(dropDownListCategoria.getSelectedIndex() == 1){
+                    Categoria<Bebida> categoriaBebida = new Categoria<>(nombreCategoria.getText(), Bebida.class);
+                    DAOFactory.getInstance().getCategoriaDAO().addCategoria(categoriaBebida);
+                }
+            }
+
+
+        } catch (CategoriaNoEncontradaException e) {
+            throw new CategoriaNoCreadaException(e.getMessage());
+        }
+
     }//GEN-LAST:event_CrearNuevaCategoriaActionPerformed
 
-    private void editarOEliminarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarOEliminarCategoriaActionPerformed
+    private void dropDownListCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dropDownListCategoriaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_editarOEliminarCategoriaActionPerformed
+    }//GEN-LAST:event_dropDownListCategoriaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -451,21 +469,23 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfazItemsMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfazItemsMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfazItemsMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfazItemsMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InterfazItemsMenu().setVisible(true);
+                new InterfazCategoria().setVisible(true);
             }
         });
     }
@@ -475,17 +495,19 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
     private javax.swing.JButton BotonItemMenu;
     private javax.swing.JButton BotonPedidos;
     private javax.swing.JButton BotonVendedores;
-    private javax.swing.JTextField BuscadorDeItemMenu;
+    private javax.swing.JTextField Buscador;
     private javax.swing.JButton BuscarBoton;
     private javax.swing.JButton CrearNuevaCategoria;
-    private javax.swing.JButton CrearNuevoItemMenu;
-    private javax.swing.JButton editarOEliminarCategoria;
+    private javax.swing.JComboBox<String> dropDownListCategoria;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTable tablaItemsMenu;
+    private javax.swing.JTextField nombreCategoria;
+    private javax.swing.JTable tablaCategoria;
     // End of variables declaration//GEN-END:variables
 }

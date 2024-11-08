@@ -4,15 +4,140 @@
  */
 package gui.vendedores;
 
+import DAO.FACTORY.DAOFactory;
+import exceptions.vendedor.VendedorNoEncontradoException;
+import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
 import gui.itemMenu.InterfazItemsMenu;
 import gui.pedido.InterfazPedidos;
+import tp.Vendedor;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
  * @author mateo
  */
 public class InterfazVendedores extends javax.swing.JFrame {
+    public void mostrar(String nombre){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Nombre");
+        model.addColumn("ID");
+        model.addColumn("Pais");
+        model.addColumn("Ciudad");
+        model.addColumn("Calle");
+        model.addColumn("Altura");
+        model.addColumn("Editar");
+        model.addColumn("Eliminar");
+
+        //Acciones de los botones de la tabla
+        Action actionEditar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+
+                // Obtiene el ID del vendedor desde la tabla en la columna correspondiente
+                Object vendedorId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                // Recupera los datos completos del vendedor con el ID obtenido
+                Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorId((int) vendedorId);
+
+                // Crea y muestra una nueva interfaz para editar los datos del vendedor
+                if (vendedor != null) {
+                    InterfazVendedoresEditar interfazVendedoresEditar = new InterfazVendedoresEditar(vendedor);
+                    interfazVendedoresEditar.setVisible(true);
+                }
+            }
+        };
+        Action actionEliminar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+                // Obtiene el ID del VENDEDOR desde la tabla en la columna correspondiente
+                Object vendedorID = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Deseas eliminar el vendedor?",
+                        "Confirmación de eliminación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                if(confirm == JOptionPane.YES_OPTION){
+
+                    try{
+                        DAOFactory.getInstance().getVendedorDAO().eliminarVendedor((int) vendedorID);
+
+
+                    }catch (VendedorNoEncontradoException ex){
+                        JOptionPane.showMessageDialog(null,ex.getMessage());
+                    }
+                }
+            };
+        };
+        if(nombre != null){
+            try{
+                List<Vendedor> vendedors = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre(nombre);
+                Iterator<Vendedor> iterator = vendedors.iterator();
+                while(iterator.hasNext()){
+                    Vendedor vendedor = iterator.next();
+                    model.addRow(new Object[]{
+                            vendedor.getNombre(),
+                            vendedor.getId(),
+                            vendedor.getDireccion().getPais(),
+                            vendedor.getDireccion().getCiudad(),
+                            vendedor.getDireccion().getCalle(),
+                            vendedor.getDireccion().getAltura()
+                    });
+
+
+                }
+
+            }catch(VendedorNoEncontradoException e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+
+            }
+        }
+        else{
+            try{
+                List<Vendedor> vendedores = DAOFactory.getInstance().getVendedorDAO().getVendedores();
+                Iterator<Vendedor> iterator = vendedores.iterator();
+                while(iterator.hasNext()){
+                    Vendedor vendedor = iterator.next();
+                    model.addRow(new Object[]{
+                            vendedor.getNombre(),
+                            vendedor.getId(),
+                            vendedor.getDireccion().getPais(),
+                            vendedor.getDireccion().getCiudad(),
+                            vendedor.getDireccion().getCalle(),
+                            vendedor.getDireccion().getAltura()
+                    });
+
+
+                }
+
+            }catch(VendedorNoEncontradoException e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+
+            }
+        }
+        // Crear la tabla con el modelo
+        tablaVendedores.setModel(model);
+        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaVendedores,actionEditar,6);
+        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaVendedores,actionEliminar,7);
+
+
+
+
+
+    }
+
 
     /**
      * Creates new form InterfazVendedores
@@ -38,11 +163,11 @@ public class InterfazVendedores extends javax.swing.JFrame {
         botonClientes = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaVendedores = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         botonCrearVendedor = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        buscadorNombre = new javax.swing.JTextField();
         botonBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -118,26 +243,8 @@ public class InterfazVendedores extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(222, 222, 222));
         jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 128)));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Nombre", "ID", "Pais", "Ciudad", "Calle", "Altura", "Acciones"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(jTable1);
+        mostrar(null);
+        jScrollPane1.setViewportView(tablaVendedores);
 
         jTextField1.setEditable(false);
         jTextField1.setBackground(new java.awt.Color(155, 155, 155));
@@ -159,10 +266,15 @@ public class InterfazVendedores extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Buscador:");
 
-        jTextField2.setBackground(new java.awt.Color(222, 222, 222));
-        jTextField2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(155, 155, 155));
-        jTextField2.setText("Ingrese el nombre del vendedor...");
+        buscadorNombre.setBackground(new java.awt.Color(222, 222, 222));
+        buscadorNombre.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        buscadorNombre.setForeground(new java.awt.Color(155, 155, 155));
+        buscadorNombre.setText("Ingrese el nombre del vendedor...");
+        buscadorNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscadorNombreActionPerformed(evt);
+            }
+        });
 
         botonBuscar.setBackground(new java.awt.Color(65, 105, 225));
         botonBuscar.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -189,7 +301,7 @@ public class InterfazVendedores extends javax.swing.JFrame {
                         .addGap(74, 74, 74)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buscadorNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(botonBuscar)
                         .addGap(20, 20, 20))))
@@ -203,7 +315,7 @@ public class InterfazVendedores extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonCrearVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2)
+                    .addComponent(buscadorNombre)
                     .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -239,16 +351,26 @@ public class InterfazVendedores extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void botonCrearVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCrearVendedorActionPerformed
         // TODO add your handling code here:
+        InterfazVendedoresCrear interfazVendedoresCrear = new InterfazVendedoresCrear();
+        interfazVendedoresCrear.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_botonCrearVendedorActionPerformed
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
         // TODO add your handling code here:
+        if(buscadorNombre.getText().equals("")){
+            mostrar(null);
+        }else{
+            mostrar(buscadorNombre.getText());
+        }
     }//GEN-LAST:event_botonBuscarActionPerformed
 
     private void botonClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonClientesActionPerformed
@@ -271,6 +393,10 @@ public class InterfazVendedores extends javax.swing.JFrame {
         interfazPedidos.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_botonPedidosActionPerformed
+
+    private void buscadorNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscadorNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buscadorNombreActionPerformed
 
     /**
      * @param args the command line arguments
@@ -313,14 +439,14 @@ public class InterfazVendedores extends javax.swing.JFrame {
     private javax.swing.JButton botonCrearVendedor;
     private javax.swing.JButton botonItemsMenu;
     private javax.swing.JButton botonPedidos;
+    private javax.swing.JTextField buscadorNombre;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTable tablaVendedores;
     // End of variables declaration//GEN-END:variables
 }

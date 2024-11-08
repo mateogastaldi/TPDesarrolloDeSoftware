@@ -1,5 +1,7 @@
 package tp;
 
+import exceptions.itemMenu.categoria.CategoriaNoCreadaException;
+
 public class Categoria<T extends ItemMenu> {
     private static int contadorId=0;
     private int id;
@@ -7,10 +9,13 @@ public class Categoria<T extends ItemMenu> {
     private Class<T> tipoItem;
 
     //constructor
-    public Categoria(String descripcion, Class<T> tipoItem) {
-        setDescripcion(descripcion);
-        setId();
-        setTipoItem(tipoItem);
+    public Categoria(String descripcion, Class<T> tipoItem) throws CategoriaNoCreadaException {
+        if(descripcion==null || tipoItem==null) throw new CategoriaNoCreadaException("No se pudo crear la categoria");
+        else{
+            setDescripcion(descripcion);
+            setId();
+            setTipoItem(tipoItem);
+        }
     }
 
     //getters-setters
@@ -21,4 +26,5 @@ public class Categoria<T extends ItemMenu> {
     public int getId() {return id;}
     public String getDescripcion() {return descripcion;}
     public Class<T> getTipoItem() {return tipoItem;}
+
 }

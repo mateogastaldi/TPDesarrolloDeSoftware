@@ -7,6 +7,7 @@ import tp.ItemMenu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CategoriaMemory implements CategoriaDAO {
 
@@ -37,5 +38,36 @@ public class CategoriaMemory implements CategoriaDAO {
     //setters
     private void setItemMenu(List<Categoria> cat){
         this.categorias = cat;
+    }
+
+    public Categoria filtrarCategoriaId(int id) throws CategoriaNoEncontradaException {
+        Categoria categoria = this.categorias.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+        if(categoria == null){
+            throw new CategoriaNoEncontradaException("No existen categoria con el id" + id);
+        }
+        return categoria;
+    }
+
+    public void eliminarCategoria(int id) throws CategoriaNoEncontradaException {
+        Categoria categoria = filtrarCategoriaId(id);
+        if(categoria == null){
+            throw new CategoriaNoEncontradaException("No existen categoria");
+        }
+        this.categorias.remove(categoria);
+    }
+
+    public List<Categoria> filtrarCategoriaPorNombre(String nombre) throws CategoriaNoEncontradaException {
+        List<Categoria> categorias = this.categorias.stream()
+                .filter(cat-> cat.getDescripcion().equalsIgnoreCase(nombre))
+                .collect(Collectors.toList());
+
+        if(categorias.isEmpty()){
+            throw new CategoriaNoEncontradaException("No existen categoria");
+        }
+        return categorias;
+    }
+
+    public void addCategoria(Categoria cat){
+        this.categorias.add(cat);
     }
 }

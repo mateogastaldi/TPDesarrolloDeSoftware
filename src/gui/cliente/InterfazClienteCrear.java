@@ -4,6 +4,7 @@
  */
 package gui.cliente;
 
+import DAO.FACTORY.DAOFactory;
 import memory.ClienteMemory;
 import tp.Cliente;
 import tp.Coordenada;
@@ -451,7 +452,7 @@ public class InterfazClienteCrear extends javax.swing.JFrame {
         Direccion direccion = new Direccion(calle,altura,ciudad,pais);
         Cliente cliente = new Cliente(nombre,cuit,email,direccion,coordenada);
 
-        ClienteMemory.getInstance().addCliente(cliente);
+        DAOFactory.getInstance().getClienteDAO().addCliente(cliente);
         InterfazClientes intClientes = new InterfazClientes();
         intClientes.setVisible(true);
         this.setVisible(false);

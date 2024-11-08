@@ -71,4 +71,12 @@ public class VendedorMemory implements VendedorDAO {
         return vendedoresFiltrados;
     }
 
+    public void eliminarVendedor(int id) throws VendedorNoEncontradoException{
+        Vendedor vendedor = filtrarVendedorPorId(id);
+        if(vendedor == null){
+            throw new VendedorNoEncontradoException("No se encontraron vendedores con id:" + id);
+        }
+        this.vendedores.remove(vendedor);
+    }
+
 }

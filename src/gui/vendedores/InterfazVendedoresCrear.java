@@ -14,10 +14,10 @@ import tp.Vendedor;
  *
  * @author mateo
  */
-public class VendedoresCrear extends javax.swing.JFrame {
+public class InterfazVendedoresCrear extends javax.swing.JFrame {
 
 
-    public VendedoresCrear() {
+    public InterfazVendedoresCrear() {
         initComponents();
     }
 
@@ -453,13 +453,13 @@ public class VendedoresCrear extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VendedoresCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazVendedoresCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VendedoresCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazVendedoresCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VendedoresCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazVendedoresCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VendedoresCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazVendedoresCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -497,7 +497,7 @@ public class VendedoresCrear extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new VendedoresCrear().setVisible(true);
+                new InterfazVendedoresCrear().setVisible(true);
             }
         });
     }
