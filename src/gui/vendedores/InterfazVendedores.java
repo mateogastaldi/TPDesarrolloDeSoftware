@@ -4,6 +4,10 @@
  */
 package gui.vendedores;
 
+import gui.cliente.InterfazClientes;
+import gui.itemMenu.InterfazItemsMenu;
+import gui.pedido.InterfazPedidos;
+
 /**
  *
  * @author mateo
@@ -29,17 +33,17 @@ public class InterfazVendedores extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        botonItemsMenu = new javax.swing.JButton();
+        botonPedidos = new javax.swing.JButton();
+        botonClientes = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
-        jButton5 = new javax.swing.JButton();
+        botonCrearVendedor = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
-        jButton6 = new javax.swing.JButton();
+        botonBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -57,17 +61,32 @@ public class InterfazVendedores extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(65, 105, 225));
-        jButton2.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jButton2.setText("ItemMenus");
+        botonItemsMenu.setBackground(new java.awt.Color(65, 105, 225));
+        botonItemsMenu.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        botonItemsMenu.setText("ItemMenus");
+        botonItemsMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonItemsMenuActionPerformed(evt);
+            }
+        });
 
-        jButton3.setBackground(new java.awt.Color(65, 105, 225));
-        jButton3.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jButton3.setText("Pedidos");
+        botonPedidos.setBackground(new java.awt.Color(65, 105, 225));
+        botonPedidos.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        botonPedidos.setText("Pedidos");
+        botonPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonPedidosActionPerformed(evt);
+            }
+        });
 
-        jButton4.setBackground(new java.awt.Color(65, 105, 225));
-        jButton4.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jButton4.setText("Clientes");
+        botonClientes.setBackground(new java.awt.Color(65, 105, 225));
+        botonClientes.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        botonClientes.setText("Clientes");
+        botonClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonClientesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -77,9 +96,9 @@ public class InterfazVendedores extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(botonItemsMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botonPedidos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(botonClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -88,11 +107,11 @@ public class InterfazVendedores extends javax.swing.JFrame {
                 .addGap(71, 71, 71)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(botonClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(botonItemsMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(botonPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -126,12 +145,12 @@ public class InterfazVendedores extends javax.swing.JFrame {
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField1.setText("Lista de Vendedores");
 
-        jButton5.setBackground(new java.awt.Color(65, 105, 225));
-        jButton5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jButton5.setText("Crear Nuevo Vendedor");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        botonCrearVendedor.setBackground(new java.awt.Color(65, 105, 225));
+        botonCrearVendedor.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        botonCrearVendedor.setText("Crear Nuevo Vendedor");
+        botonCrearVendedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                botonCrearVendedorActionPerformed(evt);
             }
         });
 
@@ -145,12 +164,12 @@ public class InterfazVendedores extends javax.swing.JFrame {
         jTextField2.setForeground(new java.awt.Color(155, 155, 155));
         jTextField2.setText("Ingrese el nombre del vendedor...");
 
-        jButton6.setBackground(new java.awt.Color(65, 105, 225));
-        jButton6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        jButton6.setText("Buscar");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        botonBuscar.setBackground(new java.awt.Color(65, 105, 225));
+        botonBuscar.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        botonBuscar.setText("Buscar");
+        botonBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                botonBuscarActionPerformed(evt);
             }
         });
 
@@ -166,13 +185,13 @@ public class InterfazVendedores extends javax.swing.JFrame {
                         .addComponent(jTextField1)
                         .addContainerGap())
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton5)
+                        .addComponent(botonCrearVendedor)
                         .addGap(74, 74, 74)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton6)
+                        .addComponent(botonBuscar)
                         .addGap(20, 20, 20))))
         );
         jPanel3Layout.setVerticalGroup(
@@ -182,10 +201,10 @@ public class InterfazVendedores extends javax.swing.JFrame {
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonCrearVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField2)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -224,13 +243,34 @@ public class InterfazVendedores extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void botonCrearVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCrearVendedorActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_botonCrearVendedorActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_botonBuscarActionPerformed
+
+    private void botonClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonClientesActionPerformed
+        // TODO add your handling code here:
+        InterfazClientes interfazClientes = new InterfazClientes();
+        interfazClientes.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_botonClientesActionPerformed
+
+    private void botonItemsMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonItemsMenuActionPerformed
+        // TODO add your handling code here:
+        InterfazItemsMenu itemsMenu = new InterfazItemsMenu();
+        itemsMenu.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_botonItemsMenuActionPerformed
+
+    private void botonPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPedidosActionPerformed
+        // TODO add your handling code here:
+        InterfazPedidos interfazPedidos = new InterfazPedidos();
+        interfazPedidos.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_botonPedidosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -268,12 +308,12 @@ public class InterfazVendedores extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonBuscar;
+    private javax.swing.JButton botonClientes;
+    private javax.swing.JButton botonCrearVendedor;
+    private javax.swing.JButton botonItemsMenu;
+    private javax.swing.JButton botonPedidos;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

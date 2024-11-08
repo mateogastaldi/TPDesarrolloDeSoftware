@@ -24,17 +24,30 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
 
     public DefaultComboBoxModel<Vendedor> modeloDropDownListVendedor(){
         DefaultComboBoxModel<Vendedor> modelo = new DefaultComboBoxModel<>();
-        Iterator<Vendedor> c = DAOFactory.getInstance().getVendedorDAO().getVendedores().iterator();
-        while (c.hasNext()) {
-            modelo.addElement(c.next());
+        try{
+            Iterator<Vendedor> c = DAOFactory.getInstance().getVendedorDAO().getVendedores().iterator();
+            while (c.hasNext()) {
+                modelo.addElement(c.next());
+            }
+
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
         return modelo;
+
     }
     public DefaultComboBoxModel<Categoria> modeloDropDownListCategoria(){
         DefaultComboBoxModel<Categoria> modelo = new DefaultComboBoxModel<>();
-        Iterator<Categoria> c = DAOFactory.getInstance().getCategoriaDAO().getCategorias().iterator();
-        while (c.hasNext()) {
-            modelo.addElement(c.next());
+        try{
+
+            Iterator<Categoria> c = DAOFactory.getInstance().getCategoriaDAO().getCategorias().iterator();
+            while (c.hasNext()) {
+                modelo.addElement(c.next());
+            }
+
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
         return modelo;
     }
@@ -69,9 +82,9 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         aptoVeganoCheckBox = new javax.swing.JCheckBox();
         aptoCeliacoCheckBox = new javax.swing.JCheckBox();
-        DropDownListCategoria = new javax.swing.JComboBox<>(modeloDropDownListCategoria());
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        DropDownListCategoria = new javax.swing.JComboBox<>(modeloDropDownListCategoria());
         DropDownListVendedor = new javax.swing.JComboBox<>(modeloDropDownListVendedor());
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
@@ -472,7 +485,7 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CuadroTitulo;
-    private javax.swing.JComboBox<String> DropDownListCategoria;
+    private javax.swing.JComboBox<Categoria> DropDownListCategoria;
     private javax.swing.JComboBox<Vendedor> DropDownListVendedor;
     private javax.swing.JCheckBox aptoCeliacoCheckBox;
     private javax.swing.JCheckBox aptoVeganoCheckBox;

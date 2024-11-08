@@ -1,6 +1,7 @@
 package memory;
 
 import DAO.CategoriaDAO;
+import exceptions.itemMenu.categoria.CategoriaNoEncontradaException;
 import tp.Categoria;
 import tp.ItemMenu;
 
@@ -21,8 +22,11 @@ public class CategoriaMemory implements CategoriaDAO {
     }
 
     //getters
-    public List<Categoria> getCategorias(){
-        return this.categorias;
+    public List<Categoria> getCategorias() throws CategoriaNoEncontradaException {
+        if(categorias.isEmpty()){
+            throw new CategoriaNoEncontradaException("No existen categorias");
+        }
+        return categorias;
     }
     public static CategoriaMemory getInstance() {
         if(CATEGORIA_INSTANCE == null) {

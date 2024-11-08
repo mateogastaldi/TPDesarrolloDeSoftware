@@ -5,6 +5,7 @@
 package gui.itemMenu;
 
 import DAO.CategoriaDAO;
+import DAO.FACTORY.DAOFactory;
 import DAO.ItemsMenuDAO;
 import DAO.VendedorDAO;
 import exceptions.cliente.ClienteNoEncontradoException;
@@ -13,8 +14,6 @@ import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
 import gui.pedido.InterfazPedidos;
 import gui.vendedores.InterfazVendedores;
-import memory.ClienteMemory;
-import memory.ItemsMenuMemory;
 import tp.Cliente;
 import tp.ItemMenu;
 
@@ -29,19 +28,11 @@ import java.util.List;
  * @author mateo
  */
 public class InterfazItemsMenu extends javax.swing.JFrame {
-    private final CategoriaDAO categoriaDAO;
-    private final VendedorDAO vendedorDAO;
-    private final ItemsMenuDAO itemsMenuDAO;
 
     /**
      * Creates new form InterfazVendedores
      */
-    public InterfazItemsMenu(CategoriaDAO categoriaDAO, VendedorDAO vendedorDAO, ItemsMenuDAO itemsMenuDAO) {
-        this.categoriaDAO = categoriaDAO;
-        this.vendedorDAO = vendedorDAO;
-        this.itemsMenuDAO = itemsMenuDAO;
-        initComponents();
-    }
+    public InterfazItemsMenu() {initComponents();}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -257,7 +248,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 Object itemMenuId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
                 // Recupera los datos completos del cliente con el ID obtenido
-                ItemMenu itemMenu = ItemsMenuMemory.getInstance().filtrarItemMenuPorId((int) itemMenuId);
+                ItemMenu itemMenu = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorId((int) itemMenuId);
 
                 // Crea y muestra una nueva interfaz para editar los datos del cliente
                 if (itemMenu != null) {
@@ -284,7 +275,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 if(confirm == JOptionPane.YES_OPTION){
 
                     try{
-                        ItemsMenuMemory.getInstance().eliminarItemMenu((int) itemMenuId);
+                        DAOFactory.getInstance().getItemsMenuDAO().eliminarItemMenu((int) itemMenuId);
 
 
                     }catch (ItemMenuNoEncontradoException ex){
@@ -298,7 +289,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
         if(nombre != null){
             try{
-                List<ItemMenu> itemsMenu = ItemsMenuMemory.getInstance().filtrarItemMenuPorNombre(nombre);
+                List<ItemMenu> itemsMenu = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorNombre(nombre);
                 Iterator<ItemMenu> iterator = itemsMenu.iterator();
                 while(iterator.hasNext()){
                     ItemMenu itemMenu = iterator.next();
@@ -322,7 +313,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         }
         else{
             try{
-                List<Cliente> clientes = ClienteMemory.getInstance().getClientes();
+                List<Cliente> clientes = DAOFactory.getInstance().getClienteDAO().getClientes();
                 Iterator<Cliente> iterator = clientes.iterator();
                 while(iterator.hasNext()){
                     Cliente cliente = iterator.next();
