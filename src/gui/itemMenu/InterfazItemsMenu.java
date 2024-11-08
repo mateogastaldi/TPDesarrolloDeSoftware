@@ -4,6 +4,9 @@
  */
 package gui.itemMenu;
 
+import DAO.CategoriaDAO;
+import DAO.ItemsMenuDAO;
+import DAO.VendedorDAO;
 import exceptions.cliente.ClienteNoEncontradoException;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import gui.ButtonColumn;
@@ -26,11 +29,17 @@ import java.util.List;
  * @author mateo
  */
 public class InterfazItemsMenu extends javax.swing.JFrame {
+    private final CategoriaDAO categoriaDAO;
+    private final VendedorDAO vendedorDAO;
+    private final ItemsMenuDAO itemsMenuDAO;
 
     /**
      * Creates new form InterfazVendedores
      */
-    public InterfazItemsMenu() {
+    public InterfazItemsMenu(CategoriaDAO categoriaDAO, VendedorDAO vendedorDAO, ItemsMenuDAO itemsMenuDAO) {
+        this.categoriaDAO = categoriaDAO;
+        this.vendedorDAO = vendedorDAO;
+        this.itemsMenuDAO = itemsMenuDAO;
         initComponents();
     }
 

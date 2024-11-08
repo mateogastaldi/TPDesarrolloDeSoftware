@@ -4,6 +4,10 @@
  */
 package gui.itemMenu;
 
+import DAO.CategoriaDAO;
+import DAO.FACTORY.DAOFactory;
+import DAO.ItemsMenuDAO;
+import DAO.VendedorDAO;
 import gui.cliente.*;
 import memory.ClienteMemory;
 import memory.VendedorMemory;
@@ -17,9 +21,10 @@ import java.util.Iterator;
  * @author mateo
  */
 public class InterfazItemMenuCrear extends javax.swing.JFrame {
+
     public DefaultComboBoxModel<Vendedor> modeloDropDownListVendedor(){
         DefaultComboBoxModel<Vendedor> modelo = new DefaultComboBoxModel<>();
-        Iterator<Vendedor> c = VendedorMemory.getInstance().getVendedores().iterator();
+        Iterator<Vendedor> c = DAOFactory.getInstance().getVendedorDAO().getVendedores().iterator();
         while (c.hasNext()) {
             modelo.addElement(c.next());
         }
@@ -27,7 +32,7 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
     }
     public DefaultComboBoxModel<Categoria> modeloDropDownListCategoria(){
         DefaultComboBoxModel<Categoria> modelo = new DefaultComboBoxModel<>();
-       // Iterator<Categoria> c = CategoriaMemory.getInstance().getCategorias().iterator();
+        Iterator<Categoria> c = DAOFactory.getInstance().getCategoriaDAO().getCategorias().iterator();
         while (c.hasNext()) {
             modelo.addElement(c.next());
         }
@@ -35,9 +40,7 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
     }
 
 
-    public InterfazItemMenuCrear() {
-        initComponents();
-    }
+    public InterfazItemMenuCrear() {initComponents();}
 
 
 
