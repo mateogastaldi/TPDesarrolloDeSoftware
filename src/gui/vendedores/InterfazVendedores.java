@@ -73,6 +73,8 @@ public class InterfazVendedores extends javax.swing.JFrame {
 
                     try{
                         DAOFactory.getInstance().getVendedorDAO().eliminarVendedor((int) vendedorID);
+                        if(nombre == null){mostrar(null);}
+                        else{mostrar(nombre);}
 
 
                     }catch (VendedorNoEncontradoException ex){

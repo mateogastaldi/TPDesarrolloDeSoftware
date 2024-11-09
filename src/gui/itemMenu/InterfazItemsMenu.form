@@ -176,35 +176,32 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jTextField1" max="32767" attributes="0"/>
-                          <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jTextField1" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="CrearNuevaCategoria" max="32767" attributes="0"/>
-                                  <Component id="CrearNuevoItemMenu" max="32767" attributes="0"/>
+                                  <Component id="CrearNuevoPLato1" max="32767" attributes="0"/>
+                                  <Component id="CrearNuevoBebida" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="editarOEliminarCategoria" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="0" pref="39" max="32767" attributes="0"/>
-                                      <Component id="jLabel1" min="-2" pref="95" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="BuscadorDeItemMenu" min="-2" pref="317" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="BuscarBoton" min="-2" pref="126" max="-2" attributes="0"/>
-                                  </Group>
+                              <EmptySpace pref="31" max="32767" attributes="0"/>
+                              <Component id="jLabel1" min="-2" pref="95" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="BuscadorDeItemMenu" min="-2" pref="317" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="CrearNuevaCategoria" alignment="1" max="32767" attributes="0"/>
+                                  <Component id="BuscarBoton" alignment="1" pref="126" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
-                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -214,17 +211,17 @@
                       <Component id="jTextField1" min="-2" pref="44" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="CrearNuevoItemMenu" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
                           <Component id="jLabel1" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
                           <Component id="BuscadorDeItemMenu" alignment="3" max="32767" attributes="0"/>
                           <Component id="BuscarBoton" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                          <Component id="CrearNuevoPLato1" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="CrearNuevaCategoria" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                          <Component id="editarOEliminarCategoria" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                          <Component id="CrearNuevoBebida" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="12" max="32767" attributes="0"/>
+                      <EmptySpace pref="6" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="326" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -274,7 +271,7 @@
                 <Property name="text" type="java.lang.String" value="Lista de Items Menu"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JButton" name="CrearNuevoItemMenu">
+            <Component class="javax.swing.JButton" name="CrearNuevoBebida">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="e1" green="69" red="41" type="rgb"/>
@@ -282,10 +279,10 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="14" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Crear Nuevo ItemMenu"/>
+                <Property name="text" type="java.lang.String" value="Crear Nueva Bebida"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CrearNuevoItemMenuActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CrearNuevoBebidaActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
@@ -337,13 +334,13 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="14" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Crear Nueva Categoria "/>
+                <Property name="text" type="java.lang.String" value="Categorias"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CrearNuevaCategoriaActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="editarOEliminarCategoria">
+            <Component class="javax.swing.JButton" name="CrearNuevoPLato1">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="e1" green="69" red="41" type="rgb"/>
@@ -351,10 +348,10 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="14" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Editar o Eliminar Categoria "/>
+                <Property name="text" type="java.lang.String" value="Crear Nuevo Plato"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="editarOEliminarCategoriaActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CrearNuevoPLato1ActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

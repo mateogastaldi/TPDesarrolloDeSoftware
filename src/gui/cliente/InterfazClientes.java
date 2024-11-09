@@ -11,6 +11,7 @@ import gui.itemMenu.InterfazItemsMenu;
 import gui.pedido.InterfazPedidos;
 import gui.vendedores.InterfazVendedores;
 
+import memory.ClienteMemory;
 import tp.Cliente;
 
 import javax.swing.*;
@@ -59,6 +60,7 @@ public class InterfazClientes extends javax.swing.JFrame {
                 // Recupera los datos completos del cliente con el ID obtenido
                 Cliente cliente = DAOFactory.getInstance().getClienteDAO().filtrarClientePorId((int) clienteId);
 
+
                 // Crea y muestra una nueva interfaz para editar los datos del cliente
                 if (cliente != null) {
                     InterfazClienteEditar editarClienteFrame = new InterfazClienteEditar(cliente);
@@ -85,6 +87,8 @@ public class InterfazClientes extends javax.swing.JFrame {
 
                     try{
                         DAOFactory.getInstance().getClienteDAO().eliminarCliente((int) clienteId);
+                        if(nombre == null){mostrar(null);}
+                        else{mostrar(nombre);}
 
 
                     }catch (ClienteNoEncontradoException ex){

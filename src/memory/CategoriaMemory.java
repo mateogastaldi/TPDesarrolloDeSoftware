@@ -1,6 +1,7 @@
 package memory;
 
 import DAO.CategoriaDAO;
+import exceptions.itemMenu.categoria.CategoriaNoCreadaException;
 import exceptions.itemMenu.categoria.CategoriaNoEncontradaException;
 import tp.Categoria;
 import tp.ItemMenu;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CategoriaMemory implements CategoriaDAO {
+public class CategoriaMemory<T extends ItemMenu> implements CategoriaDAO {
 
     private static CategoriaMemory CATEGORIA_INSTANCE;
     private List<Categoria> categorias;
@@ -23,10 +24,8 @@ public class CategoriaMemory implements CategoriaDAO {
     }
 
     //getters
-    public List<Categoria> getCategorias() throws CategoriaNoEncontradaException {
-        if(categorias.isEmpty()){
-            throw new CategoriaNoEncontradaException("No existen categorias");
-        }
+    public List<Categoria> getCategorias() {
+
         return categorias;
     }
     public static CategoriaMemory getInstance() {
@@ -69,5 +68,11 @@ public class CategoriaMemory implements CategoriaDAO {
 
     public void addCategoria(Categoria cat){
         this.categorias.add(cat);
+    }
+    public <T extends ItemMenu> List<Categoria<T>> filtrarPorTipoItem(Class<? extends ItemMenu> tipoClase) {
+        return categorias.stream()
+                .filter(categoria -> categoria.getTipoItem().equals(tipoClase))
+                .map(categoria -> (Categoria<T>) categoria) // Cast explícito
+                .collect(Collectors.toList());
     }
 }

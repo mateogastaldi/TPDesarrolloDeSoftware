@@ -4,13 +4,7 @@
  */
 package gui.itemMenu;
 
-import DAO.CategoriaDAO;
 import DAO.FACTORY.DAOFactory;
-import DAO.ItemsMenuDAO;
-import DAO.VendedorDAO;
-import gui.cliente.*;
-import memory.ClienteMemory;
-import memory.VendedorMemory;
 import tp.*;
 
 import javax.swing.*;
@@ -20,14 +14,14 @@ import java.util.Iterator;
  *
  * @author mateo
  */
-public class InterfazItemMenuCrear extends javax.swing.JFrame {
+public class InterfazItemMenuCrearBebida extends javax.swing.JFrame {
 
-    public DefaultComboBoxModel<Vendedor> modeloDropDownListVendedor(){
-        DefaultComboBoxModel<Vendedor> modelo = new DefaultComboBoxModel<>();
+    public DefaultComboBoxModel<String> modeloDropDownListVendedor(){
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
             Iterator<Vendedor> c = DAOFactory.getInstance().getVendedorDAO().getVendedores().iterator();
             while (c.hasNext()) {
-                modelo.addElement(c.next());
+                modelo.addElement(c.next().getNombre());
             }
 
         }catch(Exception e){
@@ -36,13 +30,13 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
         return modelo;
 
     }
-    public DefaultComboBoxModel<Categoria> modeloDropDownListCategoria(){
-        DefaultComboBoxModel<Categoria> modelo = new DefaultComboBoxModel<>();
+    public DefaultComboBoxModel<String> modeloDropDownListCategoria(){
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
 
-            Iterator<Categoria> c = DAOFactory.getInstance().getCategoriaDAO().getCategorias().iterator();
+             Iterator<Categoria<ItemMenu>> c = DAOFactory.getInstance().getCategoriaDAO().filtrarPorTipoItem(Bebida.class).iterator();
             while (c.hasNext()) {
-                modelo.addElement(c.next());
+                modelo.addElement(c.next().getDescripcion());
             }
 
         }
@@ -53,7 +47,7 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
     }
 
 
-    public InterfazItemMenuCrear() {initComponents();}
+    public InterfazItemMenuCrearBebida() {initComponents();}
 
 
 
@@ -82,10 +76,14 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         aptoVeganoCheckBox = new javax.swing.JCheckBox();
         aptoCeliacoCheckBox = new javax.swing.JCheckBox();
-        DropDownListCategoria = new javax.swing.JComboBox<>();
+        DropDownListCategoria = new javax.swing.JComboBox<>(modeloDropDownListCategoria());
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        DropDownListVendedor = new javax.swing.JComboBox<>();
+        DropDownListVendedor = new javax.swing.JComboBox<>(modeloDropDownListVendedor());
+        alcohol = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        tamanio = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -130,7 +128,7 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
         CuadroTitulo.setBackground(new java.awt.Color(155, 155, 155));
         CuadroTitulo.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         CuadroTitulo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        CuadroTitulo.setText("Crear Item Menu");
+        CuadroTitulo.setText("Crear Bebida");
         CuadroTitulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CuadroTituloActionPerformed(evt);
@@ -243,6 +241,46 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
         jLabel9.setText("Vendedor:");
         jLabel9.setToolTipText("");
 
+        alcohol.setBackground(new java.awt.Color(222, 222, 222));
+        alcohol.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        alcohol.setForeground(new java.awt.Color(0, 0, 0));
+        alcohol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                alcoholActionPerformed(evt);
+            }
+        });
+        alcohol.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                alcoholKeyTyped(evt);
+            }
+        });
+
+        jLabel10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("Graduacion Alcoholica:");
+        jLabel10.setToolTipText("");
+
+        tamanio.setBackground(new java.awt.Color(222, 222, 222));
+        tamanio.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        tamanio.setForeground(new java.awt.Color(0, 0, 0));
+        tamanio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tamanioActionPerformed(evt);
+            }
+        });
+        tamanio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tamanioKeyTyped(evt);
+            }
+        });
+
+        jLabel12.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel12.setText("Tamanio:");
+        jLabel12.setToolTipText("");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -252,42 +290,57 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(CuadroTitulo))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addGap(122, 122, 122)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(precio, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nombreItem, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(DropDownListVendedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 376, Short.MAX_VALUE)
-                        .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(descripcionItem, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(aptoVeganoCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(DropDownListCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(alcohol, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(122, 122, 122)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(precio, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(nombreItem, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(DropDownListVendedor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                .addGap(121, 121, 121)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                        .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(21, 21, 21))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(tamanio, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(24, 24, 24)
-                                .addComponent(aptoCeliacoCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(descripcionItem, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(aptoVeganoCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(DropDownListCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(24, 24, 24)
+                                        .addComponent(aptoCeliacoCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(147, 147, 147)))
                 .addContainerGap())
         );
@@ -321,7 +374,13 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
                         .addComponent(aptoCeliacoCheckBox)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(aptoVeganoCheckBox)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 178, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(alcohol, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tamanio, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -378,24 +437,43 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
-//        String nombre = nombreItem.getText();
-//        double precioIngresado = Double.parseDouble(precio.getText());
-//        int id =
-//        Vendedor vendedor = VendedorMemory.getInstance().filtrarVendedorPorId(id)
-//
-//
-//        ClienteMemory.getInstance().addCliente(cliente);
-//        InterfazClientes intClientes = new InterfazClientes();
-//        intClientes.setVisible(true);
-//        this.setVisible(false);
+        double gradAlcoholica = Double.parseDouble(alcohol.getText());
+        if(gradAlcoholica > 100.0){
+            JOptionPane.showMessageDialog(this, "El gradual es mayor que 100.0");
+            InterfazItemMenuCrearBebida interfazItemMenuCrearBebida = new InterfazItemMenuCrearBebida();
+            interfazItemMenuCrearBebida.setVisible(true);
+            this.setVisible(false);
+        }
+        else{
+            double tamanioIngresado = Double.parseDouble(tamanio.getText());
+            String nombre = nombreItem.getText();
+
+            double precioIngresado = Double.parseDouble(precio.getText());
+            Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
+            Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
+            boolean aptoCelaico = false;
+            boolean aptoVegano = false;
+            if(aptoCeliacoCheckBox.isSelected()){
+                boolean aptoCeliaco = true;
+            }
+            if(aptoVeganoCheckBox.isSelected()){
+                aptoVegano = true;
+            }
+            String descripcion = descripcionItem.getText();
+            Bebida bebida = new Bebida(nombre,descripcion,precioIngresado,aptoVegano,aptoCelaico,categoria,vendedor,gradAlcoholica,tamanioIngresado);
+            DAOFactory.getInstance().getItemsMenuDAO().addItemMenu(bebida);
+
+
+            InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();
+            interfazItemsMenu.setVisible(true);
+            this.setVisible(false);
+        }
+
         
     }//GEN-LAST:event_botonConfirmarActionPerformed
 
     private void descripcionItemKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descripcionItemKeyTyped
         // TODO add your handling code here:
-        char c = evt.getKeyChar();
-        
-        if(c<'0' || c>'9') evt.consume();
     }//GEN-LAST:event_descripcionItemKeyTyped
 
     private void nombreItemKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nombreItemKeyTyped
@@ -412,8 +490,8 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
 
     private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarActionPerformed
         // TODO add your handling code here:
-        InterfazClientes intClientes = new InterfazClientes();
-        intClientes.setVisible(true);
+        InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();
+        interfazItemsMenu.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_botonCancelarActionPerformed
 
@@ -424,6 +502,27 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
     private void aptoVeganoCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aptoVeganoCheckBoxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_aptoVeganoCheckBoxActionPerformed
+
+    private void alcoholActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_alcoholActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_alcoholActionPerformed
+
+    private void alcoholKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_alcoholKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if( (c<'0' || c>'9') && c!='.') evt.consume();
+    }//GEN-LAST:event_alcoholKeyTyped
+
+    private void tamanioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tamanioActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_tamanioActionPerformed
+
+    private void tamanioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tamanioKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if( (c<'0' || c>'9') && c!='.') evt.consume();
+    }//GEN-LAST:event_tamanioKeyTyped
 
    
 
@@ -446,13 +545,13 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfazItemMenuCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazItemMenuCrearBebida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfazItemMenuCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazItemMenuCrearBebida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfazItemMenuCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazItemMenuCrearBebida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfazItemMenuCrear.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfazItemMenuCrearBebida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -490,7 +589,7 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InterfazItemMenuCrear().setVisible(true);
+                new InterfazItemMenuCrearBebida().setVisible(true);
             }
         });
     }
@@ -499,6 +598,7 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
     private javax.swing.JTextField CuadroTitulo;
     private javax.swing.JComboBox<String> DropDownListCategoria;
     private javax.swing.JComboBox<String> DropDownListVendedor;
+    private javax.swing.JTextField alcohol;
     private javax.swing.JCheckBox aptoCeliacoCheckBox;
     private javax.swing.JCheckBox aptoVeganoCheckBox;
     private javax.swing.JButton botonCancelar;
@@ -507,7 +607,9 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
     private javax.swing.JDialog jDialog1;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -520,5 +622,6 @@ public class InterfazItemMenuCrear extends javax.swing.JFrame {
     private javax.swing.JTextField nombreItem;
     private java.awt.PopupMenu popupMenu1;
     private javax.swing.JTextField precio;
+    private javax.swing.JTextField tamanio;
     // End of variables declaration//GEN-END:variables
 }

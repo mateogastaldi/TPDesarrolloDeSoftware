@@ -11,6 +11,7 @@ import exceptions.itemMenu.categoria.CategoriaNoCreadaException;
 import exceptions.itemMenu.categoria.CategoriaNoEncontradaException;
 import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
+import gui.itemMenu.InterfazItemsMenu;
 import gui.pedido.InterfazPedidos;
 import gui.vendedores.InterfazVendedores;
 import tp.*;
@@ -31,6 +32,99 @@ public class InterfazCategoria extends javax.swing.JFrame {
      * Creates new form InterfazVendedores
      */
     public InterfazCategoria() {initComponents();}
+    public void mostrar(String nombre){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Nombre");
+        model.addColumn("ID");
+        model.addColumn("Tipo Item");
+        model.addColumn("Eliminar");
+
+        //Acciones de los botones de la tabla
+
+        Action actionEliminar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+                // Obtiene el ID de la categoria desde la tabla en la columna correspondiente
+                Object categoriaId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Deseas eliminar la categoria?",
+                        "Confirmación de eliminación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                if(confirm == JOptionPane.YES_OPTION){
+
+                    try{
+                        DAOFactory.getInstance().getCategoriaDAO().eliminarCategoria((int) categoriaId);
+                        if(nombre == null){mostrar(null);}
+                        else{mostrar(nombre);}
+
+
+                    }catch (CategoriaNoEncontradaException ex){
+                        JOptionPane.showMessageDialog(null,ex.getMessage());
+                    }
+                }
+            };
+        };
+
+
+
+        if(nombre != null){
+            try{
+                List<Categoria> categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre(nombre);
+                Iterator<Categoria> iterator = categoria.iterator();
+                while(iterator.hasNext()){
+                    Categoria cat = iterator.next();
+                    model.addRow(new Object[]{
+                            cat.getDescripcion(),
+                            cat.getId(),
+                            cat.getTipoItem().getSimpleName(),
+                    });
+
+
+                }
+
+            }catch(CategoriaNoEncontradaException e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+
+            }
+        }
+        else{
+
+            try{
+                List<Categoria> categorias = DAOFactory.getInstance().getCategoriaDAO().getCategorias();
+                Iterator<Categoria> iterator = categorias.iterator();
+                while(iterator.hasNext()){
+                    Categoria cat = iterator.next();
+                    model.addRow(new Object[]{
+                            cat.getDescripcion(),
+                            cat.getId(),
+                            cat.getTipoItem().getSimpleName(),
+
+                    });
+
+
+                }
+
+            }catch(CategoriaNoEncontradaException e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+
+            }
+        }
+        // Crear la tabla con el modelo
+        tablaCategoria.setModel(model);
+
+        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaCategoria,actionEliminar,3);
+
+
+
+
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,14 +145,16 @@ public class InterfazCategoria extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaCategoria = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        nombreCategoria = new javax.swing.JTextField();
         BuscarBoton = new javax.swing.JButton();
-        CrearNuevaCategoria = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         Buscador = new javax.swing.JTextField();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        nombreCategoria = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         dropDownListCategoria = new javax.swing.JComboBox<>();
+        CrearNuevaCategoria = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,6 +175,11 @@ public class InterfazCategoria extends javax.swing.JFrame {
         BotonItemMenu.setBackground(new java.awt.Color(65, 105, 225));
         BotonItemMenu.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         BotonItemMenu.setText("ItemMenus");
+        BotonItemMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonItemMenuActionPerformed(evt);
+            }
+        });
 
         BotonPedidos.setBackground(new java.awt.Color(65, 105, 225));
         BotonPedidos.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
@@ -162,30 +263,12 @@ public class InterfazCategoria extends javax.swing.JFrame {
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField1.setText("Lista de Categorias");
 
-        jLabel1.setBackground(new java.awt.Color(222, 222, 222));
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Nombre:");
-
-        nombreCategoria.setBackground(new java.awt.Color(222, 222, 222));
-        nombreCategoria.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        nombreCategoria.setForeground(new java.awt.Color(155, 155, 155));
-
         BuscarBoton.setBackground(new java.awt.Color(65, 105, 225));
         BuscarBoton.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         BuscarBoton.setText("Buscar");
         BuscarBoton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BuscarBotonActionPerformed(evt);
-            }
-        });
-
-        CrearNuevaCategoria.setBackground(new java.awt.Color(65, 105, 225));
-        CrearNuevaCategoria.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        CrearNuevaCategoria.setText("Crear Nueva Categoria ");
-        CrearNuevaCategoria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CrearNuevaCategoriaActionPerformed(evt);
             }
         });
 
@@ -197,6 +280,24 @@ public class InterfazCategoria extends javax.swing.JFrame {
         Buscador.setBackground(new java.awt.Color(222, 222, 222));
         Buscador.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         Buscador.setForeground(new java.awt.Color(155, 155, 155));
+
+        jPanel4.setBackground(new java.awt.Color(222, 222, 222));
+        jPanel4.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(51, 51, 51)));
+        jPanel4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jLabel1.setBackground(new java.awt.Color(222, 222, 222));
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("CREAR NUEVA CATEGORIA");
+
+        nombreCategoria.setBackground(new java.awt.Color(222, 222, 222));
+        nombreCategoria.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        nombreCategoria.setForeground(new java.awt.Color(51, 51, 51));
+        nombreCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nombreCategoriaActionPerformed(evt);
+            }
+        });
 
         jLabel3.setBackground(new java.awt.Color(222, 222, 222));
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -210,58 +311,89 @@ public class InterfazCategoria extends javax.swing.JFrame {
             }
         });
 
+        CrearNuevaCategoria.setBackground(new java.awt.Color(65, 105, 225));
+        CrearNuevaCategoria.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        CrearNuevaCategoria.setText("Crear ");
+        CrearNuevaCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CrearNuevaCategoriaActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setBackground(new java.awt.Color(222, 222, 222));
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Nombre:");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nombreCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(117, 117, 117)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(dropDownListCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 170, Short.MAX_VALUE)
+                .addComponent(CrearNuevaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(369, 369, 369))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(CrearNuevaCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(nombreCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(dropDownListCategoria))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 861, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(270, 270, 270)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(Buscador, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(nombreCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(31, 31, 31)
-                        .addComponent(dropDownListCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(CrearNuevaCategoria)))
-                .addContainerGap())
+                        .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(35, 35, 35))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Buscador))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(CrearNuevaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(dropDownListCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(nombreCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(Buscador, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -292,115 +424,7 @@ public class InterfazCategoria extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    public void mostrar(String nombre){
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Nombre");
-        model.addColumn("ID");
-        model.addColumn("Tipo Item");
-        model.addColumn("Editar");
-        model.addColumn("Eliminar");
 
-        //Acciones de los botones de la tabla
-        Action actionEditar = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JTable table = (JTable) e.getSource();
-                int modelRow = Integer.valueOf(e.getActionCommand());
-
-                // Obtiene el ID de la categoria desde la tabla en la columna correspondiente
-                Object categoriaId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
-
-                // Recupera los datos completos de la categoria con el ID obtenido
-                Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaId((int) categoriaId);
-
-                // Crea y muestra una nueva interfaz para editar los datos del cliente
-                if (categoria != null) {
-                    InterfazCategoriaEditar interfazCategoriaEditar = new InterfazCategoriaEditar(categoria);
-                    interfazCategoriaEditar.setVisible(true);
-                }
-            }
-        };
-        Action actionEliminar = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JTable table = (JTable) e.getSource();
-                int modelRow = Integer.valueOf(e.getActionCommand());
-                // Obtiene el ID de la categoria desde la tabla en la columna correspondiente
-                Object categoriaId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
-
-                int confirm = JOptionPane.showConfirmDialog(
-                        null,
-                        "¿Deseas eliminar la categoria?",
-                        "Confirmación de eliminación",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE
-                );
-                if(confirm == JOptionPane.YES_OPTION){
-
-                    try{
-                        DAOFactory.getInstance().getCategoriaDAO().eliminarCategoria((int) categoriaId);
-
-
-                    }catch (CategoriaNoEncontradaException ex){
-                        JOptionPane.showMessageDialog(null,ex.getMessage());
-                    }
-                }
-            };
-        };
-
-
-
-        if(nombre != null){
-            try{
-                List<Categoria> categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre(nombre);
-                Iterator<Categoria> iterator = categoria.iterator();
-                while(iterator.hasNext()){
-                    Categoria cat = iterator.next();
-                    model.addRow(new Object[]{
-                            cat.getDescripcion(),
-                            cat.getId(),
-                            cat.getTipoItem().getClass().getName(),
-                    });
-
-
-                }
-
-            }catch(CategoriaNoEncontradaException e){
-                JOptionPane.showMessageDialog(null, e.getMessage());
-
-            }
-        }
-        else{
-            try{
-                List<Categoria> categorias = DAOFactory.getInstance().getCategoriaDAO().getCategorias();
-                Iterator<Categoria> iterator = categorias.iterator();
-                while(iterator.hasNext()){
-                    Categoria cat = iterator.next();
-                    model.addRow(new Object[]{
-                            cat.getDescripcion(),
-                            cat.getId(),
-                            cat.getTipoItem().getClass().getName(),
-
-                    });
-
-
-                }
-
-            }catch(CategoriaNoEncontradaException e){
-                JOptionPane.showMessageDialog(null, e.getMessage());
-
-            }
-        }
-        // Crear la tabla con el modelo
-        tablaCategoria.setModel(model);
-        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaCategoria,actionEditar,6);
-        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaCategoria,actionEliminar,7);
-
-
-
-
-
-    }
 
     private void BotonVendedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVendedoresActionPerformed
         // TODO add your handling code here:
@@ -433,11 +457,13 @@ public class InterfazCategoria extends javax.swing.JFrame {
             if(dropDownListCategoria.getSelectedIndex() == 0){
                 Categoria<Plato> categoriaPlato = new Categoria<>(nombreCategoria.getText(), Plato.class);
                 DAOFactory.getInstance().getCategoriaDAO().addCategoria(categoriaPlato);
+                mostrar(null);
             }
             else{
                 if(dropDownListCategoria.getSelectedIndex() == 1){
                     Categoria<Bebida> categoriaBebida = new Categoria<>(nombreCategoria.getText(), Bebida.class);
                     DAOFactory.getInstance().getCategoriaDAO().addCategoria(categoriaBebida);
+                    mostrar(null);
                 }
             }
 
@@ -451,6 +477,17 @@ public class InterfazCategoria extends javax.swing.JFrame {
     private void dropDownListCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dropDownListCategoriaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_dropDownListCategoriaActionPerformed
+
+    private void nombreCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nombreCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nombreCategoriaActionPerformed
+
+    private void BotonItemMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonItemMenuActionPerformed
+        // TODO add your handling code here:
+        InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();
+        interfazItemsMenu.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_BotonItemMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -502,9 +539,11 @@ public class InterfazCategoria extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField nombreCategoria;

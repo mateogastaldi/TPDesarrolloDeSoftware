@@ -4,14 +4,12 @@
  */
 package gui.itemMenu;
 
-import DAO.CategoriaDAO;
 import DAO.FACTORY.DAOFactory;
-import DAO.ItemsMenuDAO;
-import DAO.VendedorDAO;
 import exceptions.cliente.ClienteNoEncontradoException;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
+import gui.itemMenu.categoria.InterfazCategoria;
 import gui.pedido.InterfazPedidos;
 import gui.vendedores.InterfazVendedores;
 import tp.Cliente;
@@ -53,12 +51,12 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaItemsMenu = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
-        CrearNuevoItemMenu = new javax.swing.JButton();
+        CrearNuevoBebida = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         BuscadorDeItemMenu = new javax.swing.JTextField();
         BuscarBoton = new javax.swing.JButton();
         CrearNuevaCategoria = new javax.swing.JButton();
-        editarOEliminarCategoria = new javax.swing.JButton();
+        CrearNuevoPLato1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -155,12 +153,12 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField1.setText("Lista de Items Menu");
 
-        CrearNuevoItemMenu.setBackground(new java.awt.Color(65, 105, 225));
-        CrearNuevoItemMenu.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        CrearNuevoItemMenu.setText("Crear Nuevo ItemMenu");
-        CrearNuevoItemMenu.addActionListener(new java.awt.event.ActionListener() {
+        CrearNuevoBebida.setBackground(new java.awt.Color(65, 105, 225));
+        CrearNuevoBebida.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        CrearNuevoBebida.setText("Crear Nueva Bebida");
+        CrearNuevoBebida.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CrearNuevoItemMenuActionPerformed(evt);
+                CrearNuevoBebidaActionPerformed(evt);
             }
         });
 
@@ -184,19 +182,19 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
         CrearNuevaCategoria.setBackground(new java.awt.Color(65, 105, 225));
         CrearNuevaCategoria.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        CrearNuevaCategoria.setText("Crear Nueva Categoria ");
+        CrearNuevaCategoria.setText("Categorias");
         CrearNuevaCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CrearNuevaCategoriaActionPerformed(evt);
             }
         });
 
-        editarOEliminarCategoria.setBackground(new java.awt.Color(65, 105, 225));
-        editarOEliminarCategoria.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        editarOEliminarCategoria.setText("Editar o Eliminar Categoria ");
-        editarOEliminarCategoria.addActionListener(new java.awt.event.ActionListener() {
+        CrearNuevoPLato1.setBackground(new java.awt.Color(65, 105, 225));
+        CrearNuevoPLato1.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        CrearNuevoPLato1.setText("Crear Nuevo Plato");
+        CrearNuevoPLato1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editarOEliminarCategoriaActionPerformed(evt);
+                CrearNuevoPLato1ActionPerformed(evt);
             }
         });
 
@@ -204,28 +202,26 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(CrearNuevaCategoria, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(CrearNuevoItemMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(editarOEliminarCategoria)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(0, 39, Short.MAX_VALUE)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(BuscadorDeItemMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap())
             .addComponent(jScrollPane1)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jTextField1))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(CrearNuevoPLato1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(CrearNuevoBebida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BuscadorDeItemMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(CrearNuevaCategoria, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BuscarBoton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE))))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -234,15 +230,15 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(CrearNuevoItemMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(BuscadorDeItemMenu)
-                    .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(BuscarBoton, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(CrearNuevoPLato1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(CrearNuevaCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(editarOEliminarCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                    .addComponent(CrearNuevoBebida, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -401,12 +397,12 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_BotonVendedoresActionPerformed
 
-    private void CrearNuevoItemMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearNuevoItemMenuActionPerformed
+    private void CrearNuevoBebidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearNuevoBebidaActionPerformed
         // TODO add your handling code here:
-        InterfazItemMenuCrear interfazItemMenuCrear = new InterfazItemMenuCrear();
-        interfazItemMenuCrear.setVisible(true);
+        InterfazItemMenuCrearBebida interfazItemMenuCrearBebida = new InterfazItemMenuCrearBebida();
+        interfazItemMenuCrearBebida.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_CrearNuevoItemMenuActionPerformed
+    }//GEN-LAST:event_CrearNuevoBebidaActionPerformed
 
     private void BuscarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarBotonActionPerformed
         // TODO add your handling code here:
@@ -428,11 +424,14 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
     private void CrearNuevaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearNuevaCategoriaActionPerformed
         // TODO add your handling code here:
+        InterfazCategoria interfazCategoria = new InterfazCategoria();
+        interfazCategoria.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_CrearNuevaCategoriaActionPerformed
 
-    private void editarOEliminarCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editarOEliminarCategoriaActionPerformed
+    private void CrearNuevoPLato1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearNuevoPLato1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_editarOEliminarCategoriaActionPerformed
+    }//GEN-LAST:event_CrearNuevoPLato1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -478,8 +477,8 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
     private javax.swing.JTextField BuscadorDeItemMenu;
     private javax.swing.JButton BuscarBoton;
     private javax.swing.JButton CrearNuevaCategoria;
-    private javax.swing.JButton CrearNuevoItemMenu;
-    private javax.swing.JButton editarOEliminarCategoria;
+    private javax.swing.JButton CrearNuevoBebida;
+    private javax.swing.JButton CrearNuevoPLato1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
