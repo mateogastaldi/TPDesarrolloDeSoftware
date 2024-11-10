@@ -27,10 +27,137 @@ import java.util.List;
  */
 public class InterfazItemsMenu extends javax.swing.JFrame {
 
+    public InterfazItemsMenu() {initComponents();}
+
+    public void mostrar(String nombre){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Nombre");
+        model.addColumn("ID");
+        model.addColumn("Precio");
+        model.addColumn("Vendedor");
+        model.addColumn("Categoria");
+        model.addColumn("Apto Vegano");
+        model.addColumn("Apto Celiaco");
+        model.addColumn("Editar");
+        model.addColumn("Eliminar");
+
+        //Acciones de los botones de la tabla
+        Action actionEditar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+
+                // Obtiene el ID del item desde la tabla en la columna correspondiente
+                Object itemId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                // Recupera los datos completos del item con el ID obtenido
+                ItemMenu itemMenu = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorId((int) itemId);
+
+
+                // Crea y muestra una nueva interfaz para editar los datos del cliente
+                if (itemMenu != null) {
+                    InterfazItemsMenuEditar editarItem = new InterfazItemsMenuEditar(itemMenu);
+                    editarItem.setVisible(true);
+                }
+            }
+        };
+        Action actionEliminar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+                // Obtiene el ID del item desde la tabla en la columna correspondiente
+                Object itemId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Deseas eliminar el item?",
+                        "Confirmación de eliminación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                if(confirm == JOptionPane.YES_OPTION){
+
+                    try{
+                        DAOFactory.getInstance().getItemsMenuDAO().eliminarItemMenu((int) itemId);
+                        if(nombre == null){mostrar(null);}
+                        else{mostrar(nombre);}
+
+
+                    }catch (ItemMenuNoEncontradoException ex){
+                        JOptionPane.showMessageDialog(null,ex.getMessage());
+                    }
+                }
+            };
+        };
+
+
+
+        if(nombre != null){
+            try{
+                List<ItemMenu> itemMenus = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorNombre(nombre);
+                Iterator<ItemMenu> iterator = itemMenus.iterator();
+                while(iterator.hasNext()){
+                    ItemMenu itemMenu = iterator.next();
+                    model.addRow(new Object[]{
+                            itemMenu.getNombre(),
+                            itemMenu.getId(),
+                            itemMenu.getPrecio(),
+                            itemMenu.getVendedor().getNombre(),
+                            itemMenu.getCategoria().getClass().getSimpleName(),
+                            itemMenu.getAptoVegano(),
+                            itemMenu.getAptoCeliaco(),
+
+                    });
+
+
+                }
+
+            }catch(ItemMenuNoEncontradoException e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+
+            }
+        }
+        else{
+            try{
+                List<ItemMenu> itemMenus = DAOFactory.getInstance().getItemsMenuDAO().getItemMenus();
+                Iterator<ItemMenu> iterator = itemMenus.iterator();
+                while(iterator.hasNext()){
+                    ItemMenu itemMenu = iterator.next();
+                    model.addRow(new Object[]{
+                            itemMenu.getNombre(),
+                            itemMenu.getId(),
+                            itemMenu.getPrecio(),
+                            itemMenu.getVendedor().getNombre(),
+                            itemMenu.getCategoria().getClass().getSimpleName(),
+                            itemMenu.getAptoVegano(),
+                            itemMenu.getAptoCeliaco(),
+
+                    });
+
+
+                }
+
+            }catch(ItemMenuNoEncontradoException e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+
+            }
+        }
+        // Crear la tabla con el modelo
+        tablaItemsMenu.setModel(model);
+        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaItemsMenu,actionEditar,7);
+        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaItemsMenu,actionEliminar,8);
+
+
+
+
+
+    }
     /**
      * Creates new form InterfazVendedores
      */
-    public InterfazItemsMenu() {initComponents();}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -126,25 +253,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(222, 222, 222));
         jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 128)));
 
-        tablaItemsMenu.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Nombre", "ID", "Nombre Vendedor", "Precio", "Categoria", "Editar", "Eliminar"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        mostrar(null);
         jScrollPane1.setViewportView(tablaItemsMenu);
 
         jTextField1.setEditable(false);
@@ -270,125 +379,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    public void mostrar(String nombre){
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("Nombre");
-        model.addColumn("ID");
-        model.addColumn("Nombre Vendedor");
-        model.addColumn("Precio");
-        model.addColumn("Categoria");
-        model.addColumn("Apto Vegano");
-        model.addColumn("Apto Celiaco");
-        model.addColumn("Editar");
-        model.addColumn("Eliminar");
 
-        //Acciones de los botones de la tabla
-        Action actionEditar = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JTable table = (JTable) e.getSource();
-                int modelRow = Integer.valueOf(e.getActionCommand());
-
-                // Obtiene el ID del item menu desde la tabla en la columna correspondiente
-                Object itemMenuId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
-
-                // Recupera los datos completos del cliente con el ID obtenido
-                ItemMenu itemMenu = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorId((int) itemMenuId);
-
-                // Crea y muestra una nueva interfaz para editar los datos del cliente
-                if (itemMenu != null) {
-                    InterfazItemsMenuEditar editarItemMenuInterfaz = new InterfazItemsMenuEditar(itemMenu);
-                    editarItemMenuInterfaz.setVisible(true);
-                }
-            }
-        };
-        Action actionEliminar = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JTable table = (JTable) e.getSource();
-                int modelRow = Integer.valueOf(e.getActionCommand());
-                // Obtiene el ID del item Menu desde la tabla en la columna correspondiente
-                Object itemMenuId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
-
-                int confirm = JOptionPane.showConfirmDialog(
-                        null,
-                        "¿Deseas eliminar el Item Menu?",
-                        "Confirmación de eliminación",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE
-                );
-                if(confirm == JOptionPane.YES_OPTION){
-
-                    try{
-                        DAOFactory.getInstance().getItemsMenuDAO().eliminarItemMenu((int) itemMenuId);
-
-
-                    }catch (ItemMenuNoEncontradoException ex){
-                        JOptionPane.showMessageDialog(null,ex.getMessage());
-                    }
-                }
-            };
-        };
-
-
-
-        if(nombre != null){
-            try{
-                List<ItemMenu> itemsMenu = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorNombre(nombre);
-                Iterator<ItemMenu> iterator = itemsMenu.iterator();
-                while(iterator.hasNext()){
-                    ItemMenu itemMenu = iterator.next();
-                    model.addRow(new Object[]{
-                            itemMenu.getNombre(),
-                            itemMenu.getId(),
-                            itemMenu.getVendedor().getNombre(),
-                            itemMenu.getPrecio(),
-                            itemMenu.getCategoria().getDescripcion(),
-                            itemMenu.getAptoVegano(),
-                            itemMenu.getAptoCeliaco(),
-                    });
-
-
-                }
-
-            }catch(ClienteNoEncontradoException e){
-                JOptionPane.showMessageDialog(null, e.getMessage());
-
-            }
-        }
-        else{
-            try{
-                List<Cliente> clientes = DAOFactory.getInstance().getClienteDAO().getClientes();
-                Iterator<Cliente> iterator = clientes.iterator();
-                while(iterator.hasNext()){
-                    Cliente cliente = iterator.next();
-                    model.addRow(new Object[]{
-                            cliente.getNombre(),
-                            cliente.getId(),
-                            cliente.getDireccion().getPais(),
-                            cliente.getDireccion().getCiudad(),
-                            cliente.getDireccion().getCalle(),
-                            cliente.getDireccion().getAltura()
-                    });
-
-
-                }
-
-            }catch(ClienteNoEncontradoException e){
-                JOptionPane.showMessageDialog(null, e.getMessage());
-
-            }
-        }
-        // Crear la tabla con el modelo
-        tablaItemsMenu.setModel(model);
-        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaItemsMenu,actionEditar,6);
-        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaItemsMenu,actionEliminar,7);
-
-
-
-
-
-    }
 
     private void BotonVendedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonVendedoresActionPerformed
         // TODO add your handling code here:
@@ -406,6 +397,8 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
     private void BuscarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarBotonActionPerformed
         // TODO add your handling code here:
+        if(BuscadorDeItemMenu.getText().equalsIgnoreCase("")){mostrar(null);}
+        else{mostrar(BuscadorDeItemMenu.getText());}
     }//GEN-LAST:event_BuscarBotonActionPerformed
 
     private void BotonClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonClienteActionPerformed
@@ -431,6 +424,9 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
     private void CrearNuevoPLato1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CrearNuevoPLato1ActionPerformed
         // TODO add your handling code here:
+        InterfazItemMenuCrearPlato interfazItemMenuCrearPlato = new InterfazItemMenuCrearPlato();
+        interfazItemMenuCrearPlato.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_CrearNuevoPLato1ActionPerformed
 
     /**

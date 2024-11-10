@@ -229,32 +229,7 @@ public class InterfazCategoria extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(222, 222, 222));
         jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 128)));
 
-        tablaCategoria.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Nombre", "ID", "Tipo Item", "Editar", "Eliminar"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, true, true, true, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        mostrar(null);
         jScrollPane1.setViewportView(tablaCategoria);
 
         jTextField1.setEditable(false);
@@ -435,6 +410,8 @@ public class InterfazCategoria extends javax.swing.JFrame {
 
     private void BuscarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarBotonActionPerformed
         // TODO add your handling code here:
+        if(nombreCategoria.getText().equalsIgnoreCase("")){mostrar(null);}
+        else{mostrar(nombreCategoria.getText());}
     }//GEN-LAST:event_BuscarBotonActionPerformed
 
     private void BotonClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonClienteActionPerformed

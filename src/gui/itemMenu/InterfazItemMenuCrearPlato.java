@@ -34,7 +34,7 @@ public class InterfazItemMenuCrearPlato extends javax.swing.JFrame {
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
 
-            Iterator<Categoria> c = DAOFactory.getInstance().getCategoriaDAO().getCategorias().iterator();
+            Iterator<Categoria<ItemMenu>> c = DAOFactory.getInstance().getCategoriaDAO().filtrarPorTipoItem(Plato.class).iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getDescripcion());
             }
@@ -76,10 +76,10 @@ public class InterfazItemMenuCrearPlato extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         aptoVeganoCheckBox = new javax.swing.JCheckBox();
         aptoCeliacoCheckBox = new javax.swing.JCheckBox();
-        DropDownListCategoria = new javax.swing.JComboBox<>();
+        DropDownListCategoria = new javax.swing.JComboBox<>(modeloDropDownListCategoria());
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        DropDownListVendedor = new javax.swing.JComboBox<>();
+        DropDownListVendedor = new javax.swing.JComboBox<>(modeloDropDownListVendedor());
         peso = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         Calorias = new javax.swing.JTextField();
@@ -438,26 +438,32 @@ public class InterfazItemMenuCrearPlato extends javax.swing.JFrame {
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
-//        String nombre = nombreItem.getText();
-//        double precioIngresado = Double.parseDouble(precio.getText());
-//        Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
-//        Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
-//        boolean aptoCelaico = false;
-//        boolean aptoVegano = false;
-//        if(aptoCeliacoCheckBox.isSelected()){
-//            boolean aptoCeliaco = true;
-//        }
-//        if(aptoVeganoCheckBox.isSelected()){
-//            aptoVegano = true;
-//        }
-//        String descripcion = descripcionItem.getText();
-//        ItemMenu item =
-//
-//
-//
-//        InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();
-//        interfazItemsMenu.setVisible(true);
-//        this.setVisible(false);
+       double pesoIngresado = Double.parseDouble(peso.getText());
+
+
+        double caloriasIngresadas = Double.parseDouble(Calorias.getText());
+        String nombre = nombreItem.getText();
+
+        double precioIngresado = Double.parseDouble(precio.getText());
+        Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
+        Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
+        boolean aptoCelaico = false;
+        boolean aptoVegano = false;
+        if(aptoCeliacoCheckBox.isSelected()){
+            boolean aptoCeliaco = true;
+        }
+        if(aptoVeganoCheckBox.isSelected()){
+            aptoVegano = true;
+        }
+        String descripcion = descripcionItem.getText();
+        Plato plato = new Plato(nombre,descripcion,precioIngresado,aptoVegano,categoria,vendedor,caloriasIngresadas,aptoCelaico,pesoIngresado);
+        DAOFactory.getInstance().getItemsMenuDAO().addItemMenu(plato);
+
+
+        InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();
+        interfazItemsMenu.setVisible(true);
+        this.setVisible(false);
+
         
     }//GEN-LAST:event_botonConfirmarActionPerformed
 
