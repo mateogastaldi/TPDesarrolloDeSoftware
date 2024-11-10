@@ -11,20 +11,23 @@ public class Pedido extends EventManager {
     private List<ItemPedido> itemsPedidos;
     private Estado estado;
     private PagoStrategy metodoPago;
+    private Vendedor vendedor;
 
     //constructores
-    public Pedido(Cliente cliente) {
+    public Pedido(Cliente cliente,Vendedor vendedor) {
         super();
         setCliente(cliente);
+        setVendedor(vendedor);
         itemsPedidos = new ArrayList<>();
         this.estado = new EstadoRECIBIDO();
         setId();
     }
-    public Pedido(Cliente cliente, List<ItemPedido> itemsPedidos) {
+    public Pedido(Cliente cliente, List<ItemPedido> itemsPedidos,Vendedor vendedor) {
         super();
         setCliente(cliente);
         setItemsPedidos(itemsPedidos);
         this.estado = new EstadoRECIBIDO();
+        setVendedor(vendedor);
         setId();
     }
 
@@ -46,6 +49,8 @@ public class Pedido extends EventManager {
         ItemPedidoMemory.getInstance().addItemPedido(itemPedido);
     }
     private void setId(){this.id = ++contadorId;}
+    public Vendedor getVendedor() {return vendedor;}
+    public void setVendedor(Vendedor vendedor) {this.vendedor = vendedor;}
 
     //metodos
     public TipoEstado estado(){return estado.getEstado();}

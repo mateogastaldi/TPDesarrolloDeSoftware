@@ -11,4 +11,6 @@ public interface PedidosDAO {
     Pedido filtrarPedidoPorId(int id) throws PedidoNoEncontradoException;
     List<Pedido> filtrarPorNombreCliente(String nombre) throws PedidoNoEncontradoException;
     List<Pedido> filtrarPorIdCliente(int id) throws PedidoNoEncontradoException;
+    void eliminarPedido(int id) throws PedidoNoEncontradoException;
+    List<Pedido> filtrarPedidoPorVendedor(String vendedor) throws PedidoNoEncontradoException;
 }

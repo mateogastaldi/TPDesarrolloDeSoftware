@@ -6,6 +6,7 @@ package memory;
 
 import DAO.PedidosDAO;
 import exceptions.Pedido.PedidoNoEncontradoException;
+import exceptions.cliente.ClienteNoEncontradoException;
 import tp.Pedido;
 
 import java.util.ArrayList;
@@ -72,6 +73,25 @@ public class PedidosMemory implements PedidosDAO {
                 .collect(Collectors.toList());
         if(pedidosFiltrados.isEmpty()){
             throw new PedidoNoEncontradoException("No se encontro pedido con el id de cliente" + id);
+        }
+        return pedidosFiltrados;
+    }
+
+    public void eliminarPedido(int id) throws PedidoNoEncontradoException {
+        Pedido pedido = pedidos.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+
+        if(pedido == null){
+            ClienteNoEncontradoException exc = new ClienteNoEncontradoException("Cliente no encontrado");
+        }
+        else {
+            pedidos.remove(pedido);
+        }
+    }
+
+    public List<Pedido> filtrarPedidoPorVendedor(String nombre) throws PedidoNoEncontradoException{
+        List<Pedido> pedidosFiltrados = this.pedidos.stream().filter(p-> p.getVendedor().getNombre().equalsIgnoreCase(nombre)).collect(Collectors.toList());
+        if(pedidosFiltrados.isEmpty()){
+            throw new PedidoNoEncontradoException("Pedido no encontrado");
         }
         return pedidosFiltrados;
     }
