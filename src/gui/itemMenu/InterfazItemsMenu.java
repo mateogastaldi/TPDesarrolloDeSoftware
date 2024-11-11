@@ -14,6 +14,7 @@ import gui.pedido.InterfazPedidos;
 import gui.vendedores.InterfazVendedores;
 import tp.Cliente;
 import tp.ItemMenu;
+import tp.Plato;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -57,8 +58,15 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
                 // Crea y muestra una nueva interfaz para editar los datos del cliente
                 if (itemMenu != null) {
-                    InterfazItemsMenuEditar editarItem = new InterfazItemsMenuEditar(itemMenu);
-                    editarItem.setVisible(true);
+                    if(itemMenu.getCategoria().getTipoItem().equals(Plato.class)){
+                        InterfazItemMenuEditarPlato interfazItemMenuEditarPlato = new InterfazItemMenuEditarPlato( itemMenu);
+                        interfazItemMenuEditarPlato.setVisible(true);
+
+                    }
+                    else{
+                        InterfazItemMenuEditarBebida interfazItemMenuEditarBebida = new InterfazItemMenuEditarBebida(itemMenu);
+                        interfazItemMenuEditarBebida.setVisible(true);
+                    }
                 }
             }
         };
@@ -105,7 +113,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                             itemMenu.getId(),
                             itemMenu.getPrecio(),
                             itemMenu.getVendedor().getNombre(),
-                            itemMenu.getCategoria().getClass().getSimpleName(),
+                            itemMenu.getCategoria().getTipoItem().getSimpleName(),
                             itemMenu.getAptoVegano(),
                             itemMenu.getAptoCeliaco(),
 

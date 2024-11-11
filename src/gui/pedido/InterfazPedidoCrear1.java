@@ -5,20 +5,86 @@
 package gui.pedido;
 
 import DAO.FACTORY.DAOFactory;
+import exceptions.Pedido.PedidoNoEncontradoException;
 import tp.ItemMenu;
 import tp.MediosDePagos;
 import tp.Pedido;
 import tp.Vendedor;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
 import java.util.Iterator;
+import java.util.List;
 
 public class InterfazPedidoCrear1 extends javax.swing.JFrame {
+    public void mostrar(int id,String vendedor, String cliente) {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Cliente");
+        model.addColumn("Vendedor");
+        model.addColumn("Estado");
+        model.addColumn("Editar");
+        model.addColumn("Eliminar");
+
+        //Acciones de los botones de la tabla
+        Action actionEditar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+
+                // Obtiene el ID del pedido desde la tabla en la columna correspondiente
+                Object pedidoId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                // Recupera los datos completos del pedido con el ID obtenido
+                Pedido pedido = DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId((int) pedidoId);
+
+
+                // Crea y muestra una nueva interfaz para editar los datos del pedido
+                if (pedido != null) {
+                    InterfazPedidoEditar interfazPedidoEditar = new InterfazPedidoEditar(pedido);
+                    interfazPedidoEditar.setVisible(true);
+                }
+            }
+        };
+        Action actionEliminar = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+                // Obtiene el ID del pedido desde la tabla en la columna correspondiente
+                Object pedidoId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+
+                int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "¿Deseas eliminar el pedido?",
+                        "Confirmación de eliminación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+                if (confirm == JOptionPane.YES_OPTION) {
+
+                    try {
+                        DAOFactory.getInstance().getPedidosDAO().eliminarPedido((int) pedidoId);
+                        mostrar(id, vendedor, cliente);
+
+
+                    } catch (PedidoNoEncontradoException ex) {
+                        JOptionPane.showMessageDialog(null, ex.getMessage());
+                    }
+                }
+            }
+
+            ;
+        };
+    }
     Vendedor v;
+    List<ItemMenu> itemsDelLocal = DAOFactory.getInstance().getItemsMenuDAO().filtrarPorIdVendedor(v.getId());
     public DefaultComboBoxModel<String> modeloDropDownListItems(){
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
-            Iterator<ItemMenu> item = DAOFactory.getInstance().getItemsMenuDAO().filtrarPorIdVendedor(v.getId()).iterator();
+            Iterator<ItemMenu> item = itemsDelLocal.iterator();
             while (item.hasNext()) {
                 modelo.addElement(item.next().getNombre());
             }
@@ -198,6 +264,7 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
 
     private void agregarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarItemActionPerformed
         // TODO add your handling code here:
+
     }//GEN-LAST:event_agregarItemActionPerformed
 
     private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarActionPerformed
