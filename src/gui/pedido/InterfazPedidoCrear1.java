@@ -5,6 +5,8 @@
 package gui.pedido;
 
 import DAO.FACTORY.DAOFactory;
+import tp.ItemMenu;
+import tp.MediosDePagos;
 import tp.Pedido;
 import tp.Vendedor;
 
@@ -12,37 +14,24 @@ import javax.swing.*;
 import java.util.Iterator;
 
 public class InterfazPedidoCrear1 extends javax.swing.JFrame {
-    public DefaultComboBoxModel<String> modeloDropDownListVendedor(){
+    Vendedor v;
+    public DefaultComboBoxModel<String> modeloDropDownListItems(){
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
-            Iterator<Vendedor> c = DAOFactory.getInstance().getVendedorDAO().getVendedores().iterator();
-            while (c.hasNext()) {
-                modelo.addElement(c.next().getNombre());
+            Iterator<ItemMenu> item = DAOFactory.getInstance().getItemsMenuDAO().filtrarPorIdVendedor(v.getId()).iterator();
+            while (item.hasNext()) {
+                modelo.addElement(item.next().getNombre());
             }
 
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
         return modelo;
-
-    }
-    public DefaultComboBoxModel<String> modeloDropDownListItemMenu(){
-        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
-        try{
-            Iterator<Vendedor> c = DAOFactory.getInstance().getVendedorDAO().getVendedores().iterator();
-            while (c.hasNext()) {
-                modelo.addElement(c.next().getNombre());
-            }
-
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, e.getMessage());
-        }
-        return modelo;
-
     }
 
 
-    public InterfazPedidoCrear1() {
+    public InterfazPedidoCrear1(Vendedor vendedor, MediosDePagos mediosDePagos) {
+        v = vendedor;
         initComponents();
     }
 
