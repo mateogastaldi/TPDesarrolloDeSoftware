@@ -80,7 +80,7 @@ public class Etapa3 {
         vendedor3.addItemMenu(unKiloTrevi);
 
         //Creacion de pedidos
-        Pedido pedido1 = new Pedido(cliente1);
+        Pedido pedido1 = new Pedido(cliente1,vendedor1);
         ItemPedido itemPedido1 = new ItemPedido(plato1, pedido1);
         ItemPedido itemPedido2 = new ItemPedido(plato2, pedido1);
         ItemPedido itemPedido3 = new ItemPedido(plato3, pedido1);
@@ -95,7 +95,7 @@ public class Etapa3 {
         pedido1.addItemPedido(itemPedido5);
         pedido1.addItemPedido(itemPedido6);
 
-        Pedido pedido2 = new Pedido(cliente2);
+        Pedido pedido2 = new Pedido(cliente2,vendedor1);
         ItemPedido itemPedido7 = new ItemPedido(plato1, pedido2);
         ItemPedido itemPedido8 = new ItemPedido(plato2, pedido2);
         ItemPedido itemPedido9 = new ItemPedido(bebida1, pedido2);
@@ -106,7 +106,7 @@ public class Etapa3 {
         pedido2.addItemPedido(itemPedido9);
         pedido2.addItemPedido(itemPedido10);
 
-        Pedido pedido3 = new Pedido(cliente3);
+        Pedido pedido3 = new Pedido(cliente3,vendedor2);
         ItemPedido itemPedido11 = new ItemPedido(plato1, pedido3);
         ItemPedido itemPedido12 = new ItemPedido(bebida1, pedido3);
         ItemPedido itemPedido13 = new ItemPedido(plato5,pedido3);

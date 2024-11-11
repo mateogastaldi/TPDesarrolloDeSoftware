@@ -187,7 +187,7 @@
                           <Group type="102" attributes="0">
                               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextField3" min="-2" pref="151" max="-2" attributes="0"/>
+                              <Component id="filtrarPorVendedor" min="-2" pref="151" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -197,8 +197,8 @@
                               </Group>
                               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jTextField2" pref="151" max="32767" attributes="0"/>
-                                  <Component id="jTextField4" max="32767" attributes="0"/>
+                                  <Component id="filtrarPorId" pref="151" max="32767" attributes="0"/>
+                                  <Component id="filtrarPorCliente" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="botonBuscar" min="-2" pref="100" max="-2" attributes="0"/>
@@ -215,25 +215,24 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jTextField1" min="-2" pref="44" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace pref="13" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="filtrarPorId" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                          <Component id="jLabel1" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel1" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                                  <Component id="jTextField2" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel3" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                                  <Component id="jTextField3" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                                  <Component id="filtrarPorVendedor" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="0" pref="50" max="32767" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel2" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
-                                  <Component id="jTextField4" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
+                                  <Component id="filtrarPorCliente" alignment="3" min="-2" pref="38" max="-2" attributes="0"/>
                                   <Component id="botonBuscar" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
                                   <Component id="botonCrearPedido" alignment="3" min="-2" pref="43" max="-2" attributes="0"/>
                               </Group>
@@ -315,7 +314,7 @@
                 <Property name="text" type="java.lang.String" value="Filtrar por id:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField2">
+            <Component class="javax.swing.JTextField" name="filtrarPorId">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="de" green="de" red="de" type="rgb"/>
@@ -326,7 +325,6 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="9b" green="9b" red="9b" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Ingrese el id del pedido..."/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel2">
@@ -357,7 +355,7 @@
                 <Property name="text" type="java.lang.String" value="Filtrar por Vendedor:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField3">
+            <Component class="javax.swing.JTextField" name="filtrarPorVendedor">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="de" green="de" red="de" type="rgb"/>
@@ -368,10 +366,9 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="9b" green="9b" red="9b" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Ingrese el id del pedido..."/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField4">
+            <Component class="javax.swing.JTextField" name="filtrarPorCliente">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="de" green="de" red="de" type="rgb"/>
@@ -382,7 +379,6 @@
                 <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="9b" green="9b" red="9b" type="rgb"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Ingrese el id del pedido..."/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="botonBuscar">

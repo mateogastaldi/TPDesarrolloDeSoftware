@@ -33,6 +33,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("ID");
         model.addColumn("Cliente");
+        model.addColumn("Vendedor");
         model.addColumn("Estado");
         model.addColumn("Editar");
         model.addColumn("Eliminar");
@@ -88,15 +89,34 @@ public class InterfazPedidos extends javax.swing.JFrame {
         };
 
 
+        try{
+            List<Pedido> pedidoList = DAOFactory.getInstance().getPedidosDAO().getPedido();
+            if(id != -1) {pedidoList.retainAll((List<Pedido>)DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId(id));}
+            if(vendedor != null) {pedidoList.retainAll(DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorVendedor(vendedor));}
+            if(cliente != null) {pedidoList.retainAll(DAOFactory.getInstance().getPedidosDAO().filtrarPorNombreCliente(cliente));}
+            Iterator<Pedido> ip = pedidoList.iterator();
+            while(ip.hasNext()){
+                Pedido pedido = ip.next();
+                model.addRow(new Object[]{
+                        pedido.getId(),
+                        pedido.getCliente().getNombre(),
+                        pedido.getVendedor().getNombre(),
+                        pedido.getEstado().stringEstado()
 
-        List<Pedido> pedidoList = DAOFactory.getInstance().getPedidosDAO().getPedido();
-        if(id != -1) {pedidoList.retainAll((List<Pedido>)DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId(id));}
+                });
+            }
+        }catch (PedidoNoEncontradoException ex){
+            JOptionPane.showMessageDialog(null,ex.getMessage());
+        }
+
+
+
 
 
         // Crear la tabla con el modelo
         tablaPedidos.setModel(model);
-        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaPedidos,actionEditar,3);
-        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaPedidos,actionEliminar,4);
+        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaPedidos,actionEditar,4);
+        ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaPedidos,actionEliminar,5);
 
 
 
@@ -128,11 +148,11 @@ public class InterfazPedidos extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         botonCrearPedido = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        filtrarPorId = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        filtrarPorVendedor = new javax.swing.JTextField();
+        filtrarPorCliente = new javax.swing.JTextField();
         botonBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -208,25 +228,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(222, 222, 222));
         jPanel3.setBorder(javax.swing.BorderFactory.createMatteBorder(2, 2, 2, 2, new java.awt.Color(0, 0, 128)));
 
-        tablaPedidos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "ID", "Cliente", "Estado", "Editar", "Eliminar"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        mostrar(-1,null,null);
         jScrollPane1.setViewportView(tablaPedidos);
 
         jTextField1.setEditable(false);
@@ -249,10 +251,9 @@ public class InterfazPedidos extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Filtrar por id:");
 
-        jTextField2.setBackground(new java.awt.Color(222, 222, 222));
-        jTextField2.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(155, 155, 155));
-        jTextField2.setText("Ingrese el id del pedido...");
+        filtrarPorId.setBackground(new java.awt.Color(222, 222, 222));
+        filtrarPorId.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        filtrarPorId.setForeground(new java.awt.Color(155, 155, 155));
 
         jLabel2.setBackground(new java.awt.Color(222, 222, 222));
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -264,15 +265,13 @@ public class InterfazPedidos extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Filtrar por Vendedor:");
 
-        jTextField3.setBackground(new java.awt.Color(222, 222, 222));
-        jTextField3.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTextField3.setForeground(new java.awt.Color(155, 155, 155));
-        jTextField3.setText("Ingrese el id del pedido...");
+        filtrarPorVendedor.setBackground(new java.awt.Color(222, 222, 222));
+        filtrarPorVendedor.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        filtrarPorVendedor.setForeground(new java.awt.Color(155, 155, 155));
 
-        jTextField4.setBackground(new java.awt.Color(222, 222, 222));
-        jTextField4.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
-        jTextField4.setForeground(new java.awt.Color(155, 155, 155));
-        jTextField4.setText("Ingrese el id del pedido...");
+        filtrarPorCliente.setBackground(new java.awt.Color(222, 222, 222));
+        filtrarPorCliente.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        filtrarPorCliente.setForeground(new java.awt.Color(155, 155, 155));
 
         botonBuscar.setBackground(new java.awt.Color(65, 105, 225));
         botonBuscar.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
@@ -295,7 +294,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(filtrarPorVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -303,8 +302,8 @@ public class InterfazPedidos extends javax.swing.JFrame {
                             .addComponent(jLabel1))
                         .addGap(31, 31, 31)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
-                            .addComponent(jTextField4))
+                            .addComponent(filtrarPorId, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                            .addComponent(filtrarPorCliente))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(63, 63, 63)
@@ -316,22 +315,21 @@ public class InterfazPedidos extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(filtrarPorId, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(filtrarPorVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 50, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(filtrarPorCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(botonBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(botonCrearPedido, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(67, 67, 67)))
@@ -398,6 +396,11 @@ public class InterfazPedidos extends javax.swing.JFrame {
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
         // TODO add your handling code here:
+        int id = Integer.parseInt(filtrarPorId.getText());
+        String cliente = filtrarPorCliente.getText();
+        String vendedor = filtrarPorVendedor.getText();
+        mostrar(id, cliente, vendedor);
+
     }//GEN-LAST:event_botonBuscarActionPerformed
 
     /**
@@ -440,6 +443,9 @@ public class InterfazPedidos extends javax.swing.JFrame {
     private javax.swing.JButton botonBuscar;
     private javax.swing.JButton botonCrearPedido;
     private javax.swing.JButton clientes;
+    private javax.swing.JTextField filtrarPorCliente;
+    private javax.swing.JTextField filtrarPorId;
+    private javax.swing.JTextField filtrarPorVendedor;
     private javax.swing.JButton itemMenus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -449,9 +455,6 @@ public class InterfazPedidos extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JButton pedidos;
     private javax.swing.JTable tablaPedidos;
     private javax.swing.JButton vendedores;

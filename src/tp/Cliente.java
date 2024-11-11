@@ -82,7 +82,7 @@ public class Cliente implements EventListener {
     }
 
     public Pedido generarPedido(Vendedor vendedor){
-        Pedido pedido = new Pedido(this);
+        Pedido pedido = new Pedido(this,vendedor);
         System.out.println("Los items disponibles del vendedor "+ vendedor.getNombre() + " son: ");
         vendedor.printAllItemMenu();
         System.out.println("Elija los productos que desee, poner 0 para finalizar: ");
