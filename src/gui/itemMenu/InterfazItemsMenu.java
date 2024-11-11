@@ -130,7 +130,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                             itemMenu.getId(),
                             itemMenu.getPrecio(),
                             itemMenu.getVendedor().getNombre(),
-                            itemMenu.getCategoria().getClass().getSimpleName(),
+                            itemMenu.getCategoria().getTipoItem().getSimpleName(),
                             itemMenu.getAptoVegano(),
                             itemMenu.getAptoCeliaco(),
 
