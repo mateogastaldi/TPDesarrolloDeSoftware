@@ -113,7 +113,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                             itemMenu.getId(),
                             itemMenu.getPrecio(),
                             itemMenu.getVendedor().getNombre(),
-                            itemMenu.getCategoria().getTipoItem().getSimpleName(),
+                            itemMenu.getCategoria().getDescripcion(),
                             itemMenu.getAptoVegano(),
                             itemMenu.getAptoCeliaco(),
 
@@ -138,7 +138,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                             itemMenu.getId(),
                             itemMenu.getPrecio(),
                             itemMenu.getVendedor().getNombre(),
-                            itemMenu.getCategoria().getTipoItem().getSimpleName(),
+                            itemMenu.getCategoria().getDescripcion(),
                             itemMenu.getAptoVegano(),
                             itemMenu.getAptoCeliaco(),
 

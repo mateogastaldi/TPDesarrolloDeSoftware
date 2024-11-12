@@ -374,6 +374,9 @@ public class InterfazPedidos extends javax.swing.JFrame {
 
     private void botonCrearPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCrearPedidoActionPerformed
         // TODO add your handling code here:
+        InterfazPedidoCrear interfazPedidoCrear = new InterfazPedidoCrear();
+        interfazPedidoCrear.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_botonCrearPedidoActionPerformed
 
     private void clientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientesActionPerformed

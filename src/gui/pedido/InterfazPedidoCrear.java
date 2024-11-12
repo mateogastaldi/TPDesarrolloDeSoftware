@@ -191,7 +191,9 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
+
         Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String) dropVendedores.getSelectedItem()).getFirst();
+
         MediosDePagos mediosDePagos = null;
         if(((String) dropDownListMetodosDePago.getSelectedItem()).equals(MediosDePagos.MERCADO_PAGO.name())){ mediosDePagos = MediosDePagos.MERCADO_PAGO ;}
         else{
@@ -200,7 +202,13 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
                 mediosDePagos = MediosDePagos.EFECTIVO;
             }
         }
-        InterfazPedidoCrear1 interfazPedidoCrear1 = new InterfazPedidoCrear1(vendedor,mediosDePagos);
+
+        if (vendedor != null) {
+            System.out.println("Vendedor encontrado: " + vendedor.getId() + " - " + vendedor.getNombre());
+        } else {
+            System.out.println("No se encontró el vendedor");
+        }
+        InterfazPedidoCrear1 interfazPedidoCrear1 = new InterfazPedidoCrear1(vendedor, mediosDePagos);
         interfazPedidoCrear1.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_botonConfirmarActionPerformed
