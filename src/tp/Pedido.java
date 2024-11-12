@@ -1,6 +1,7 @@
 package tp;
 
-import memory.ItemPedidoMemory;
+import DAO.FACTORY.DAOFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,10 +44,10 @@ public class Pedido extends EventManager {
         this.addEventListener(cliente);
     }
     private void setItemsPedidos (List<ItemPedido> itemsPedidos) {this.itemsPedidos = itemsPedidos;}
-    private void setMetodoPago(PagoStrategy metodoPago) {this.metodoPago = metodoPago;}
+        private void setMetodoPago(PagoStrategy metodoPago) {this.metodoPago = metodoPago;}
     public void addItemPedido(ItemPedido itemPedido) {
         itemsPedidos.add(itemPedido);
-        ItemPedidoMemory.getInstance().addItemPedido(itemPedido);
+        DAOFactory.getInstance().getItemsPedidoDAO().addItemPedido(itemPedido);
     }
     private void setId(){this.id = ++contadorId;}
     public Vendedor getVendedor() {return vendedor;}
@@ -88,5 +89,14 @@ public class Pedido extends EventManager {
         System.out.println(this.cliente.getNombre());
     }
 
+    public void removeItemPedido(ItemPedido itemPedido){
+        itemsPedidos.remove(itemPedido);
+        DAOFactory.getInstance().getItemsPedidoDAO().remove(itemPedido);
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        Pedido pedido = (Pedido) obj;
+        return pedido.getId() == this.getId();
+    }
 }

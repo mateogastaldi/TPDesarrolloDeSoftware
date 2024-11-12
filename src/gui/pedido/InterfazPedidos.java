@@ -6,12 +6,10 @@ package gui.pedido;
 
 import DAO.FACTORY.DAOFactory;
 import exceptions.Pedido.PedidoNoEncontradoException;
-import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
 import gui.itemMenu.InterfazItemsMenu;
 import gui.vendedores.InterfazVendedores;
-import tp.ItemMenu;
 import tp.Pedido;
 
 import javax.swing.*;
@@ -39,7 +37,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
         model.addColumn("Eliminar");
 
         //Acciones de los botones de la tabla
-        Action actionEditar = new AbstractAction() {
+        Action actionActualizarEstado = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JTable table = (JTable) e.getSource();
@@ -52,10 +50,10 @@ public class InterfazPedidos extends javax.swing.JFrame {
                 Pedido pedido = DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId((int) pedidoId);
 
 
-                // Crea y muestra una nueva interfaz para editar los datos del pedido
+                // Crea y muestra una nueva interfaz para actualizar el estado pedido
                 if (pedido != null) {
-                    InterfazPedidoEditar interfazPedidoEditar = new InterfazPedidoEditar(pedido);
-                    interfazPedidoEditar.setVisible(true);
+                      pedido.actualizarEstado();
+                      mostrar(id,vendedor,cliente);
                 }
             }
         };
@@ -91,9 +89,9 @@ public class InterfazPedidos extends javax.swing.JFrame {
 
         try{
             List<Pedido> pedidoList = DAOFactory.getInstance().getPedidosDAO().getPedido();
-            if(id != -1) {pedidoList.retainAll((List<Pedido>)DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId(id));}
-            if(vendedor != null) {pedidoList.retainAll(DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorVendedor(vendedor));}
-            if(cliente != null) {pedidoList.retainAll(DAOFactory.getInstance().getPedidosDAO().filtrarPorNombreCliente(cliente));}
+            if(id > 0) {pedidoList.retainAll((List<Pedido>)DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId(id));}
+            if(vendedor != null && !vendedor.equals("")) {pedidoList.retainAll(DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorVendedor(vendedor));}
+            if(cliente != null && !cliente.equals("")) {pedidoList.retainAll(DAOFactory.getInstance().getPedidosDAO().filtrarPorNombreCliente(cliente));}
             Iterator<Pedido> ip = pedidoList.iterator();
             while(ip.hasNext()){
                 Pedido pedido = ip.next();
@@ -102,7 +100,6 @@ public class InterfazPedidos extends javax.swing.JFrame {
                         pedido.getCliente().getNombre(),
                         pedido.getVendedor().getNombre(),
                         pedido.getEstado().stringEstado()
-
                 });
             }
         }catch (PedidoNoEncontradoException ex){
@@ -115,7 +112,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
 
         // Crear la tabla con el modelo
         tablaPedidos.setModel(model);
-        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaPedidos,actionEditar,4);
+        ButtonColumn buttonColumnEditar = new ButtonColumn(tablaPedidos, actionActualizarEstado,4);
         ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaPedidos,actionEliminar,5);
 
 
@@ -399,11 +396,14 @@ public class InterfazPedidos extends javax.swing.JFrame {
 
     private void botonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBuscarActionPerformed
         // TODO add your handling code here:
-        int id = Integer.parseInt(filtrarPorId.getText());
-        String cliente = filtrarPorCliente.getText();
-        String vendedor = filtrarPorVendedor.getText();
-        mostrar(id, cliente, vendedor);
+        int id;
+        if (!filtrarPorId.getText().equals("")) {id = Integer.parseInt(filtrarPorId.getText());}
+        else{ id = -1;}
 
+        String cliente = filtrarPorCliente.getText();
+
+        String vendedor = filtrarPorVendedor.getText();
+        mostrar(id, vendedor, cliente);
     }//GEN-LAST:event_botonBuscarActionPerformed
 
     /**

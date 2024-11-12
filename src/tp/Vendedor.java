@@ -179,4 +179,11 @@ public class Vendedor {
     public boolean nombreIgual(String nom){return this.getNombre().equalsIgnoreCase(nom);}
     public boolean idIgual(int id){return this.getId() == id;}
 
+    public void editar(String nombre, Coordenada coordenadas, ArrayList<ItemMenu> itemMenu, ArrayList<Pedido> pedidos){
+        if(nombre != null){ setNombre(nombre); }
+        if(coordenadas != null){ setCoordenadas(coordenadas); }
+        if(itemMenu != null){ setItemMenu(itemMenu); }
+        if(pedidos != null){ setPedidos(pedidos); }
+    }
+
     }

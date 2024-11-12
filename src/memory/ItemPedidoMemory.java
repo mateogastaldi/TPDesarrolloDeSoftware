@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import exceptions.itemPedido.ItemPedidoNoEncontradoException;
 import tp.ItemPedido;
+import tp.Pedido;
 
 public class ItemPedidoMemory implements ItemPedidoDAO{
 
@@ -89,10 +90,25 @@ public class ItemPedidoMemory implements ItemPedidoDAO{
         return itemsFiltrados;
     }
     @Override
-    public List<ItemPedido> allItemsPedidos() throws ItemPedidoNoEncontradoException {
+    public List<ItemPedido> getitemsPedidos() throws ItemPedidoNoEncontradoException {
         if (this.itemsPedidos.isEmpty()) {
             throw new ItemPedidoNoEncontradoException("No existen Items Pedidos");
         }
         return this.itemsPedidos;
+    }
+
+    public ItemPedido getItemPedido(int id) throws ItemPedidoNoEncontradoException {
+        ItemPedido iP = this.itemsPedidos.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+        if (iP == null) {
+            throw new ItemPedidoNoEncontradoException("No existen Items Pedidos");
+        }
+        return iP;
+    }
+    public List<ItemPedido> filtrarPorPedido(Pedido pedido){
+        List<ItemPedido> item = itemsPedidos.stream().filter(p -> p.getPedido().getId() == pedido.getId()).collect(Collectors.toList());
+        return item;
+    }
+    public void remove(ItemPedido itemPedido) throws ItemPedidoNoEncontradoException {
+        this.itemsPedidos.remove(itemPedido);
     }
 }

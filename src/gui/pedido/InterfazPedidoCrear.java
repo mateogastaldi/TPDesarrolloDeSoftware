@@ -5,9 +5,7 @@
 package gui.pedido;
 
 import DAO.FACTORY.DAOFactory;
-import tp.MediosDePagos;
-import tp.Pedido;
-import tp.Vendedor;
+import tp.*;
 
 import javax.swing.*;
 import java.util.Iterator;
@@ -34,6 +32,23 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
         modelo.addElement(MediosDePagos.TRANSFERENCIA.name());
         modelo.addElement(MediosDePagos.EFECTIVO.name());
 
+        return modelo;
+
+    }
+
+    public DefaultComboBoxModel<String> modeloDropDownListCliente(){
+        DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+
+        try{
+            Iterator<Cliente> c = DAOFactory.getInstance().getClienteDAO().getClientes().iterator();
+            while (c.hasNext()) {
+                modelo.addElement(c.next().getNombre());
+            }
+
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
 
         return modelo;
 
@@ -57,6 +72,8 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
         dropVendedores = new javax.swing.JComboBox<>(modeloDropDownListVendedor());
         jLabel9 = new javax.swing.JLabel();
         dropDownListMetodosDePago = new javax.swing.JComboBox<>(modeloDropDownListMetodosDePago());
+        jLabel10 = new javax.swing.JLabel();
+        dropDownListCliente = new javax.swing.JComboBox<>(modeloDropDownListCliente());
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -101,8 +118,14 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("Metodo de pago:");
+        jLabel9.setText("Cliente:");
         jLabel9.setToolTipText("");
+
+        jLabel10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("Metodo de pago:");
+        jLabel10.setToolTipText("");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -115,40 +138,43 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
                         .addComponent(jTextField1)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 265, Short.MAX_VALUE)
+                        .addGap(0, 157, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(22, 22, 22))
+                                .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(27, 27, 27))
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(dropDownListMetodosDePago, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(dropVendedores, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(278, 278, 278))))))
+                                    .addComponent(dropVendedores, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(dropDownListCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(139, 139, 139))))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dropVendedores, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(53, 53, 53)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dropVendedores, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dropDownListMetodosDePago, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dropDownListMetodosDePago, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                    .addComponent(dropDownListCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(65, 65, 65)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -160,7 +186,7 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(114, Short.MAX_VALUE)
+                .addContainerGap(370, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(118, 118, 118))
         );
@@ -194,21 +220,18 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
 
         Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String) dropVendedores.getSelectedItem()).getFirst();
 
-        MediosDePagos mediosDePagos = null;
-        if(((String) dropDownListMetodosDePago.getSelectedItem()).equals(MediosDePagos.MERCADO_PAGO.name())){ mediosDePagos = MediosDePagos.MERCADO_PAGO ;}
+        PagoStrategy mediosDePagos = null;
+        if(((String) dropDownListMetodosDePago.getSelectedItem()).equals(MediosDePagos.MERCADO_PAGO.name())){ mediosDePagos = new MercadoPago() ;}
         else{
-            if(((String) dropDownListMetodosDePago.getSelectedItem()).equals(MediosDePagos.TRANSFERENCIA.name())){ mediosDePagos = MediosDePagos.TRANSFERENCIA ;}
+            if(((String) dropDownListMetodosDePago.getSelectedItem()).equals(MediosDePagos.TRANSFERENCIA.name())){ mediosDePagos =  new Transferencia() ;}
             else{
-                mediosDePagos = MediosDePagos.EFECTIVO;
+                mediosDePagos = new Efectivo();
             }
         }
 
-        if (vendedor != null) {
-            System.out.println("Vendedor encontrado: " + vendedor.getId() + " - " + vendedor.getNombre());
-        } else {
-            System.out.println("No se encontró el vendedor");
-        }
-        InterfazPedidoCrear1 interfazPedidoCrear1 = new InterfazPedidoCrear1(vendedor, mediosDePagos);
+        Cliente cliente = DAOFactory.getInstance().getClienteDAO().filtrarClientePorNombre((String) dropDownListCliente.getSelectedItem()).getFirst();
+
+        InterfazPedidoCrear1 interfazPedidoCrear1 = new InterfazPedidoCrear1(vendedor, mediosDePagos, cliente);
         interfazPedidoCrear1.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_botonConfirmarActionPerformed
@@ -223,8 +246,10 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonCancelar;
     private javax.swing.JButton botonConfirmar;
+    private javax.swing.JComboBox<String> dropDownListCliente;
     private javax.swing.JComboBox<String> dropDownListMetodosDePago;
     private javax.swing.JComboBox<String> dropVendedores;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;

@@ -12,4 +12,5 @@ public interface VendedorDAO {
     List<Vendedor> filtrarVendedorPorNombre(String nombre) throws VendedorNoEncontradoException;
     Vendedor filtrarVendedorPorId(int id) throws VendedorNoEncontradoException;
     void eliminarVendedor(int id) throws VendedorNoEncontradoException;
+
 }

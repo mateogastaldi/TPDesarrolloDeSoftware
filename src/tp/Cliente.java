@@ -80,7 +80,6 @@ public class Cliente implements EventListener {
     public boolean idIgual(int id){
         return this.getId() == id;
     }
-
     public Pedido generarPedido(Vendedor vendedor){
         Pedido pedido = new Pedido(this,vendedor);
         System.out.println("Los items disponibles del vendedor "+ vendedor.getNombre() + " son: ");
@@ -118,7 +117,6 @@ public class Cliente implements EventListener {
         return pedido;
 
     }
-
     public void metodoPago(Pedido pedido){
         System.out.println("Elegir metodo de pago: |  1=Transferencia  |  2=MercadoPago  |  3=Efectivo  |");
 
@@ -146,7 +144,6 @@ public class Cliente implements EventListener {
 
         }
     }
-
     public void modificarAtributos(String nombre, long cuit, Direccion direccion,String email,Coordenada coordenadas){
 
         if(!nombre.equals("")) setNombre(nombre);
@@ -156,7 +153,6 @@ public class Cliente implements EventListener {
 
 
     }
-
     @Override
     public void update(Pedido p) {
 

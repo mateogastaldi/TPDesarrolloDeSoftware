@@ -4,9 +4,7 @@ package memory;
 import DAO.ItemsMenuDAO;
 import exceptions.cliente.ClienteNoEncontradoException;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
-import tp.Bebida;
-import tp.ItemMenu;
-import tp.Plato;
+import tp.*;
 
 import java.util.ArrayList;
 import java.util.List;
