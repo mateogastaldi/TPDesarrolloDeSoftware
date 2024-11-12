@@ -11,7 +11,7 @@ public class Pedido extends EventManager {
     private Cliente cliente;
     private List<ItemPedido> itemsPedidos;
     private Estado estado;
-    private PagoStrategy metodoPago;
+    private Pago pago;
     private Vendedor vendedor;
 
     //constructores
@@ -35,7 +35,7 @@ public class Pedido extends EventManager {
     //getters-setters
     public Cliente getCliente() {return cliente;}
     public List<ItemPedido> getItemsPedidos() {return itemsPedidos;}
-    public PagoStrategy getMetodoPago(){return this.metodoPago;}
+    public Pago getPago(){return this.pago;}
     public int getId() {return id;}
     public Estado getEstado() {return estado;}
 
@@ -44,7 +44,7 @@ public class Pedido extends EventManager {
         this.addEventListener(cliente);
     }
     private void setItemsPedidos (List<ItemPedido> itemsPedidos) {this.itemsPedidos = itemsPedidos;}
-        private void setMetodoPago(PagoStrategy metodoPago) {this.metodoPago = metodoPago;}
+    private void setPago(Pago pago) {this.pago = pago;}
     public void addItemPedido(ItemPedido itemPedido) {
         itemsPedidos.add(itemPedido);
         DAOFactory.getInstance().getItemsPedidoDAO().addItemPedido(itemPedido);
@@ -57,6 +57,9 @@ public class Pedido extends EventManager {
     public TipoEstado estado(){return estado.getEstado();}
     public void actualizarEstado() {
         estado.siguiente();
+        if(estado.equals(TipoEstado.ENVIADO)) {
+            DAOFactory.getInstance().getPagoDAO().addPago(pago);
+        }
         this.notifyListeners(this);
     }
 
@@ -68,16 +71,13 @@ public class Pedido extends EventManager {
         return precioBase;
    }
     public double precioTotal(){
-        return metodoPago.precio(this.calcularPrecioBase());
+        return pago.getMonto();
     }
 
-    public void pagarEfectivo(){
-        this.setMetodoPago(new Efectivo());
+    public void pagarPagoStrategy(PagoStrategy ps){
+        this.setPago(new Pago(ps, calcularPrecioBase()));
    }
-    public void pagarMercadoPago(){this.setMetodoPago(new MercadoPago());}
-    public void pagarTransferencia(){
-        this.setMetodoPago(new Transferencia());
-    }
+
     public void printItemsPedidos(){
         for(ItemPedido itemPedido : itemsPedidos){
             System.out.println(itemPedido.getItemMenu().getNombre());

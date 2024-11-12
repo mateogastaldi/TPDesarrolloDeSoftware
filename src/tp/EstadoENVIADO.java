@@ -1,9 +1,13 @@
 package tp;
 
+import DAO.FACTORY.DAOFactory;
+
 public class EstadoENVIADO extends Estado {
 
     //constructores
-    public EstadoENVIADO() {super();}
+    public EstadoENVIADO() {
+        super();
+    }
 
     //metodos
     public TipoEstado getEstado() {

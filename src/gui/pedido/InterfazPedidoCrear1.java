@@ -34,6 +34,7 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
         itemsDelLocal = DAOFactory.getInstance().getItemsMenuDAO().filtrarPorIdVendedor(vendedorGlobal.getId());
         mp = mediosDePagos;
         pedido = new Pedido(cliente,vendedor);
+        pedido.pagarPagoStrategy(mediosDePagos);
         initComponents();
     }
 

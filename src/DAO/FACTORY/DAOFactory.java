@@ -11,6 +11,7 @@ public class DAOFactory {
     private ItemPedidoDAO itemsPedidoDAO;
     private PedidosDAO pedidosDAO;
     private VendedorDAO vendedorDAO;
+    private PagoDAO pagoDAO;
 
     private DAOFactory() {
         this.categoriaDAO = CategoriaMemory.getInstance();
@@ -19,6 +20,8 @@ public class DAOFactory {
         this.itemsPedidoDAO = ItemPedidoMemory.getInstance();
         this.pedidosDAO = PedidosMemory.getInstance();
         this.vendedorDAO = VendedorMemory.getInstance();
+        this.pagoDAO = PagoMemory.getInstance();
+
     }
     public static DAOFactory getInstance() {
         if (instance == null) {
@@ -43,5 +46,8 @@ public class DAOFactory {
     }
     public VendedorDAO getVendedorDAO() {
         return vendedorDAO;
+    }
+    public PagoDAO getPagoDAO() {
+        return pagoDAO;
     }
 }

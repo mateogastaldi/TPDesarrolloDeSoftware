@@ -33,7 +33,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
         model.addColumn("Cliente");
         model.addColumn("Vendedor");
         model.addColumn("Estado");
-        model.addColumn("Editar");
+        model.addColumn("Actualizar");
         model.addColumn("Eliminar");
 
         //Acciones de los botones de la tabla
@@ -44,7 +44,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
                 int modelRow = Integer.valueOf(e.getActionCommand());
 
                 // Obtiene el ID del pedido desde la tabla en la columna correspondiente
-                Object pedidoId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+                Object pedidoId = table.getModel().getValueAt(modelRow, 0); // Columna "ID"
 
                 // Recupera los datos completos del pedido con el ID obtenido
                 Pedido pedido = DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId((int) pedidoId);
@@ -63,7 +63,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
                 JTable table = (JTable) e.getSource();
                 int modelRow = Integer.valueOf(e.getActionCommand());
                 // Obtiene el ID del pedido desde la tabla en la columna correspondiente
-                Object pedidoId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+                Object pedidoId = table.getModel().getValueAt(modelRow, 0); // Columna "ID"
 
                 int confirm = JOptionPane.showConfirmDialog(
                         null,
