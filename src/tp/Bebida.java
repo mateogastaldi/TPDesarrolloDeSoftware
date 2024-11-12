@@ -1,3 +1,4 @@
+// Bebida.java
 package tp;
 public class Bebida extends ItemMenu{
     private double graduacionAlcoholica;
@@ -43,4 +44,10 @@ public class Bebida extends ItemMenu{
     }
     @Override
     public boolean aptoCeliaco(){return getAptoCeliaco();}
+
+    public void editarItem(String nombre, String descripcion, double precio, boolean aptoVegano, boolean aptoCeliaco, Categoria categoria, Vendedor vendedor, double graduacionAlcoholica, double tamanio) {
+        super.editarItem(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor);
+        setGraduacionAlcoholica(graduacionAlcoholica);
+        setTamanio(tamanio);
+    }
 }

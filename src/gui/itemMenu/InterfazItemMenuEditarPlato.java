@@ -1,3 +1,4 @@
+// InterfazItemMenuEditarPlato.java
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -6,6 +7,7 @@ package gui.itemMenu;
 
 import gui.itemMenu.*;
 import DAO.FACTORY.DAOFactory;
+import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import tp.*;
 
 import javax.swing.*;
@@ -17,6 +19,7 @@ import java.util.Iterator;
  */
 public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
     private ItemMenu iM = null;
+    private Plato plato = null;
 
     public DefaultComboBoxModel<String> modeloDropDownListVendedor(){
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
@@ -51,10 +54,28 @@ public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
 
     public InterfazItemMenuEditarPlato(ItemMenu itemMenu) {
         iM = itemMenu;
+        plato = (Plato) iM;
         initComponents();
+        cargarDatosPlato(); // Carga los datos del Plato en los campos
     }
 
+    // Método para cargar los datos del Plato en los campos
+    private void cargarDatosPlato() {
+        // Autocompletar campos con los datos del Plato
+        nombreItem.setText(plato.getNombre());
+        descripcionItem.setText(plato.getDescripcion());
+        precio.setText(String.valueOf(plato.getPrecio()));
+        peso.setText(String.valueOf(plato.getPeso()));
+        Calorias.setText(String.valueOf(plato.getCalorias()));
 
+        // Establecer el vendedor y la categoría
+        DropDownListVendedor.setSelectedItem(plato.getVendedor().getNombre());
+        DropDownListCategoria.setSelectedItem(plato.getCategoria().getDescripcion());
+
+        // Establecer si es apto para celiacos o veganos
+        aptoCeliacoCheckBox.setSelected(plato.aptoCeliaco());
+        aptoVeganoCheckBox.setSelected(plato.aptoVegano());
+    }
 
 
     @SuppressWarnings("unchecked")
@@ -81,10 +102,10 @@ public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         aptoVeganoCheckBox = new javax.swing.JCheckBox();
         aptoCeliacoCheckBox = new javax.swing.JCheckBox();
-        DropDownListCategoria = new javax.swing.JComboBox<>();
+        DropDownListCategoria = new javax.swing.JComboBox<>(modeloDropDownListCategoria());
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        DropDownListVendedor = new javax.swing.JComboBox<>();
+        DropDownListVendedor = new javax.swing.JComboBox<>(modeloDropDownListVendedor());
         peso = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         Calorias = new javax.swing.JTextField();
@@ -442,34 +463,35 @@ public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
     }//GEN-LAST:event_descripcionItemActionPerformed
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
-        // TODO add your handling code here:
-       double pesoIngresado = Double.parseDouble(peso.getText());
+    // TODO add your handling code here:
+    // Obtén y valida los datos ingresados
+    String nombre = nombreItem.getText();
+    double pesoIngresado = Double.parseDouble(peso.getText());
+    String descripcion = descripcionItem.getText();
 
+    double caloriasIngresadas = Double.parseDouble(Calorias.getText());
+    double precioIngresado = Double.parseDouble(precio.getText());
 
-        double caloriasIngresadas = Double.parseDouble(Calorias.getText());
-        String nombre = nombreItem.getText();
+    // Obtén el vendedor y la categoría seleccionados
+    Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
+    Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
 
-        double precioIngresado = Double.parseDouble(precio.getText());
-        Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
-        Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
-        boolean aptoCelaico = false;
-        boolean aptoVegano = false;
-        if(aptoCeliacoCheckBox.isSelected()){
-            boolean aptoCeliaco = true;
-        }
-        if(aptoVeganoCheckBox.isSelected()){
-            aptoVegano = true;
-        }
-        String descripcion = descripcionItem.getText();
-        Plato plato = new Plato(nombre,descripcion,precioIngresado,aptoVegano,categoria,vendedor,caloriasIngresadas,aptoCelaico,pesoIngresado);
-        DAOFactory.getInstance().getItemsMenuDAO().addItemMenu(plato);
+    // Verifica si el plato es apto para veganos o celíacos
+    boolean aptoCeliaco = aptoCeliacoCheckBox.isSelected();
+    boolean aptoVegano = aptoVeganoCheckBox.isSelected();
 
+    try {
+                // Obtén el plato existente y actualízalo
+        plato.editarItem(nombre, descripcion, precioIngresado, aptoVegano, aptoCeliaco, categoria, vendedor, caloriasIngresadas, pesoIngresado);
 
+        // Redirige a la interfaz de items del menú
         InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();
         interfazItemsMenu.setVisible(true);
         this.setVisible(false);
-
-        
+    } catch (ItemMenuNoEncontradoException e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
+   
     }//GEN-LAST:event_botonConfirmarActionPerformed
 
     private void descripcionItemKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descripcionItemKeyTyped

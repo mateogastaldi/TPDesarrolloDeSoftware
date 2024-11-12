@@ -1,10 +1,12 @@
-
+// ItemsMenuMemory.java
 package memory;
 
 import DAO.ItemsMenuDAO;
 import exceptions.cliente.ClienteNoEncontradoException;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
+import tp.Bebida;
 import tp.ItemMenu;
+import tp.Plato;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +143,7 @@ public class ItemsMenuMemory implements ItemsMenuDAO {
         return itemFiltrados;
     }
 
+    @Override
     public void eliminarItemMenu(int id) throws ItemMenuNoEncontradoException{
         ItemMenu itemMenu = itemMenus.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
 
@@ -151,4 +154,24 @@ public class ItemsMenuMemory implements ItemsMenuDAO {
             itemMenus.remove(itemMenu);
         }
     }
+    
+    // ItemsMenuMemory.java
+    @Override
+    public void editarItemMenu(int id, String nombre, String descripcion, double precio, boolean aptoVegano, boolean aptoCeliaco, Categoria categoria, Vendedor vendedor, Double especifico1, Double especifico2) throws ItemMenuNoEncontradoException {
+        ItemMenu item = filtrarItemMenuPorId(id); // Usa el método de filtro existente para obtener el ítem
+        switch (item) {
+            case Plato plato -> {
+                double calorias = (especifico1 != null) ? especifico1 : plato.getCalorias();
+                double peso = (especifico2 != null) ? especifico2 : plato.getPeso();
+                plato.editarItem(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor, calorias, peso);
+            }
+            case Bebida bebida -> {
+                double graduacionAlcoholica = (especifico1 != null) ? especifico1 : bebida.getGraduacionAlcoholica();
+                double tamanio = (especifico2 != null) ? especifico2 : bebida.getTamanio();
+                bebida.editarItem(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor, graduacionAlcoholica, tamanio);
+            }
+            default -> throw new ItemMenuNoEncontradoException("El ítem con ID " + id + " no es válido para la edición");
+        }
+    }
+
 }

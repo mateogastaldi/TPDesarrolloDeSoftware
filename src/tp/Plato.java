@@ -1,3 +1,4 @@
+// Plato.java
 package tp;
 
 
@@ -43,5 +44,12 @@ public class Plato extends ItemMenu{
     public boolean aptoVegano(){return getAptoVegano();}
     @Override
     public boolean aptoCeliaco(){return getAptoCeliaco();}
+
+
+    public void editarItem(String nombre, String descripcion, double precio, boolean aptoVegano, boolean aptoCeliaco, Categoria categoria, Vendedor vendedor, double caloriasIngresadas, double peso) {
+        super.editarItem(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor);
+        setCalorias(caloriasIngresadas);
+        setPeso(peso);
+    }
    
 }

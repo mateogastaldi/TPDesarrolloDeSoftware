@@ -1,10 +1,11 @@
-
+// ItemsMenuDAO.java
 package DAO;
 
-import java.util.List;
-
-import tp.ItemMenu;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
+import java.util.List;
+import tp.Categoria;
+import tp.ItemMenu;
+import tp.Vendedor;
 
 public interface ItemsMenuDAO{
     List<ItemMenu> getItemMenus() throws ItemMenuNoEncontradoException;
@@ -18,4 +19,5 @@ public interface ItemsMenuDAO{
     List<ItemMenu> filtrarAptoVeganos() throws ItemMenuNoEncontradoException;
     List<ItemMenu> filtrarAptoCeliacos() throws ItemMenuNoEncontradoException;
     void eliminarItemMenu(int id) throws ItemMenuNoEncontradoException;
+    void editarItemMenu(int id, String nombre, String descripcion, double precio, boolean aptoVegano, boolean aptoCeliaco, Categoria categoria, Vendedor vendedor, Double especifico1, Double especifico2) throws ItemMenuNoEncontradoException;
 }

@@ -1,3 +1,4 @@
+// ItemMenu.java
 package tp;
 
 public abstract class ItemMenu {
@@ -63,4 +64,14 @@ public abstract class ItemMenu {
     public void printItemMenu(){
         System.out.println("ID: " + getId() + " | Nombre: " + getNombre() + " | Precio: " + getPrecio());
     }
+    public void editarItem(String nombre, String descripcion, double precio, boolean aptoVegano, boolean aptoCeliaco, Categoria categoria, Vendedor vendedor) {
+        setNombre(nombre);
+        setDescripcion(descripcion);
+        setPrecio(precio);
+        setAptoVegano(aptoVegano);
+        setAptoCeliaco(aptoCeliaco);
+        setCategoria(categoria);
+        setVendedor(vendedor);
+    }
+
 }

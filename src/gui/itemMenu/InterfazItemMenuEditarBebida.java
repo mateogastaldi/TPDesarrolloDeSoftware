@@ -1,3 +1,4 @@
+// InterfazItemMenuEditarBebida.java
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -16,6 +17,7 @@ import java.util.Iterator;
  */
 public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
     private ItemMenu iM = null;
+    private Bebida bebida = null;
 
     public DefaultComboBoxModel<String> modeloDropDownListVendedor(){
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
@@ -50,7 +52,22 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
 
     public InterfazItemMenuEditarBebida(ItemMenu itemMenu) {
         iM = itemMenu;
-        initComponents();}
+        bebida = (Bebida) iM;
+        initComponents();
+        cargarDatosBebida();
+    }
+
+    public void cargarDatosBebida(){
+        nombreItem.setText(bebida.getNombre());
+        descripcionItem.setText(bebida.getDescripcion());
+        precio.setText(String.valueOf(bebida.getPrecio()));
+        alcohol.setText(String.valueOf(bebida.getGraduacionAlcoholica()));
+        tamanio.setText(String.valueOf(bebida.getTamanio()));
+        aptoVeganoCheckBox.setSelected(bebida.getAptoVegano());
+        aptoCeliacoCheckBox.setSelected(bebida.getAptoCeliaco());
+        DropDownListCategoria.setModel(modeloDropDownListCategoria());
+        DropDownListVendedor.setModel(modeloDropDownListVendedor());
+    }
 
 
 
@@ -79,10 +96,10 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         aptoVeganoCheckBox = new javax.swing.JCheckBox();
         aptoCeliacoCheckBox = new javax.swing.JCheckBox();
-        DropDownListCategoria = new javax.swing.JComboBox<>();
+        DropDownListCategoria = new javax.swing.JComboBox<>(modeloDropDownListCategoria());
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        DropDownListVendedor = new javax.swing.JComboBox<>();
+        DropDownListVendedor = new javax.swing.JComboBox<>(modeloDropDownListVendedor());
         alcohol = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         tamanio = new javax.swing.JTextField();
@@ -439,41 +456,35 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
     }//GEN-LAST:event_descripcionItemActionPerformed
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
-        // TODO add your handling code here:
-        double gradAlcoholica = Double.parseDouble(alcohol.getText());
-        if(gradAlcoholica > 100.0){
-            JOptionPane.showMessageDialog(this, "El gradual es mayor que 100.0");
-            InterfazItemMenuEditarBebida interfazItemMenuCrearBebida = new InterfazItemMenuEditarBebida(iM);
-            interfazItemMenuCrearBebida.setVisible(true);
-            this.setVisible(false);
-        }
-        else{
-            double tamanioIngresado = Double.parseDouble(tamanio.getText());
-            String nombre = nombreItem.getText();
-
-            double precioIngresado = Double.parseDouble(precio.getText());
-            Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
-            Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
-            boolean aptoCelaico = false;
-            boolean aptoVegano = false;
-            if(aptoCeliacoCheckBox.isSelected()){
-                boolean aptoCeliaco = true;
-            }
-            if(aptoVeganoCheckBox.isSelected()){
-                aptoVegano = true;
-            }
-            String descripcion = descripcionItem.getText();
-            Bebida bebida = new Bebida(nombre,descripcion,precioIngresado,aptoVegano,aptoCelaico,categoria,vendedor,gradAlcoholica,tamanioIngresado);
-            DAOFactory.getInstance().getItemsMenuDAO().addItemMenu(bebida);
-
-
+        // Obtén y valida los datos ingresados
+        String nombre = nombreItem.getText();
+        String descripcion = descripcionItem.getText();
+        double precioIngresado = Double.parseDouble(precio.getText());
+        double graduacionAlcoholicaIngresada = Double.parseDouble(alcohol.getText());
+        double tamanioIngresado = Double.parseDouble(tamanio.getText());
+    
+        // Obtén el vendedor y la categoría seleccionados
+        Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String) DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
+        Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre((String) DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
+    
+        // Verifica si el item es apto para veganos o celíacos
+        boolean aptoCeliaco = aptoCeliacoCheckBox.isSelected();
+        boolean aptoVegano = aptoVeganoCheckBox.isSelected();
+    
+        try {
+            // Llama al método para editar el item
+            // Recuerda que la lógica para editar la bebida usa los parámetros específicos de esta clase
+            bebida.editarItem(nombre, descripcion, precioIngresado, aptoVegano, aptoCeliaco, categoria, vendedor, graduacionAlcoholicaIngresada, tamanioIngresado);
+    
+            // Redirige a la interfaz de items del menú
             InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();
             interfazItemsMenu.setVisible(true);
             this.setVisible(false);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
-        
-    }//GEN-LAST:event_botonConfirmarActionPerformed
+    }
+    
 
     private void descripcionItemKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descripcionItemKeyTyped
         // TODO add your handling code here:
