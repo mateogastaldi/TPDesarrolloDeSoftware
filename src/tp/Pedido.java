@@ -38,6 +38,7 @@ public class Pedido extends EventManager {
     public Pago getPago(){return this.pago;}
     public int getId() {return id;}
     public Estado getEstado() {return estado;}
+    public Vendedor getVendedor() {return vendedor;}
 
     private void setCliente(Cliente cliente) {
         this.cliente = cliente;
@@ -50,7 +51,6 @@ public class Pedido extends EventManager {
         DAOFactory.getInstance().getItemsPedidoDAO().addItemPedido(itemPedido);
     }
     private void setId(){this.id = ++contadorId;}
-    public Vendedor getVendedor() {return vendedor;}
     public void setVendedor(Vendedor vendedor) {this.vendedor = vendedor;}
 
     //metodos
@@ -81,8 +81,7 @@ public class Pedido extends EventManager {
     public void printItemsPedidos(){
         for(ItemPedido itemPedido : itemsPedidos){
             System.out.println(itemPedido.getItemMenu().getNombre());
-        }
-    }
+        }}
     public void printAllPedido(){
         System.out.println("Pedido de ID: "+this.getId());
         this.printItemsPedidos();
