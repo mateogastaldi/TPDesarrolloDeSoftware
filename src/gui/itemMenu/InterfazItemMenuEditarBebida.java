@@ -30,6 +30,7 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
+
         return modelo;
 
     }
@@ -65,8 +66,8 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
         tamanio.setText(String.valueOf(bebida.getTamanio()));
         aptoVeganoCheckBox.setSelected(bebida.getAptoVegano());
         aptoCeliacoCheckBox.setSelected(bebida.getAptoCeliaco());
-        DropDownListCategoria.setModel(modeloDropDownListCategoria());
-        DropDownListVendedor.setModel(modeloDropDownListVendedor());
+        DropDownListCategoria.setSelectedItem(bebida.getCategoria().getDescripcion());
+        DropDownListVendedor.setSelectedItem(bebida.getVendedor().getNombre());
     }
 
 
