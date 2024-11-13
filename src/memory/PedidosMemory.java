@@ -7,7 +7,7 @@ package memory;
 import DAO.PedidosDAO;
 import exceptions.Pedido.PedidoNoEncontradoException;
 import exceptions.cliente.ClienteNoEncontradoException;
-import tp.Pedido;
+import model.Pedido;
 
 import java.util.ArrayList;
 import java.util.List;

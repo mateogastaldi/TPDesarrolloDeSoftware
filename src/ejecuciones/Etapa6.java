@@ -2,7 +2,7 @@ package ejecuciones;
 
 import DAO.FACTORY.DAOFactory;
 import gui.cliente.InterfazClientes;
-import tp.*;
+import model.*;
 
 public class Etapa6 {
     public static void ejecutar() {

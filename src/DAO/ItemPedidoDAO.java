@@ -3,8 +3,8 @@ package DAO;
 
 import java.util.List;
 import exceptions.itemPedido.ItemPedidoNoEncontradoException;
-import tp.ItemPedido;
-import tp.Pedido;
+import model.ItemPedido;
+import model.Pedido;
 
 public interface ItemPedidoDAO {
 
@@ -14,8 +14,8 @@ public interface ItemPedidoDAO {
     List<ItemPedido> filtrarPorNombreVendedor(String nombreVendedor) throws ItemPedidoNoEncontradoException;
     List<ItemPedido> filtrarPorRangoPrecio(double precioMin, double precioMax) throws ItemPedidoNoEncontradoException;
     List<ItemPedido> filtrarPorIdVendedor(int idVendedor) throws ItemPedidoNoEncontradoException;
-    List<ItemPedido> getitemsPedidos() throws ItemPedidoNoEncontradoException;
     List<ItemPedido> filtrarPorPedido(Pedido pedido);
+    List<ItemPedido> getitemsPedidos() throws ItemPedidoNoEncontradoException;
     void remove(ItemPedido itemPedido) throws ItemPedidoNoEncontradoException;
-
+    
 }

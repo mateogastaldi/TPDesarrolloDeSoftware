@@ -1,6 +1,4 @@
-package tp;
-
-import java.util.Scanner;
+package model;
 
 public class Efectivo implements PagoStrategy{
 

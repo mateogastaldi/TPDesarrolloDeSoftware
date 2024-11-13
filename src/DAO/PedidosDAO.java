@@ -2,7 +2,7 @@
 package DAO;
 
 import java.util.List;
-import tp.Pedido;
+import model.Pedido;
 import exceptions.Pedido.PedidoNoEncontradoException;
 
 public interface PedidosDAO {

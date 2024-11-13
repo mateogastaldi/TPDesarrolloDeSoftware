@@ -1,4 +1,4 @@
-package tp;
+package model;
 
 public class Pago {
     PagoStrategy metodoDePago;

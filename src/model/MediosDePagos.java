@@ -1,4 +1,4 @@
-package tp;
+package model;
 
 public enum MediosDePagos {
     MERCADO_PAGO,

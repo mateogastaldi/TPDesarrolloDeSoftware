@@ -4,8 +4,7 @@
  */
 package gui.itemMenu;
 
-import DAO.FACTORY.DAOFactory;
-import tp.*;
+import model.*;
 
 import javax.swing.*;
 import java.util.Iterator;
@@ -19,7 +18,7 @@ public class InterfazItemMenuCrearBebida extends javax.swing.JFrame {
     public DefaultComboBoxModel<String> modeloDropDownListVendedor(){
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
-            Iterator<Vendedor> c = DAOFactory.getInstance().getVendedorDAO().getVendedores().iterator();
+            Iterator<Vendedor> c = VendedoresController.getInstance.getVendedores().iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getNombre());
             }
@@ -34,7 +33,7 @@ public class InterfazItemMenuCrearBebida extends javax.swing.JFrame {
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
 
-             Iterator<Categoria<ItemMenu>> c = DAOFactory.getInstance().getCategoriaDAO().filtrarPorTipoItem(Bebida.class).iterator();
+             Iterator<Categoria<ItemMenu>> c = ItemMenusController.getInstance().filtrarPorTipoItem(Bebida.class).iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getDescripcion());
             }
@@ -460,8 +459,7 @@ public class InterfazItemMenuCrearBebida extends javax.swing.JFrame {
                 aptoVegano = true;
             }
             String descripcion = descripcionItem.getText();
-            Bebida bebida = new Bebida(nombre,descripcion,precioIngresado,aptoVegano,aptoCelaico,categoria,vendedor,gradAlcoholica,tamanioIngresado);
-            DAOFactory.getInstance().getItemsMenuDAO().addItemMenu(bebida);
+            ItemMenusController.getInstance().addBebida(nombre,descripcion,precioIngresado,aptoVegano,aptoCelaico,categoria,vendedor,gradAlcoholica,tamanioIngresado);
 
 
             InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();

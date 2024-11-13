@@ -1,4 +1,4 @@
-package tp;
+package model;
 
 import exceptions.itemPedido.ItemPedidoNoEncontradoException;
 import java.util.ArrayList;

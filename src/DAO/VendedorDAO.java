@@ -2,7 +2,9 @@
 package DAO;
 
 import exceptions.vendedor.VendedorNoEncontradoException;
-import tp.Vendedor;
+import model.Vendedor;
+import model.Coordenada;
+import model.Direccion;
 
 import java.util.List;
 
@@ -12,5 +14,5 @@ public interface VendedorDAO {
     List<Vendedor> filtrarVendedorPorNombre(String nombre) throws VendedorNoEncontradoException;
     Vendedor filtrarVendedorPorId(int id) throws VendedorNoEncontradoException;
     void eliminarVendedor(int id) throws VendedorNoEncontradoException;
-
+    void modificarVendedor(int id, String nombre, Direccion direccion, Coordenada coordenada) throws VendedorNoEncontradoException;
 }

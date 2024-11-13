@@ -1,6 +1,6 @@
 package DAO;
 
-import tp.Pago;
+import model.Pago;
 
 public interface PagoDAO {
     void addPago(Pago p);

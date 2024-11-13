@@ -1,6 +1,4 @@
-package tp;
-
-import exceptions.cliente.direccion.DireccionNoCreadaException;
+package model;
 
 public class Direccion {
     //atributos

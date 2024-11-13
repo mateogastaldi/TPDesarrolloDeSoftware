@@ -1,5 +1,5 @@
 // Plato.java
-package tp;
+package model;
 
 
 public class Plato extends ItemMenu{

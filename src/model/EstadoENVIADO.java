@@ -1,6 +1,4 @@
-package tp;
-
-import DAO.FACTORY.DAOFactory;
+package model;
 
 public class EstadoENVIADO extends Estado {
 

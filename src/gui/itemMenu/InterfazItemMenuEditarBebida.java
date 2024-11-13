@@ -6,7 +6,7 @@
 package gui.itemMenu;
 
 import DAO.FACTORY.DAOFactory;
-import tp.*;
+import model.*;
 
 import javax.swing.*;
 import java.util.Iterator;

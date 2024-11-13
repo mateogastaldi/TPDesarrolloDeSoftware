@@ -5,8 +5,6 @@
 package gui.itemMenu.categoria;
 
 import DAO.FACTORY.DAOFactory;
-import exceptions.cliente.ClienteNoEncontradoException;
-import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import exceptions.itemMenu.categoria.CategoriaNoCreadaException;
 import exceptions.itemMenu.categoria.CategoriaNoEncontradaException;
 import gui.ButtonColumn;
@@ -14,7 +12,7 @@ import gui.cliente.InterfazClientes;
 import gui.itemMenu.InterfazItemsMenu;
 import gui.pedido.InterfazPedidos;
 import gui.vendedores.InterfazVendedores;
-import tp.*;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

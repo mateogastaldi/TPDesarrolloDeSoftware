@@ -11,8 +11,7 @@ import gui.itemMenu.InterfazItemsMenu;
 import gui.pedido.InterfazPedidos;
 import gui.vendedores.InterfazVendedores;
 
-import memory.ClienteMemory;
-import tp.Cliente;
+import model.Cliente;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

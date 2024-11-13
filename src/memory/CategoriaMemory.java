@@ -1,10 +1,9 @@
 package memory;
 
 import DAO.CategoriaDAO;
-import exceptions.itemMenu.categoria.CategoriaNoCreadaException;
 import exceptions.itemMenu.categoria.CategoriaNoEncontradaException;
-import tp.Categoria;
-import tp.ItemMenu;
+import model.Categoria;
+import model.ItemMenu;
 
 import java.util.ArrayList;
 import java.util.List;

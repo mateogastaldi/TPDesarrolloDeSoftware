@@ -4,11 +4,9 @@
  */
 package gui.vendedores;
 
-import DAO.FACTORY.DAOFactory;
-
-import tp.Coordenada;
-import tp.Direccion;
-import tp.Vendedor;
+import model.Coordenada;
+import model.Direccion;
+import model.Vendedor;
 
 /**
  *

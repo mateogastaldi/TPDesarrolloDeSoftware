@@ -3,9 +3,9 @@ package DAO;
 
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import java.util.List;
-import tp.Categoria;
-import tp.ItemMenu;
-import tp.Vendedor;
+import model.Categoria;
+import model.ItemMenu;
+import model.Vendedor;
 
 public interface ItemsMenuDAO{
     List<ItemMenu> getItemMenus() throws ItemMenuNoEncontradoException;

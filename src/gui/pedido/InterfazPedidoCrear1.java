@@ -7,7 +7,7 @@ package gui.pedido;
 import DAO.FACTORY.DAOFactory;
 import exceptions.Pedido.PedidoNoEncontradoException;
 import gui.ButtonColumn;
-import tp.*;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

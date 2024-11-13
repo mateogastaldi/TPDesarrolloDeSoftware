@@ -5,10 +5,10 @@
 package gui.cliente;
 
 import DAO.FACTORY.DAOFactory;
-import memory.ClienteMemory;
-import tp.Cliente;
-import tp.Coordenada;
-import tp.Direccion;
+import controller.ClientesController;
+import model.Cliente;
+import model.Coordenada;
+import model.Direccion;
 
 /**
  *
@@ -444,15 +444,12 @@ public class InterfazClienteCrear extends javax.swing.JFrame {
         long cuit = Long.parseLong(cuitCliente.getText());
         double longitud = Double.parseDouble(lonCliente.getText());
         double latitud = Double.parseDouble(latCliente.getText());
-        Coordenada coordenada = new Coordenada(latitud,longitud);
         String pais = paisCliente.getText();
         String ciudad = ciudadCliente.getText();
         String calle = calleCliente.getText();
         int altura = Integer.parseInt(alturaCliente.getText());
         Direccion direccion = new Direccion(calle,altura,ciudad,pais);
-        Cliente cliente = new Cliente(nombre,cuit,email,direccion,coordenada);
 
-        DAOFactory.getInstance().getClienteDAO().addCliente(cliente);
         InterfazClientes intClientes = new InterfazClientes();
         intClientes.setVisible(true);
         this.setVisible(false);

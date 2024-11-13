@@ -1,4 +1,4 @@
-package tp;
+package model;
 import ejecuciones.*;
 
 public class Main {

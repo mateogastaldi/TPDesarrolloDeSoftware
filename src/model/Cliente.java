@@ -1,9 +1,6 @@
-package tp;
-
-import exceptions.itemPedido.ItemPedidoNoEncontradoException;
+package model;
 
 import javax.swing.*;
-import java.util.Scanner;
 
 public class Cliente implements EventListener {
     private static int contadorId = 0;

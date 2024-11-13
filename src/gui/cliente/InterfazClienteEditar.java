@@ -4,10 +4,9 @@
  */
 package gui.cliente;
 
-import memory.ClienteMemory;
-import tp.Cliente;
-import tp.Coordenada;
-import tp.Direccion;
+import model.Cliente;
+import model.Coordenada;
+import model.Direccion;
 
 /**
  *

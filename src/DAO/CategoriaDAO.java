@@ -1,9 +1,8 @@
 package DAO;
 
 import exceptions.itemMenu.categoria.CategoriaNoEncontradaException;
-import memory.CategoriaMemory;
-import tp.Categoria;
-import tp.ItemMenu;
+import model.Categoria;
+import model.ItemMenu;
 
 import java.util.List;
 

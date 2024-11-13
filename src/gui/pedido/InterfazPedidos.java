@@ -10,7 +10,7 @@ import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
 import gui.itemMenu.InterfazItemsMenu;
 import gui.vendedores.InterfazVendedores;
-import tp.Pedido;
+import model.Pedido;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

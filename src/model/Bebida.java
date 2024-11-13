@@ -1,5 +1,5 @@
 // Bebida.java
-package tp;
+package model;
 public class Bebida extends ItemMenu{
     private double graduacionAlcoholica;
     private double tamanio;

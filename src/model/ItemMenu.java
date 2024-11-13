@@ -1,7 +1,7 @@
 // ItemMenu.java
-package tp;
+package model;
 
-public abstract class ItemMenu {
+public abstract class   ItemMenu {
     private static int contadorId = 0;
     private int id;
     private String nombre;

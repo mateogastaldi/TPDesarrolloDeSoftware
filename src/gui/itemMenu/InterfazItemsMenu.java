@@ -5,16 +5,14 @@
 package gui.itemMenu;
 
 import DAO.FACTORY.DAOFactory;
-import exceptions.cliente.ClienteNoEncontradoException;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
 import gui.itemMenu.categoria.InterfazCategoria;
 import gui.pedido.InterfazPedidos;
 import gui.vendedores.InterfazVendedores;
-import tp.Cliente;
-import tp.ItemMenu;
-import tp.Plato;
+import model.ItemMenu;
+import model.Plato;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

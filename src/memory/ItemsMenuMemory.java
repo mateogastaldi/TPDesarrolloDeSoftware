@@ -2,9 +2,8 @@
 package memory;
 
 import DAO.ItemsMenuDAO;
-import exceptions.cliente.ClienteNoEncontradoException;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
-import tp.*;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.List;

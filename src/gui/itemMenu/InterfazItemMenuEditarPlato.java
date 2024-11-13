@@ -5,10 +5,9 @@
  */
 package gui.itemMenu;
 
-import gui.itemMenu.*;
 import DAO.FACTORY.DAOFactory;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
-import tp.*;
+import model.*;
 
 import javax.swing.*;
 import java.util.Iterator;

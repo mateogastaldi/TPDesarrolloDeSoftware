@@ -1,8 +1,7 @@
 package memory;
 
 import DAO.PagoDAO;
-import tp.ItemMenu;
-import tp.Pago;
+import model.Pago;
 
 import java.util.ArrayList;
 import java.util.List;

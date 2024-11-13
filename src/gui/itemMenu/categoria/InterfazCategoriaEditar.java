@@ -4,9 +4,7 @@
  */
 package gui.itemMenu.categoria;
 
-import gui.itemMenu.*;
-import tp.Categoria;
-import tp.ItemMenu;
+import model.Categoria;
 
 /**
  *
