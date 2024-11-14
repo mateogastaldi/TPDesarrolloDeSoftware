@@ -15,84 +15,125 @@ public class Pedido extends EventManager {
     private Pago pago;
     private Vendedor vendedor;
 
-    //constructores
-    public Pedido(int id,Cliente cliente,Vendedor vendedor, Pago pago,Estado estado) {
+    // constructores-------------------------------------------------------------------------------------
+    public Pedido(Cliente cliente, Vendedor vendedor, Pago pago, Estado estado) {
         super();
         setCliente(cliente);
         setVendedor(vendedor);
         itemsPedidos = new ArrayList<>();
-        if(estado == null)this.estado = new EstadoRECIBIDO();
-        else this.estado = estado;
-        setId(id);
+        if (estado == null)
+            this.estado = new EstadoRECIBIDO();
+        else
+            this.estado = estado;
+
     }
-    public Pedido(int id,Cliente cliente, List<ItemPedido> itemsPedidos,Vendedor vendedor, Pago pago) {
+
+    public Pedido(Cliente cliente, List<ItemPedido> itemsPedidos, Vendedor vendedor, Pago pago) {
         super();
         setCliente(cliente);
         setItemsPedidos(itemsPedidos);
         this.estado = new EstadoRECIBIDO();
         setVendedor(vendedor);
-        setId(id);
+    }
+    // -------------------------------------------------------------------------------------------------
+
+    // getters-------------------------------------------------------------------------------------------
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    //getters-setters
-    public Cliente getCliente() {return cliente;}
-    public List<ItemPedido> getItemsPedidos() {return itemsPedidos;}
-    public Pago getPago(){return this.pago;}
-    public int getId() {return id;}
-    public Estado getEstado() {return estado;}
-    public Vendedor getVendedor() {return vendedor;}
+    public List<ItemPedido> getItemsPedidos() {
+        return itemsPedidos;
+    }
 
+    public Pago getPago() {
+        return this.pago;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public Vendedor getVendedor() {
+        return vendedor;
+    }
+    // -------------------------------------------------------------------------------------------------
+
+    // setters-------------------------------------------------------------------------------------------
     private void setCliente(Cliente cliente) {
         this.cliente = cliente;
         this.addEventListener(cliente);
     }
-    private void setItemsPedidos (List<ItemPedido> itemsPedidos) {this.itemsPedidos = itemsPedidos;}
-    private void setPago(Pago pago) {this.pago = pago;}
+
+    private void setItemsPedidos(List<ItemPedido> itemsPedidos) {
+        this.itemsPedidos = itemsPedidos;
+    }
+
+    private void setPago(Pago pago) {
+        this.pago = pago;
+    }
+
     public void addItemPedido(ItemPedido itemPedido) {
         itemsPedidos.add(itemPedido);
         DAOFactory.getInstance().getItemsPedidoDAO().addItemPedido(itemPedido);
     }
-    private void setId(int id){this.id = id;}
-    public void setVendedor(Vendedor vendedor) {this.vendedor = vendedor;}
 
-    //metodos
-    public TipoEstado estado(){return estado.getEstado();}
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setVendedor(Vendedor vendedor) {
+        this.vendedor = vendedor;
+    }
+    // -------------------------------------------------------------------------------------------------
+
+    // metodos-------------------------------------------------------------------------------------------
+    public TipoEstado estado() {
+        return estado.getEstado();
+    }
+
     public void actualizarEstado() {
         estado.siguiente();
-        if(estado.equals(TipoEstado.ENVIADO)) {
-            PedidosController.getInstance().addPago(t);
+        if (estado.equals(TipoEstado.ENVIADO)) {
+            PedidosController.getInstance().addPago(pago.getMetodoDePago(), pago.getMonto());
         }
         this.notifyListeners(this);
     }
 
-    public double calcularPrecioBase(){
+    public double calcularPrecioBase() {
         double precioBase = 0;
-        for(ItemPedido itemPedido : itemsPedidos){
+        for (ItemPedido itemPedido : itemsPedidos) {
             precioBase += itemPedido.getItemMenu().getPrecio();
         }
         return precioBase;
-   }
-    public double precioTotal(){
+    }
+
+    public double precioTotal() {
         return pago.getMonto();
     }
 
-    public void pagarPagoStrategy(PagoStrategy ps){
+    public void pagarPagoStrategy(PagoStrategy ps) {
         this.setPago(new Pago(ps, calcularPrecioBase()));
-   }
+    }
 
-    public void printItemsPedidos(){
-        for(ItemPedido itemPedido : itemsPedidos){
+    public void printItemsPedidos() {
+        for (ItemPedido itemPedido : itemsPedidos) {
             System.out.println(itemPedido.getItemMenu().getNombre());
-        }}
-    public void printAllPedido(){
-        System.out.println("Pedido de ID: "+this.getId());
+        }
+    }
+
+    public void printAllPedido() {
+        System.out.println("Pedido de ID: " + this.getId());
         this.printItemsPedidos();
         System.out.println(this.cliente.getNombre());
     }
 
-    public void removeItemPedido(ItemPedido itemPedido){
-        itemsPedidos.remove(itemPedido);
-        DAOFactory.getInstance().getItemsPedidoDAO().remove(itemPedido);
+    public void removeItemPedido(ItemPedido itemPedido) {
+        
     }
 
     @Override
@@ -100,4 +141,5 @@ public class Pedido extends EventManager {
         Pedido pedido = (Pedido) obj;
         return pedido.getId() == this.getId();
     }
+    // -------------------------------------------------------------------------------------------------
 }

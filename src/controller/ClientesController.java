@@ -2,14 +2,13 @@ package controller;
 
 import DAO.FACTORY.DAOFactory;
 import exceptions.cliente.ClienteNoEncontradoException;
-import memory.ClienteMemory;
 import model.Cliente;
 import model.Coordenada;
 import model.Direccion;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class ClientesController {
 
@@ -34,13 +33,13 @@ public class ClientesController {
     public List<Cliente> filtrarClientePorNombre(String nombre) throws ClienteNoEncontradoException , SQLException{
         return DAOFactory.getInstance().getClienteDAO().filtrarClientePorNombre(nombre);
     }
-    public Cliente filtrarClientePorId(int id) throws ClienteNoEncontradoException{
+    public Cliente filtrarClientePorId(int id) throws ClienteNoEncontradoException,SQLException {
         return DAOFactory.getInstance().getClienteDAO().filtrarClientePorId(id);
     }
-    public void eliminarCliente(int id) throws ClienteNoEncontradoException {
+    public void eliminarCliente(int id) throws ClienteNoEncontradoException, SQLException {
         DAOFactory.getInstance().getClienteDAO().eliminarCliente(id);
     }
-    public List<Cliente> getClientes() throws ClienteNoEncontradoException {
+    public List<Cliente> getClientes() throws ClienteNoEncontradoException, SQLException {
         return DAOFactory.getInstance().getClienteDAO().getClientes();
     }
     public void modificarCliente(int id, String nombre, String cuit, String email, String calle, int altura, String ciudad, String pais, double lat, double lng) throws ClienteNoEncontradoException {

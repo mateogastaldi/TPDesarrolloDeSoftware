@@ -5,17 +5,16 @@ public class Pago {
     PagoStrategy metodoDePago;
     double monto;
 
-    //constructor
-    public Pago(int id, PagoStrategy m, double precio) {
-        setId(id);
-        setMetodoPago(m);
-        setMonto(m.precio(precio));
-    }
+    //constructor-------------------------------------------------------------------------------------
+    
     public Pago(PagoStrategy m, double precioBase) {
         setMetodoPago(m);
         setMonto(m.precio(precioBase));
     }
-    //getters
+
+    //-------------------------------------------------------------------------------------------------
+    
+    //getters------------------------------------------------------------------------------------------
     public PagoStrategy getMetodoDePago(){
         return this.metodoDePago;
     }
@@ -25,6 +24,7 @@ public class Pago {
     public int getId(){
         return this.id;
     }
+    //-------------------------------------------------------------------------------------------------
 
     //setters
     public void setMetodoPago(PagoStrategy m){
@@ -33,14 +33,19 @@ public class Pago {
     public void setMonto(double precio){
         this.monto  = precio;
     }
+    public void generatedId(int id){
+        this.id = id;
+    }
     public void setId(int id){
         this.id = id;
     }
+    //-------------------------------------------------------------------------------------------------
 
-    //metodos
+    //metodos------------------------------------------------------------------------------------------
     public void pagar(){
 
     }
+    //-------------------------------------------------------------------------------------------------
 
 
 }

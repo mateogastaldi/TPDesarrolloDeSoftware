@@ -4,44 +4,38 @@ package model;
 import exceptions.itemMenu.categoria.CategoriaNoCreadaException;
 
 public class Categoria{
+    //Atributos---------------------------------------------------------------------------------------
     private int id;
     private String descripcion;
     private Class<? extends ItemMenu> tipoItem;
+    //-------------------------------------------------------------------------------------------------
 
-    public Categoria(int id, String descripcion, Class<? extends ItemMenu> tipoItem) throws CategoriaNoCreadaException {
+
+    //Constructor-------------------------------------------------------------------------------------
+    public Categoria(String descripcion, Class<? extends ItemMenu> tipoItem) throws CategoriaNoCreadaException {
         if (descripcion == null || tipoItem == null)
             throw new CategoriaNoCreadaException("No se pudo crear la categoria");
         else {
             setDescripcion(descripcion);
             setTipoItem(tipoItem);
-            setId(id);
         }
     }
+    //-------------------------------------------------------------------------------------------------
 
-    // getters-setters
+    // Getters ----------------------------------------------------------------------------------------
+    public int getId() {return id;}
 
-    private void setId(int id) {
-        this.id = id;
-    }
+    public String getDescripcion() {return descripcion;}
 
-    private void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
+    public Class<? extends ItemMenu> getTipoItem() {return tipoItem;}
+    //-------------------------------------------------------------------------------------------------
 
-    private void setTipoItem(Class<? extends ItemMenu> tipoItem2) {
-            this.tipoItem = tipoItem2;
-    }
+    // Setters ----------------------------------------------------------------------------------------
+    public void setId(int id) {this.id = id;}
 
-    public int getId() {
-        return id;
-    }
+    private void setDescripcion(String descripcion) {this.descripcion = descripcion;}
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public Class<? extends ItemMenu> getTipoItem() {
-        return tipoItem;
-    }
+    private void setTipoItem(Class<? extends ItemMenu> tipoItem2) {this.tipoItem = tipoItem2;}
+    //-------------------------------------------------------------------------------------------------
 
 }

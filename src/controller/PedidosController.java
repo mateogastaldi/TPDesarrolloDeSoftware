@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import DAO.FACTORY.DAOFactory;
@@ -62,25 +63,13 @@ public class PedidosController {
     public ItemPedido getItemPedido(int id) throws ItemPedidoNoEncontradoException{
         return DAOFactory.getInstance().getItemsPedidoDAO().getItemPedido(id);
     }
-    public List<ItemPedido> filtrarPorCliente(String nombreCliente) throws ItemPedidoNoEncontradoException{
-        return DAOFactory.getInstance().getItemsPedidoDAO().filtrarPorCliente(nombreCliente);
-    }
-    public List<ItemPedido> filtrarPorNombreVendedor(String nombreVendedor) throws ItemPedidoNoEncontradoException{
-        return DAOFactory.getInstance().getItemsPedidoDAO().filtrarPorNombreVendedor(nombreVendedor);
-    }
-    public List<ItemPedido> filtrarPorRangoPrecio(double precioMin, double precioMax) throws ItemPedidoNoEncontradoException{
-        return DAOFactory.getInstance().getItemsPedidoDAO().filtrarPorRangoPrecio(precioMin, precioMax);
-    }
-    public List<ItemPedido> filtrarPorIdVendedor(int idVendedor) throws ItemPedidoNoEncontradoException{
-        return DAOFactory.getInstance().getItemsPedidoDAO().filtrarPorIdVendedor(idVendedor);
-    }
-    public List<ItemPedido> filtrarPorPedido(Pedido pedido){
+    public List<ItemPedido> filtrarPorPedido(Pedido pedido) throws ItemPedidoNoEncontradoException,SQLException{
         return DAOFactory.getInstance().getItemsPedidoDAO().filtrarPorPedido(pedido);
     }
-    public List<ItemPedido> getitemsPedidos() throws ItemPedidoNoEncontradoException{
+    public List<ItemPedido> getitemsPedidos() throws ItemPedidoNoEncontradoException,SQLException{
         return DAOFactory.getInstance().getItemsPedidoDAO().getitemsPedidos();
     }
-    public void remove(ItemPedido itemPedido) throws ItemPedidoNoEncontradoException{
+    public void remove(ItemPedido itemPedido) throws ItemPedidoNoEncontradoException,SQLException{
         DAOFactory.getInstance().getItemsPedidoDAO().remove(itemPedido);
     }
     // --------------------------------------------------------------------

@@ -1,114 +1,129 @@
 package mySQL;
-
 import DAO.ItemPedidoDAO;
 import exceptions.itemPedido.ItemPedidoNoEncontradoException;
-import model.ItemPedido;
-import model.Pedido;
+import controller.*;
+import model.*;
+import java.sql.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+public class ItemPedidoMySQL implements ItemPedidoDAO {
 
-public class ItemPedidoMySQL implements ItemPedidoDAO{
+    // Singleton  ------------------------------------------------------------------------------------
+    private static ItemPedidoMySQL ITEMPEDIDO_INSTANCE;
+    private ItemPedidoMySQL() {}
+    public static ItemPedidoMySQL getInstance() {
+        if (ITEMPEDIDO_INSTANCE == null) {
+            ITEMPEDIDO_INSTANCE = new ItemPedidoMySQL();
+        }
+        return ITEMPEDIDO_INSTANCE;
+    }
+    // -----------------------------------------------------------------------------------------------
 
-   //ESTO TIENE QUE SER UN SINGLETON
-   private static ItemPedidoMemory ITEMPEDIDOMEMORY_INSTANCE;
-   private List<ItemPedido> itemsPedidos;
+    // Metodos ---------------------------------------------------------------------------------------
+    @Override
+    public void addItemPedido(ItemPedido itemPedido) {
+        Connection MySql = ConexionMySQL.conectar();
+        String sql = "INSERT INTO itempedido (id_pedido, id_item_menu) VALUES (?, ?)";
+        try (PreparedStatement pstmt = MySql.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, itemPedido.getPedido().getId());
+            pstmt.setInt(2, itemPedido.getItemMenu().getId());
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int generatedId = generatedKeys.getInt(1);
+                        itemPedido.setId(generatedId); // Asigna la clave generada al itemPedido
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al agregar itemPedido: " + e.getMessage());
+        } finally {
+            ConexionMySQL.cerrarConexion();
+        }
+    }
 
-   //constructores
-   private ItemPedidoMemory(){
-       itemsPedidos = new ArrayList<>();
-   }
-   private ItemPedidoMemory(List<ItemPedido> itemsPedidos) {
-       setItemsPedidos(itemsPedidos);
-   }
 
-   //getters-setters
-   private void setItemsPedidos(List<ItemPedido> itemsPedidos) {
-       this.itemsPedidos = itemsPedidos;}
-   public static ItemPedidoMemory getInstance() {
-       if(ITEMPEDIDOMEMORY_INSTANCE == null) {
-           ITEMPEDIDOMEMORY_INSTANCE = new ItemPedidoMemory();
-       }
-       return ITEMPEDIDOMEMORY_INSTANCE;
-   }
-   public List<ItemPedido> getItemsPedidos() {
-       return itemsPedidos;
-   }
+    @Override
+    public List<ItemPedido> getItemsPedidos() throws SQLException {
+        List<ItemPedido> itemsPedidos = new ArrayList<>();
+        Connection MySql = ConexionMySQL.conectar();
+        String query = "SELECT * FROM itempedido";
+        try (PreparedStatement stmt = MySql.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Pedido pedido = PedidosController.getInstance().filtrarPedidoPorId(rs.getInt("pedido"));
+                ItemMenu itemMenu = ItemMenusController.getInstance().filtrarItemMenuPorId(rs.getInt("itemMenu"));    
+                ItemPedido itemPedido = new ItemPedido(itemMenu, pedido);
+                itemPedido.setId(rs.getInt("id"));
+                itemsPedidos.add(itemPedido);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener itemsPedidos: " + e.getMessage());
+            throw e;
+        } finally {
+            ConexionMySQL.cerrarConexion();
+        }
+        return itemsPedidos;
+    }
 
-   //metodos
-   @Override
-   public void addItemPedido(ItemPedido itemPedido){this.itemsPedidos.add(itemPedido);}
-   @Override
-   public List<ItemPedido> filtrarPorCliente(String nombreCliente) throws ItemPedidoNoEncontradoException {
+    public ItemPedido getItemPedido(int idAux) throws SQLException {
+        Connection MySql = ConexionMySQL.conectar();
+        ItemPedido itemPedido = null;
+        String query = "SELECT * FROM itempedido WHERE id = "+ idAux;
+        try (PreparedStatement stmt = MySql.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Pedido pedido = PedidosController.getInstance().filtrarPedidoPorId(rs.getInt("pedido"));
+                ItemMenu itemMenu = ItemMenusController.getInstance().filtrarItemMenuPorId(rs.getInt("itemMenu"));    
+                itemPedido = new ItemPedido(itemMenu, pedido);
+                itemPedido.setId(rs.getInt("id"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener itemPedido: " + e.getMessage());
+            throw e;
+        } finally {
+            ConexionMySQL.cerrarConexion();
+        }
+        return itemPedido;
+    }
 
-       List<ItemPedido> itemsPedidosFiltrados = itemsPedidos.stream()
-               .filter(item -> item.getPedido().getCliente().getNombre().equalsIgnoreCase(nombreCliente))
-               .collect(Collectors.toList());
+    public List<ItemPedido> filtrarPorPedido(Pedido pedido) throws SQLException {
+        Connection MySql = ConexionMySQL.conectar();
+        List<ItemPedido> itemsPedidos = new ArrayList<>();
+        String query = "SELECT * FROM itempedido WHERE pedido = " + pedido.getId();
+        try (PreparedStatement stmt = MySql.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ItemMenu itemMenu = ItemMenusController.getInstance().filtrarItemMenuPorId(rs.getInt("itemMenu"));    
+                ItemPedido itemPedido = new ItemPedido(itemMenu, pedido);
+                itemPedido.setId(rs.getInt("id"));
+                itemsPedidos.add(itemPedido);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al filtrar itemsPedidos por pedido: " + e.getMessage());
+            throw e;
+        } finally {
+            ConexionMySQL.cerrarConexion();
+        }
+        return itemsPedidos;
+    }
 
-       if(itemsPedidosFiltrados.isEmpty()){
-           throw new ItemPedidoNoEncontradoException("No se encontraron items para el cliente " + nombreCliente);
-       }
-
-       return itemsPedidosFiltrados;
-
-   }
-   @Override
-   public List<ItemPedido> filtrarPorNombreVendedor(String nombreVendedor) throws ItemPedidoNoEncontradoException {
-       List<ItemPedido> resultado = itemsPedidos.stream()
-               .filter(item -> item.getItemMenu().getVendedor().getNombre().equalsIgnoreCase(nombreVendedor))
-               .collect(Collectors.toList());
-
-       if (resultado.isEmpty()) {
-           throw new ItemPedidoNoEncontradoException("No se encontraron ítems para el vendedor: " + nombreVendedor);
-       }
-
-       return resultado;
-   }
-   @Override
-   public List<ItemPedido> filtrarPorRangoPrecio(double precioMin, double precioMax) throws ItemPedidoNoEncontradoException {
-       List<ItemPedido> resultado = itemsPedidos.stream()
-               .filter(item -> item.getItemMenu().getPrecio() >= precioMin && item.getItemMenu().getPrecio() <= precioMax)
-               .collect(Collectors.toList());
-
-       if (resultado.isEmpty()) {
-           throw new ItemPedidoNoEncontradoException("No se encontraron ítems en el rango de precios: " + precioMin + " - " + precioMax);
-       }
-
-       return resultado;
-   }
-   @Override
-   public List<ItemPedido> filtrarPorIdVendedor(int idVendedor) throws ItemPedidoNoEncontradoException {
-       List<ItemPedido> itemsFiltrados =  itemsPedidos.stream()
-               .filter(item -> item.getItemMenu().getVendedor().getId() == idVendedor)
-               .collect(Collectors.toList());
-
-       if (itemsFiltrados.isEmpty()) {
-           throw new ItemPedidoNoEncontradoException("No se encontraron ítems del restaurante: " + idVendedor);
-       }
-
-       return itemsFiltrados;
-   }
-   @Override
-   public List<ItemPedido> getitemsPedidos() throws ItemPedidoNoEncontradoException {
-       if (this.itemsPedidos.isEmpty()) {
-           throw new ItemPedidoNoEncontradoException("No existen Items Pedidos");
-       }
-       return this.itemsPedidos;
-   }
-
-   public ItemPedido getItemPedido(int id) throws ItemPedidoNoEncontradoException {
-       ItemPedido iP = this.itemsPedidos.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
-       if (iP == null) {
-           throw new ItemPedidoNoEncontradoException("No existen Items Pedidos");
-       }
-       return iP;
-   }
-   public List<ItemPedido> filtrarPorPedido(Pedido pedido){
-       List<ItemPedido> item = itemsPedidos.stream().filter(p -> p.getPedido().getId() == pedido.getId()).collect(Collectors.toList());
-       return item;
-   }
-   public void remove(ItemPedido itemPedido) throws ItemPedidoNoEncontradoException {
-       this.itemsPedidos.remove(itemPedido);
-   }
+    public void remove(ItemPedido itemPedido) throws ItemPedidoNoEncontradoException, SQLException {
+        Connection MySql = ConexionMySQL.conectar();
+        String query = "DELETE FROM itempedido WHERE id = " + itemPedido.getId();
+        try (
+            PreparedStatement pstmt = MySql.prepareStatement(query)) {
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new ItemPedidoNoEncontradoException("No se encontro el itemPedido a eliminar");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al eliminar itemPedido: " + e.getMessage());
+            throw e;
+        } finally {
+            ConexionMySQL.cerrarConexion();       
+        }
+    }
+    // -----------------------------------------------------------------------------------------------
 }

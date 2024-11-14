@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Vendedor {
+
     // Atributes ---------------------------------------------------------------
-    private static int contadorId;
     private int id;
     private String nombre;
     private Direccion direccion;
@@ -15,17 +15,17 @@ public class Vendedor {
     private ArrayList<ItemMenu> itemMenu;
     private ArrayList<Pedido> pedidos;
     // -------------------------------------------------------------------------
+    
     // Constructor -------------------------------------------------------------
     public Vendedor(String nombre, Direccion direccion, Coordenada coordenadas) {
-        setId();
         setNombre(nombre);
         setDireccion(direccion);
         setCoordenadas(coordenadas);
         setItemMenu();
         setPedidos();
     }
+   
     public Vendedor(String nombre, Coordenada coordenadas, ArrayList<ItemMenu> itemMenu, ArrayList<Pedido> pedidos) {
-        setId();
         setNombre(nombre);
         setCoordenadas(coordenadas);
         setItemMenu(itemMenu);
@@ -73,7 +73,7 @@ public class Vendedor {
         throw new ItemPedidoNoEncontradoException("no encontrado");
     }
 
-    private void setId() {this.id = ++contadorId;}
+    public void setId(int id) {this.id = id;}
     private void setNombre(String nombre) {this.nombre = nombre;}
     private void setDireccion(Direccion direccion) {this.direccion = direccion;}
     private void setCoordenadas(Coordenada coordenadas) {this.coordenadas = coordenadas;}

@@ -1,28 +1,33 @@
 // Bebida.java
 package model;
 public class Bebida extends ItemMenu{
+
+    // Atributos --------------------------------------------------------------------------------------
     private double graduacionAlcoholica;
     private double tamanio;
-    
-    //constructores
+    // ------------------------------------------------------------------------------------------------
+
+    // Constructor ------------------------------------------------------------------------------------
     public Bebida(String nombre, String descripcion, double precio,boolean aptoVegano,boolean aptoCeliaco, Categoria categoria,Vendedor vendedor, double graduacionAlcoholica, double tamanio){
-        super(nombre,descripcion,precio, aptoVegano,aptoCeliaco,categoria,vendedor);
+        super(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor); // ItemMenu
         setGraduacionAlcoholica(graduacionAlcoholica);
         setTamanio(tamanio);
     }
+    // ------------------------------------------------------------------------------------------------
 
-    //getters-setters
-    public double getGraduacionAlcoholica(){
-        return graduacionAlcoholica;
-    }
+    // Getters ----------------------------------------------------------------------------------------
+    public double getGraduacionAlcoholica(){return graduacionAlcoholica;}
     public double getTamanio() {return tamanio;}
+    // ------------------------------------------------------------------------------------------------
 
+    // Setters ----------------------------------------------------------------------------------------
     private void setGraduacionAlcoholica(double graduacionAlcoholica) {
         this.graduacionAlcoholica = graduacionAlcoholica;
     }
     private void setTamanio(double tamanio) {this.tamanio = tamanio;}
+    // ------------------------------------------------------------------------------------------------
 
-    //metodos
+    // Metodos ----------------------------------------------------------------------------------------
     @Override
     public double peso() {
         if(this.getGraduacionAlcoholica()>0){
@@ -30,18 +35,16 @@ public class Bebida extends ItemMenu{
         else{
             return (this.getTamanio() * 1.04) * 1.2;}
     }
+
     @Override
-    public boolean esComida(){
-        return false;
-    }
+    public boolean esComida(){return false;}
+
     @Override
-    public boolean esBebida(){
-        return true;
-    }
+    public boolean esBebida(){return true;}
+
     @Override
-    public boolean aptoVegano(){
-        return getAptoVegano();
-    }
+    public boolean aptoVegano(){return getAptoVegano();}
+
     @Override
     public boolean aptoCeliaco(){return getAptoCeliaco();}
 
@@ -50,4 +53,5 @@ public class Bebida extends ItemMenu{
         setGraduacionAlcoholica(graduacionAlcoholica);
         setTamanio(tamanio);
     }
+    // ------------------------------------------------------------------------------------------------
 }

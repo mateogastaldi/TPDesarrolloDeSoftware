@@ -2,63 +2,46 @@ package model;
 import javax.swing.*;
 
 public class Cliente implements EventListener {
+
+    //Atributos---------------------------------------------------------------------------------------
     private int id;
     private String nombre;
     private long cuit;
     private String email;
     private Direccion direccion;
     private Coordenada coordenadas;
+    // -----------------------------------------------------------------------------------------------
 
-    //constructor
-    public Cliente(int id, String nombre, long cuit, String email, Direccion direccion, Coordenada coordenadas) {
-        setId(id);
+    // Constructor -----------------------------------------------------------------------------------
+    public Cliente(String nombre, long cuit, String email, Direccion direccion, Coordenada coordenadas) {
         setNombre(nombre);
         setCuit(cuit);
         setEmail(email);
         setDireccion(direccion);
         setCoordenadas(coordenadas);
     }
+    // -----------------------------------------------------------------------------------------------
 
-    //getters-setter
-    public void setId(int id) {
-        this.id = id;
-    }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    public void setCuit(long cuit) {
-        this.cuit = cuit;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public void setDireccion(Direccion direccion) {
-        this.direccion = direccion;
-    }
-    public void setCoordenadas(Coordenada coordenadas) {
-        this.coordenadas = coordenadas;
-    }
+    // Getters ---------------------------------------------------------------------------------------
+    
+    public int getId() {return id;}
+    public long getCuit() {return cuit;}
+    public String getEmail() {return email;}
+    public Direccion getDireccion() {return direccion;}
+    public Coordenada getCoordenadas() {return coordenadas;}
+    public String getNombre() {return nombre;}
+    // -----------------------------------------------------------------------------------------------
 
-    public int getId() {
-        return id;
-    }
-    public long getCuit() {
-        return cuit;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public Direccion getDireccion() {
-        return direccion;
-    }
-    public Coordenada getCoordenadas() {
-        return coordenadas;
-    }
-    public String getNombre() {
-        return nombre;
-    }
+    // Setters ---------------------------------------------------------------------------------------
+    public void setId(int id) {this.id = id;}
+    public void setNombre(String nombre) {this.nombre = nombre;}
+    public void setCuit(long cuit) {this.cuit = cuit;}
+    public void setEmail(String email) {this.email = email;}
+    public void setDireccion(Direccion direccion) {this.direccion = direccion;}
+    public void setCoordenadas(Coordenada coordenadas) {this.coordenadas = coordenadas;}
+    // -----------------------------------------------------------------------------------------------
 
-    //metodos
+    // Metodos ---------------------------------------------------------------------------------------
     public void printAll(){
         System.out.println("ID: " + getId());
         System.out.println("Nombre: " + getNombre());
@@ -68,24 +51,17 @@ public class Cliente implements EventListener {
         System.out.println("Coordenadas(" + "Lat:" + this.coordenadas.getLat() + ", Lng:" + this.coordenadas.getLng()+")");
 
     }
-    public boolean nombreIgual(String nom){
-        return this.getNombre().equalsIgnoreCase(nom);
-    }
-    public boolean cuitIgual(long cuit){
-        return this.getCuit() == cuit;
-    }
-    public boolean idIgual(int id){
-        return this.getId() == id;
-    }
+    public boolean nombreIgual(String nom){return this.getNombre().equalsIgnoreCase(nom);}
+    public boolean cuitIgual(long cuit){return this.getCuit() == cuit;}
+    public boolean idIgual(int id){return this.getId() == id;}
     public void modificarAtributos(String nombre, long cuit, Direccion direccion,String email,Coordenada coordenadas){
 
         if(!nombre.equals("")) setNombre(nombre);
         if(cuit != -1) setCuit(cuit);
         setDireccion(direccion);
         setCoordenadas(coordenadas);
-
-
     }
+
     @Override
     public void update(Pedido p) {
         if(p.getEstado().equals(TipoEstado.ENVIADO)){
@@ -103,4 +79,5 @@ public class Cliente implements EventListener {
         setDireccion(direccion);
         setCoordenadas(coordenadas);
     }
+    // -----------------------------------------------------------------------------------------------
 }
