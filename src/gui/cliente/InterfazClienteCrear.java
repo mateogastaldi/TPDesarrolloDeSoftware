@@ -4,7 +4,7 @@
  */
 package gui.cliente;
 
-import DAO.FACTORY.DAOFactory;
+
 import controller.ClientesController;
 import model.Cliente;
 import model.Coordenada;

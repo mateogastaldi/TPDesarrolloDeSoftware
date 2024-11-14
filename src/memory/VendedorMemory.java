@@ -2,6 +2,8 @@
 package memory;
 
 import DAO.VendedorDAO;
+import model.Coordenada;
+import model.Direccion;
 import model.Vendedor;
 import exceptions.vendedor.VendedorNoEncontradoException;
 
@@ -77,6 +79,14 @@ public class VendedorMemory implements VendedorDAO {
             throw new VendedorNoEncontradoException("No se encontraron vendedores con id:" + id);
         }
         this.vendedores.remove(vendedor);
+    }
+
+    public void modificarVendedor(int id, String nombre, Direccion direccion, Coordenada coordenada) throws VendedorNoEncontradoException{
+        Vendedor vendedor = filtrarVendedorPorId(id);
+        if(vendedor == null){
+            throw new VendedorNoEncontradoException("No se encontraron vendedores con id:" + id);
+        }
+        vendedor.modificarVendedor(nombre, direccion, coordenada);
     }
 
 }

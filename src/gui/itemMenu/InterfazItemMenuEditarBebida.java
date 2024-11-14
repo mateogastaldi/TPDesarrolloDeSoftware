@@ -5,7 +5,8 @@
  */
 package gui.itemMenu;
 
-import DAO.FACTORY.DAOFactory;
+import controller.ItemMenusController;
+import controller.VendedoresController;
 import model.*;
 
 import javax.swing.*;
@@ -22,7 +23,7 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
     public DefaultComboBoxModel<String> modeloDropDownListVendedor(){
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
-            Iterator<Vendedor> c = DAOFactory.getInstance().getVendedorDAO().getVendedores().iterator();
+            Iterator<Vendedor> c = VendedoresController.getInstance().getVendedores().iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getNombre());
             }
@@ -37,7 +38,7 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
 
-             Iterator<Categoria<ItemMenu>> c = DAOFactory.getInstance().getCategoriaDAO().filtrarPorTipoItem(Bebida.class).iterator();
+             Iterator<Categoria<ItemMenu>> c = ItemMenusController.getInstance().filtrarPorTipoItem(Bebida.class).iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getDescripcion());
             }
@@ -464,8 +465,8 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
         double tamanioIngresado = Double.parseDouble(tamanio.getText());
     
         // Obtén el vendedor y la categoría seleccionados
-        Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String) DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
-        Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre((String) DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
+        Vendedor vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String) DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
+        Categoria categoria = (Categoria) ItemMenusController.getInstance().filtrarCategoriaPorNombre((String) DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
     
         // Verifica si el item es apto para veganos o celíacos
         boolean aptoCeliaco = aptoCeliacoCheckBox.isSelected();

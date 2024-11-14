@@ -4,7 +4,7 @@
  */
 package gui.pedido;
 
-import DAO.FACTORY.DAOFactory;
+import controller.PedidosController;
 import exceptions.Pedido.PedidoNoEncontradoException;
 import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
@@ -47,7 +47,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
                 Object pedidoId = table.getModel().getValueAt(modelRow, 0); // Columna "ID"
 
                 // Recupera los datos completos del pedido con el ID obtenido
-                Pedido pedido = DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId((int) pedidoId);
+                Pedido pedido = PedidosController.getInstance().filtrarPedidoPorId((int) pedidoId);
 
 
                 // Crea y muestra una nueva interfaz para actualizar el estado pedido
@@ -75,7 +75,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
                 if(confirm == JOptionPane.YES_OPTION){
 
                     try{
-                        DAOFactory.getInstance().getPedidosDAO().eliminarPedido((int) pedidoId);
+                        PedidosController.getInstance().eliminarPedido((int) pedidoId);
                         mostrar(id,vendedor,cliente);
 
 
@@ -88,10 +88,10 @@ public class InterfazPedidos extends javax.swing.JFrame {
 
 
         try{
-            List<Pedido> pedidoList = DAOFactory.getInstance().getPedidosDAO().getPedido();
-            if(id > 0) {pedidoList.retainAll((List<Pedido>)DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId(id));}
-            if(vendedor != null && !vendedor.equals("")) {pedidoList.retainAll(DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorVendedor(vendedor));}
-            if(cliente != null && !cliente.equals("")) {pedidoList.retainAll(DAOFactory.getInstance().getPedidosDAO().filtrarPorNombreCliente(cliente));}
+            List<Pedido> pedidoList = PedidosController.getInstance().getPedido();
+            if(id > 0) {pedidoList.retainAll((List<Pedido>)PedidosController.getInstance().filtrarPedidoPorId(id));}
+            if(vendedor != null && !vendedor.equals("")) {pedidoList.retainAll(PedidosController.getInstance().filtrarPedidoPorVendedor(vendedor));}
+            if(cliente != null && !cliente.equals("")) {pedidoList.retainAll(PedidosController.getInstance().filtrarPorNombreCliente(cliente));}
             Iterator<Pedido> ip = pedidoList.iterator();
             while(ip.hasNext()){
                 Pedido pedido = ip.next();

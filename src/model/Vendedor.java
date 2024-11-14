@@ -1,6 +1,8 @@
 package model;
 
 import exceptions.itemPedido.ItemPedidoNoEncontradoException;
+import exceptions.vendedor.VendedorNoEncontradoException;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -184,6 +186,13 @@ public class Vendedor {
         if(coordenadas != null){ setCoordenadas(coordenadas); }
         if(itemMenu != null){ setItemMenu(itemMenu); }
         if(pedidos != null){ setPedidos(pedidos); }
+    }
+
+
+    public void modificarVendedor(String nombre, Direccion direccion, Coordenada coordenada){
+        setNombre(nombre);
+        setDireccion(direccion);
+        setCoordenadas(coordenada);
     }
 
     }

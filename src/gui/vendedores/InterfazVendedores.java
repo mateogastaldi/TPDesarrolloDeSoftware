@@ -4,7 +4,7 @@
  */
 package gui.vendedores;
 
-import DAO.FACTORY.DAOFactory;
+import controller.VendedoresController;
 import exceptions.vendedor.VendedorNoEncontradoException;
 import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
@@ -45,7 +45,7 @@ public class InterfazVendedores extends javax.swing.JFrame {
                 Object vendedorId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
                 // Recupera los datos completos del vendedor con el ID obtenido
-                Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorId((int) vendedorId);
+                Vendedor vendedor = VendedoresController.getInstance().filtrarVendedorPorId((int) vendedorId);
 
                 // Crea y muestra una nueva interfaz para editar los datos del vendedor
                 if (vendedor != null) {
@@ -72,7 +72,7 @@ public class InterfazVendedores extends javax.swing.JFrame {
                 if(confirm == JOptionPane.YES_OPTION){
 
                     try{
-                        DAOFactory.getInstance().getVendedorDAO().eliminarVendedor((int) vendedorID);
+                        VendedoresController.getInstance().eliminarVendedor((int) vendedorID);
                         if(nombre == null){mostrar(null);}
                         else{mostrar(nombre);}
 
@@ -85,7 +85,7 @@ public class InterfazVendedores extends javax.swing.JFrame {
         };
         if(nombre != null){
             try{
-                List<Vendedor> vendedors = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre(nombre);
+                List<Vendedor> vendedors = VendedoresController.getInstance().filtrarVendedorPorNombre(nombre);
                 Iterator<Vendedor> iterator = vendedors.iterator();
                 while(iterator.hasNext()){
                     Vendedor vendedor = iterator.next();
@@ -108,7 +108,7 @@ public class InterfazVendedores extends javax.swing.JFrame {
         }
         else{
             try{
-                List<Vendedor> vendedores = DAOFactory.getInstance().getVendedorDAO().getVendedores();
+                List<Vendedor> vendedores = VendedoresController.getInstance().getVendedores();
                 Iterator<Vendedor> iterator = vendedores.iterator();
                 while(iterator.hasNext()){
                     Vendedor vendedor = iterator.next();

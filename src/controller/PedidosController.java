@@ -26,26 +26,30 @@ public class PedidosController {
     // -------------------------------------------------------------------
 
     // Methods pedidos ---------------------------------------------------
-    List<Pedido> getPedido() throws PedidoNoEncontradoException{
+    public List<Pedido> getPedido() throws PedidoNoEncontradoException{
         return DAOFactory.getInstance().getPedidosDAO().getPedido();
     }
-    void addPedido(Cliente cliente,Vendedor vendedor) throws PedidoNoEncontradoException{
+    public void addPedido(Cliente cliente,Vendedor vendedor) throws PedidoNoEncontradoException{
         Pedido pedido = new Pedido(cliente, vendedor);
         DAOFactory.getInstance().getPedidosDAO().addPedido(pedido);
     }
-    Pedido filtrarPedidoPorId(int id) throws PedidoNoEncontradoException{
+    public void addPedido(Cliente cliente,Vendedor vendedor,List<ItemPedido> itemsPedido) throws PedidoNoEncontradoException{
+        Pedido pedido = new Pedido(cliente,itemsPedido, vendedor);
+        DAOFactory.getInstance().getPedidosDAO().addPedido(pedido);
+    }
+    public Pedido filtrarPedidoPorId(int id) throws PedidoNoEncontradoException{
         return DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId(id);
     }
-    List<Pedido> filtrarPorNombreCliente(String nombre) throws PedidoNoEncontradoException{
+    public List<Pedido> filtrarPorNombreCliente(String nombre) throws PedidoNoEncontradoException{
         return DAOFactory.getInstance().getPedidosDAO().filtrarPorNombreCliente(nombre);
     }
-    List<Pedido> filtrarPorIdCliente(int id) throws PedidoNoEncontradoException{
+    public List<Pedido> filtrarPorIdCliente(int id) throws PedidoNoEncontradoException{
         return DAOFactory.getInstance().getPedidosDAO().filtrarPorIdCliente(id);
     }
-    void eliminarPedido(int id) throws PedidoNoEncontradoException{
+    public void eliminarPedido(int id) throws PedidoNoEncontradoException{
         DAOFactory.getInstance().getPedidosDAO().eliminarPedido(id);
     }
-    List<Pedido> filtrarPedidoPorVendedor(String vendedor) throws PedidoNoEncontradoException{
+    public List<Pedido> filtrarPedidoPorVendedor(String vendedor) throws PedidoNoEncontradoException{
         return DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorVendedor(vendedor);
     }
     // --------------------------------------------------------------------

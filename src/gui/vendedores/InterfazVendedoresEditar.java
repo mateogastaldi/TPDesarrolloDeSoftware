@@ -4,6 +4,7 @@
  */
 package gui.vendedores;
 
+import controller.VendedoresController;
 import model.Coordenada;
 import model.Direccion;
 import model.Vendedor;
@@ -384,7 +385,6 @@ public class InterfazVendedoresEditar extends javax.swing.JFrame {
         if(lonVendedor.getText()!=null && !lonVendedor.getText().equals("")){longitud = Double.parseDouble(lonVendedor.getText());}
         double latitud = vendedor.getCoordenadas().getLat();
         if(latVendedor.getText()!=null && !latVendedor.getText().equals("")) {latitud = Double.parseDouble(latVendedor.getText());}
-        Coordenada coordenada = new Coordenada(latitud,longitud);
         String pais = vendedor.getDireccion().getPais();
         if((paisVendedor.getText() != null) && !paisVendedor.getText().equals("")) {pais = paisVendedor.getText();}
         String ciudad = ciudadVendedor.getText();
@@ -393,8 +393,7 @@ public class InterfazVendedoresEditar extends javax.swing.JFrame {
         if(calleVendedor.getText()!=null && !calleVendedor.getText().equals("")) {calle = calleVendedor.getText();}
         int altura = vendedor.getDireccion().getAltura();
         if(alturaVendedor.getText()!=null && !alturaVendedor.getText().equals("")) {altura = Integer.parseInt(alturaVendedor.getText());}
-        Direccion direccion = new Direccion(calle,altura,ciudad,pais);
-        vendedor.editar(nombre,coordenada,null,null);
+        VendedoresController.getInstance().modificarVendedor(vendedor.getId(),nombre,calle,altura,ciudad,pais,latitud,longitud);
         InterfazVendedores interfazVendedores = new InterfazVendedores();
         interfazVendedores.setVisible(true);
         this.setVisible(false);

@@ -4,7 +4,7 @@
  */
 package gui.itemMenu;
 
-import DAO.FACTORY.DAOFactory;
+import controller.ItemMenusController;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import gui.ButtonColumn;
 import gui.cliente.InterfazClientes;
@@ -51,7 +51,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 Object itemId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
                 // Recupera los datos completos del item con el ID obtenido
-                ItemMenu itemMenu = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorId((int) itemId);
+                ItemMenu itemMenu = ItemMenusController.getInstance().filtrarItemMenuPorId((int) itemId);
 
 
                 // Crea y muestra una nueva interfaz para editar los datos del cliente
@@ -86,7 +86,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 if(confirm == JOptionPane.YES_OPTION){
 
                     try{
-                        DAOFactory.getInstance().getItemsMenuDAO().eliminarItemMenu((int) itemId);
+                        ItemMenusController.getInstance().eliminarItemMenu((int) itemId);
                         if(nombre == null){mostrar(null);}
                         else{mostrar(nombre);}
 
@@ -102,7 +102,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
         if(nombre != null){
             try{
-                List<ItemMenu> itemMenus = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorNombre(nombre);
+                List<ItemMenu> itemMenus = ItemMenusController.getInstance().filtrarItemMenuPorNombre(nombre);
                 Iterator<ItemMenu> iterator = itemMenus.iterator();
                 while(iterator.hasNext()){
                     ItemMenu itemMenu = iterator.next();
@@ -127,7 +127,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
         }
         else{
             try{
-                List<ItemMenu> itemMenus = DAOFactory.getInstance().getItemsMenuDAO().getItemMenus();
+                List<ItemMenu> itemMenus = ItemMenusController.getInstance().getItemMenus();
                 Iterator<ItemMenu> iterator = itemMenus.iterator();
                 while(iterator.hasNext()){
                     ItemMenu itemMenu = iterator.next();

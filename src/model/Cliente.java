@@ -162,4 +162,12 @@ public class Cliente implements EventListener {
             JOptionPane.showMessageDialog(null, "El pedido se ha actualizado.\n Estado del Pedido:" + p.getEstado().stringEstado());
         }
     }
+
+    public void modificarCliente(String nombre, String cuit, String email, Direccion direccion, Coordenada coordenadas){
+        setNombre(nombre);
+        setCuit(Long.parseLong(cuit));
+        setEmail(email);
+        setDireccion(direccion);
+        setCoordenadas(coordenadas);
+    }
 }

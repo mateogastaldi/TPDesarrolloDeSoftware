@@ -7,6 +7,8 @@ import model.Cliente;
 import java.util.stream.Collectors;
 import exceptions.cliente.ClienteNoEncontradoException;
 import DAO.ClienteDAO;
+import model.Coordenada;
+import model.Direccion;
 
 public class ClienteMemory implements ClienteDAO {
     //UTILIZAMOS PATRON SINGLETON PARA LA CREACION DEL MEMORY
@@ -77,5 +79,12 @@ public class ClienteMemory implements ClienteDAO {
         else {
             clientes.remove(cliente);
         }
+    }
+    public void modificarCliente(int id, String nombre, String cuit, String email, Direccion direccion, Coordenada coordenadas) throws ClienteNoEncontradoException {
+        Cliente cliente = filtrarClientePorId(id);
+        if(cliente == null){
+            throw new ClienteNoEncontradoException("Cliente no encontrado" + id);
+        }
+        cliente.modificarCliente(nombre, cuit, email, direccion, coordenadas);
     }
 }

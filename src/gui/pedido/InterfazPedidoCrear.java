@@ -4,7 +4,8 @@
  */
 package gui.pedido;
 
-import DAO.FACTORY.DAOFactory;
+import controller.ClientesController;
+import controller.VendedoresController;
 import model.*;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
     public DefaultComboBoxModel<String> modeloDropDownListVendedor(){
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
-            Iterator<Vendedor> c = DAOFactory.getInstance().getVendedorDAO().getVendedores().iterator();
+            Iterator<Vendedor> c = VendedoresController.getInstance().getVendedores().iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getNombre());
             }
@@ -40,7 +41,7 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
 
         try{
-            Iterator<Cliente> c = DAOFactory.getInstance().getClienteDAO().getClientes().iterator();
+            Iterator<Cliente> c = ClientesController.getInstance().getClientes().iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getNombre());
             }
@@ -218,7 +219,7 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
 
-        Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String) dropVendedores.getSelectedItem()).getFirst();
+        Vendedor vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String) dropVendedores.getSelectedItem()).getFirst();
 
         PagoStrategy mediosDePagos = null;
         if(((String) dropDownListMetodosDePago.getSelectedItem()).equals(MediosDePagos.MERCADO_PAGO.name())){ mediosDePagos = new MercadoPago() ;}
@@ -229,7 +230,7 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
             }
         }
 
-        Cliente cliente = DAOFactory.getInstance().getClienteDAO().filtrarClientePorNombre((String) dropDownListCliente.getSelectedItem()).getFirst();
+        Cliente cliente = ClientesController.getInstance().filtrarClientePorNombre((String) dropDownListCliente.getSelectedItem()).getFirst();
 
         InterfazPedidoCrear1 interfazPedidoCrear1 = new InterfazPedidoCrear1(vendedor, mediosDePagos, cliente);
         interfazPedidoCrear1.setVisible(true);

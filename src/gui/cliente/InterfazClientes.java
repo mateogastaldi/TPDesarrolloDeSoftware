@@ -4,7 +4,8 @@
  */
 package gui.cliente;
 
-import DAO.FACTORY.DAOFactory;
+
+import controller.ClientesController;
 import exceptions.cliente.ClienteNoEncontradoException;
 import gui.ButtonColumn;
 import gui.itemMenu.InterfazItemsMenu;
@@ -57,7 +58,7 @@ public class InterfazClientes extends javax.swing.JFrame {
                 Object clienteId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
                 // Recupera los datos completos del cliente con el ID obtenido
-                Cliente cliente = DAOFactory.getInstance().getClienteDAO().filtrarClientePorId((int) clienteId);
+                Cliente cliente = ClientesController.getInstance().filtrarClientePorId((int) clienteId);
 
 
                 // Crea y muestra una nueva interfaz para editar los datos del cliente
@@ -85,7 +86,7 @@ public class InterfazClientes extends javax.swing.JFrame {
                 if(confirm == JOptionPane.YES_OPTION){
 
                     try{
-                        DAOFactory.getInstance().getClienteDAO().eliminarCliente((int) clienteId);
+                        ClientesController.getInstance().eliminarCliente((int) clienteId);
                         if(nombre == null){mostrar(null);}
                         else{mostrar(nombre);}
 
@@ -101,7 +102,7 @@ public class InterfazClientes extends javax.swing.JFrame {
 
         if(nombre != null){
             try{
-                List<Cliente> clientes = DAOFactory.getInstance().getClienteDAO().filtrarClientePorNombre(nombre);
+                List<Cliente> clientes = ClientesController.getInstance().filtrarClientePorNombre(nombre);
                 Iterator<Cliente> iterator = clientes.iterator();
                 while(iterator.hasNext()){
                     Cliente cliente = iterator.next();
@@ -124,7 +125,7 @@ public class InterfazClientes extends javax.swing.JFrame {
         }
         else{
             try{
-                List<Cliente> clientes = DAOFactory.getInstance().getClienteDAO().getClientes();
+                List<Cliente> clientes = ClientesController.getInstance().getClientes();
                 Iterator<Cliente> iterator = clientes.iterator();
                 while(iterator.hasNext()){
                     Cliente cliente = iterator.next();

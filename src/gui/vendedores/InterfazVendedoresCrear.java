@@ -4,8 +4,7 @@
  */
 package gui.vendedores;
 
-import DAO.FACTORY.DAOFactory;
-
+import controller.VendedoresController;
 import model.Coordenada;
 import model.Direccion;
 import model.Vendedor;
@@ -380,15 +379,14 @@ public class InterfazVendedoresCrear extends javax.swing.JFrame {
         String nombre = nombreVendedor.getText();
         double longitud = Double.parseDouble(lonVendedor.getText());
         double latitud = Double.parseDouble(latVendedor.getText());
-        Coordenada coordenada = new Coordenada(latitud,longitud);
         String pais = paisVendedor.getText();
         String ciudad = ciudadVendedor.getText();
         String calle = calleVendedor.getText();
         int altura = Integer.parseInt(alturaVendedor.getText());
-        Direccion direccion = new Direccion(calle,altura,ciudad,pais);
-        Vendedor vendedor = new Vendedor(nombre,direccion,coordenada);
 
-        DAOFactory.getInstance().getVendedorDAO().addVendedor(vendedor);
+
+
+        VendedoresController.getInstance().addVendedor(nombre,calle, altura, ciudad,pais, latitud, longitud);
         InterfazVendedores interfazVendedores = new InterfazVendedores();
         interfazVendedores.setVisible(true);
         this.setVisible(false);

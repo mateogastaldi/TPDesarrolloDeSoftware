@@ -4,7 +4,10 @@
  */
 package gui.pedido;
 
-import DAO.FACTORY.DAOFactory;
+
+import controller.ItemMenusController;
+import controller.PedidosController;
+import controller.VendedoresController;
 import exceptions.Pedido.PedidoNoEncontradoException;
 import gui.ButtonColumn;
 import model.*;
@@ -31,7 +34,7 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
 
         vendedorGlobal = vendedor;
         clienteGlobal = cliente;
-        itemsDelLocal = DAOFactory.getInstance().getItemsMenuDAO().filtrarPorIdVendedor(vendedorGlobal.getId());
+        itemsDelLocal = ItemMenusController.getInstance().filtrarPorIdVendedor(vendedorGlobal.getId());
         mp = mediosDePagos;
         pedido = new Pedido(cliente,vendedor);
         pedido.pagarPagoStrategy(mediosDePagos);
@@ -65,7 +68,7 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
                 if (confirm == JOptionPane.YES_OPTION) {
 
                     try {
-                        pedido.removeItemPedido((ItemPedido) DAOFactory.getInstance().getItemsPedidoDAO().getItemPedido((int) itemId));
+                        pedido.removeItemPedido( PedidosController.getInstance().getItemPedido((int) itemId));
                         mostrar();
                     } catch (PedidoNoEncontradoException ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -76,7 +79,7 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
             ;
         };
 
-        Iterator<ItemPedido> ip = DAOFactory.getInstance().getItemsPedidoDAO().filtrarPorPedido(pedido).iterator();
+        Iterator<ItemPedido> ip = PedidosController.getInstance().filtrarPorPedido(pedido).iterator();
         while (ip.hasNext()) {
             ItemPedido itemPedido = ip.next();
             model.addRow(new Object[]{
@@ -268,8 +271,8 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
-        if(!pedido.getItemsPedidos().isEmpty()) {
-            DAOFactory.getInstance().getPedidosDAO().addPedido(pedido);
+        if(!listaItemPedidos.isEmpty()) {
+            PedidosController.getInstance().addPedido(clienteGlobal,vendedorGlobal,listaItemPedidos);
             InterfazPedidos interfazPedidos = new InterfazPedidos();
             interfazPedidos.setVisible(true);
             this.setVisible(false);
@@ -282,9 +285,9 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
 
     private void agregarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarItemActionPerformed
         // TODO add your handling code here:
-        ItemMenu itemMenu = DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorNombre((String) dropItems.getSelectedItem()).stream().findFirst().orElse(null);
+        ItemMenu itemMenu = (ItemMenu) ItemMenusController.getInstance().filtrarItemMenuPorNombre((String) dropItems.getSelectedItem()).stream().findFirst().orElse(null);
         ItemPedido itemPedido = new ItemPedido(itemMenu,pedido);
-        pedido.addItemPedido(itemPedido);
+        listaItemPedidos.add(itemPedido);
         mostrar();
 
 

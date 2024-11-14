@@ -4,6 +4,8 @@
  */
 package gui.itemMenu;
 
+import controller.ItemMenusController;
+import controller.VendedoresController;
 import model.*;
 
 import javax.swing.*;
@@ -18,7 +20,7 @@ public class InterfazItemMenuCrearBebida extends javax.swing.JFrame {
     public DefaultComboBoxModel<String> modeloDropDownListVendedor(){
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
-            Iterator<Vendedor> c = VendedoresController.getInstance.getVendedores().iterator();
+            Iterator<Vendedor> c = VendedoresController.getInstance().getVendedores().iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getNombre());
             }
@@ -448,8 +450,8 @@ public class InterfazItemMenuCrearBebida extends javax.swing.JFrame {
             String nombre = nombreItem.getText();
 
             double precioIngresado = Double.parseDouble(precio.getText());
-            Vendedor vendedor = DAOFactory.getInstance().getVendedorDAO().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
-            Categoria categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
+            Vendedor vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
+            Categoria categoria =(Categoria) ItemMenusController.getInstance().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
             boolean aptoCelaico = false;
             boolean aptoVegano = false;
             if(aptoCeliacoCheckBox.isSelected()){

@@ -4,7 +4,8 @@
  */
 package gui.itemMenu.categoria;
 
-import DAO.FACTORY.DAOFactory;
+
+import controller.ItemMenusController;
 import exceptions.itemMenu.categoria.CategoriaNoCreadaException;
 import exceptions.itemMenu.categoria.CategoriaNoEncontradaException;
 import gui.ButtonColumn;
@@ -57,7 +58,7 @@ public class InterfazCategoria extends javax.swing.JFrame {
                 if(confirm == JOptionPane.YES_OPTION){
 
                     try{
-                        DAOFactory.getInstance().getCategoriaDAO().eliminarCategoria((int) categoriaId);
+                        ItemMenusController.getInstance().eliminarCategoria((int) categoriaId);
                         if(nombre == null){mostrar(null);}
                         else{mostrar(nombre);}
 
@@ -73,7 +74,7 @@ public class InterfazCategoria extends javax.swing.JFrame {
 
         if(nombre != null){
             try{
-                List<Categoria> categoria = DAOFactory.getInstance().getCategoriaDAO().filtrarCategoriaPorNombre(nombre);
+                List<Categoria> categoria = ItemMenusController.getInstance().filtrarCategoriaPorNombre(nombre);
                 Iterator<Categoria> iterator = categoria.iterator();
                 while(iterator.hasNext()){
                     Categoria cat = iterator.next();
@@ -94,7 +95,7 @@ public class InterfazCategoria extends javax.swing.JFrame {
         else{
 
             try{
-                List<Categoria> categorias = DAOFactory.getInstance().getCategoriaDAO().getCategorias();
+                List<Categoria> categorias =ItemMenusController.getInstance().getCategorias();
                 Iterator<Categoria> iterator = categorias.iterator();
                 while(iterator.hasNext()){
                     Categoria cat = iterator.next();
@@ -430,14 +431,13 @@ public class InterfazCategoria extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
             if(dropDownListCategoria.getSelectedIndex() == 0){
-                Categoria<Plato> categoriaPlato = new Categoria<>(nombreCategoria.getText(), Plato.class);
-                DAOFactory.getInstance().getCategoriaDAO().addCategoria(categoriaPlato);
+
+                ItemMenusController.getInstance().addCategoria(nombreCategoria.getText(), Plato.class);
                 mostrar(null);
             }
             else{
                 if(dropDownListCategoria.getSelectedIndex() == 1){
-                    Categoria<Bebida> categoriaBebida = new Categoria<>(nombreCategoria.getText(), Bebida.class);
-                    DAOFactory.getInstance().getCategoriaDAO().addCategoria(categoriaBebida);
+                    ItemMenusController.getInstance().addCategoria(nombreCategoria.getText(), Bebida.class);
                     mostrar(null);
                 }
             }

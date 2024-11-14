@@ -28,6 +28,10 @@ public class ItemMenusController<T extends ItemMenu> {
         ItemMenu itemMenu = new Bebida(nombre,descripcion,precioIngresado,aptoVegano,aptoCelaico,categoria,vendedor,gradAlcoholica,tamanioIngresad);
         DAOFactory.getInstance().getItemsMenuDAO().addItemMenu(itemMenu);
     }
+    public void addPlato(String nombre,String descripcion,double precioIngresado,boolean aptoVegano, Categoria categoria,Vendedor vendedor,double calorias, boolean aptoCeliaco, double peso){
+        ItemMenu item = new Plato(nombre,descripcion,precioIngresado,aptoVegano,categoria,vendedor,calorias,aptoCeliaco,peso);
+        DAOFactory.getInstance().getItemsMenuDAO().addItemMenu(item);
+    }
     public List<ItemMenu> filtrarItemMenuPorNombre(String nombre) throws ItemMenuNoEncontradoException{
         return DAOFactory.getInstance().getItemsMenuDAO().filtrarItemMenuPorNombre(nombre);
     }
