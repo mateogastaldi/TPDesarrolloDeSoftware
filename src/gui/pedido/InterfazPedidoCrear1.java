@@ -36,7 +36,7 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
         clienteGlobal = cliente;
         itemsDelLocal = ItemMenusController.getInstance().filtrarPorIdVendedor(vendedorGlobal.getId());
         mp = mediosDePagos;
-        pedido = new Pedido(cliente,vendedor);
+        pedido = PedidosController.getInstance().crearPedido(clienteGlobal,vendedorGlobal);
         pedido.pagarPagoStrategy(mediosDePagos);
         initComponents();
     }

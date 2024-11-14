@@ -1,12 +1,13 @@
 package model;
 
 import DAO.FACTORY.DAOFactory;
+import controller.ItemMenusController;
+import controller.PedidosController;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido extends EventManager {
-    private static int contadorId = 0;
     private int id;
     private Cliente cliente;
     private List<ItemPedido> itemsPedidos;
@@ -15,21 +16,22 @@ public class Pedido extends EventManager {
     private Vendedor vendedor;
 
     //constructores
-    public Pedido(Cliente cliente,Vendedor vendedor) {
+    public Pedido(int id,Cliente cliente,Vendedor vendedor, Pago pago,Estado estado) {
         super();
         setCliente(cliente);
         setVendedor(vendedor);
         itemsPedidos = new ArrayList<>();
-        this.estado = new EstadoRECIBIDO();
-        setId();
+        if(estado == null)this.estado = new EstadoRECIBIDO();
+        else this.estado = estado;
+        setId(id);
     }
-    public Pedido(Cliente cliente, List<ItemPedido> itemsPedidos,Vendedor vendedor) {
+    public Pedido(int id,Cliente cliente, List<ItemPedido> itemsPedidos,Vendedor vendedor, Pago pago) {
         super();
         setCliente(cliente);
         setItemsPedidos(itemsPedidos);
         this.estado = new EstadoRECIBIDO();
         setVendedor(vendedor);
-        setId();
+        setId(id);
     }
 
     //getters-setters
@@ -50,7 +52,7 @@ public class Pedido extends EventManager {
         itemsPedidos.add(itemPedido);
         DAOFactory.getInstance().getItemsPedidoDAO().addItemPedido(itemPedido);
     }
-    private void setId(){this.id = ++contadorId;}
+    private void setId(int id){this.id = id;}
     public void setVendedor(Vendedor vendedor) {this.vendedor = vendedor;}
 
     //metodos
@@ -58,7 +60,7 @@ public class Pedido extends EventManager {
     public void actualizarEstado() {
         estado.siguiente();
         if(estado.equals(TipoEstado.ENVIADO)) {
-            DAOFactory.getInstance().getPagoDAO().addPago(pago);
+            PedidosController.getInstance().addPago(t);
         }
         this.notifyListeners(this);
     }

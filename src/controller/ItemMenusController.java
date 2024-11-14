@@ -1,14 +1,16 @@
 package controller;
-
 import java.util.List;
-
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import exceptions.itemMenu.categoria.CategoriaNoEncontradaException;
 import DAO.FACTORY.DAOFactory;
-import model.*;
+import model.ItemMenu;
+import model.Bebida;
+import model.Plato;
+import model.Categoria;
+import model.Vendedor;
 
-public class ItemMenusController<T extends ItemMenu> {
-    
+public class ItemMenusController {
+
     // Singleton -------------------------------------------------------------
     private static ItemMenusController instance;
     private ItemMenusController() {}
@@ -22,8 +24,8 @@ public class ItemMenusController<T extends ItemMenu> {
 
     // Methods ItemMenu ------------------------------------------------------
     public List<ItemMenu> getItemMenus() throws ItemMenuNoEncontradoException{
-        return DAOFactory.getInstance().getItemsMenuDAO().getItemMenus();
-    }
+         return DAOFactory.getInstance().getItemsMenuDAO().getItemMenu();
+     }
     public void addBebida(String nombre,String descripcion,double precioIngresado,boolean aptoVegano,boolean aptoCelaico, Categoria categoria,Vendedor vendedor,double gradAlcoholica,double tamanioIngresad) throws ItemMenuNoEncontradoException{
         ItemMenu itemMenu = new Bebida(nombre,descripcion,precioIngresado,aptoVegano,aptoCelaico,categoria,vendedor,gradAlcoholica,tamanioIngresad);
         DAOFactory.getInstance().getItemsMenuDAO().addItemMenu(itemMenu);
@@ -59,10 +61,12 @@ public class ItemMenusController<T extends ItemMenu> {
     public void eliminarItemMenu(int id) throws ItemMenuNoEncontradoException{
         DAOFactory.getInstance().getItemsMenuDAO().eliminarItemMenu(id);
     }
-    public <T extends ItemMenu> List<Categoria<T>> filtrarPorTipoItem(Class<? extends ItemMenu> bebida){
+    public <T extends ItemMenu> List<Categoria> filtrarPorTipoItem(Class<? extends ItemMenu> bebida){
         return DAOFactory.getInstance().getCategoriaDAO().filtrarPorTipoItem(bebida);
     }
     public void editarItemMenu(int id, String nombre, String descripcion, double precio, boolean aptoVegano, boolean aptoCeliaco, Categoria categoria, Vendedor vendedor, Double especifico1, Double especifico2) throws ItemMenuNoEncontradoException{
+        ItemMenu item = filtrarItemMenuPorId(id);
+        item.editarItem(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor);
         DAOFactory.getInstance().getItemsMenuDAO().editarItemMenu(id, nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor, especifico1, especifico2);
     }
     // -----------------------------------------------------------------------

@@ -7,7 +7,7 @@ import exceptions.vendedor.VendedorNoEncontradoException;
 import model.Coordenada;
 import model.Direccion;
 import model.Vendedor;
-
+ 
 public class VendedoresController {
     // Singleton -------------------------------------------------------------
     private static VendedoresController instance;

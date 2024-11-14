@@ -1,13 +1,12 @@
-package model;
 
+package model;
 import exceptions.itemPedido.ItemPedidoNoEncontradoException;
 import exceptions.vendedor.VendedorNoEncontradoException;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Vendedor {
-    //atributos
+    // Atributes ---------------------------------------------------------------
     private static int contadorId;
     private int id;
     private String nombre;
@@ -15,8 +14,8 @@ public class Vendedor {
     private Coordenada coordenadas;
     private ArrayList<ItemMenu> itemMenu;
     private ArrayList<Pedido> pedidos;
-
-    //constructor
+    // -------------------------------------------------------------------------
+    // Constructor -------------------------------------------------------------
     public Vendedor(String nombre, Direccion direccion, Coordenada coordenadas) {
         setId();
         setNombre(nombre);
@@ -32,8 +31,8 @@ public class Vendedor {
         setItemMenu(itemMenu);
         setPedidos(pedidos);
     }
-
-    //getters-setters
+    // -------------------------------------------------------------------------
+    // Getter-Setter -----------------------------------------------------------
     public ArrayList<Bebida> getItemBebida(){
         ArrayList<Bebida> bebidas = new ArrayList<>();
         for(ItemMenu b: this.itemMenu) if(b.esBebida()) bebidas.add((Bebida)b);
@@ -80,9 +79,11 @@ public class Vendedor {
     private void setCoordenadas(Coordenada coordenadas) {this.coordenadas = coordenadas;}
     private void setItemMenu(ArrayList<ItemMenu> itemMenu){this.itemMenu = itemMenu;}
     private void setItemMenu() {this.itemMenu = new ArrayList<>();}
-    public void addItemMenu(ItemMenu itemMenu){this.itemMenu.add(itemMenu);}
     private void setPedidos(){this.pedidos = new ArrayList<>();}
     private void setPedidos(ArrayList<Pedido> pedidos){this.pedidos = pedidos;}
+    // -------------------------------------------------------------------------
+    // Methods ----------------------------------------------------------------
+    public void addItemMenu(ItemMenu itemMenu){this.itemMenu.add(itemMenu);}
     public void addPedido(Pedido pedido){this.pedidos.add(pedido);}
 
     //metodos

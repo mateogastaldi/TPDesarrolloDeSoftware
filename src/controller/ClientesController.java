@@ -7,6 +7,7 @@ import model.Cliente;
 import model.Coordenada;
 import model.Direccion;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class ClientesController {
         Cliente cliente = new Cliente(nombre,cuit,email,direccion,coord);
         DAOFactory.getInstance().getClienteDAO().addCliente(cliente);
     }
-    public List<Cliente> filtrarClientePorNombre(String nombre) throws ClienteNoEncontradoException {
+    public List<Cliente> filtrarClientePorNombre(String nombre) throws ClienteNoEncontradoException , SQLException{
         return DAOFactory.getInstance().getClienteDAO().filtrarClientePorNombre(nombre);
     }
     public Cliente filtrarClientePorId(int id) throws ClienteNoEncontradoException{

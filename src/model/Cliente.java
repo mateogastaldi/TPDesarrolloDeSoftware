@@ -1,9 +1,7 @@
 package model;
-
 import javax.swing.*;
 
 public class Cliente implements EventListener {
-    private static int contadorId = 0;
     private int id;
     private String nombre;
     private long cuit;
@@ -12,8 +10,8 @@ public class Cliente implements EventListener {
     private Coordenada coordenadas;
 
     //constructor
-    public Cliente(String nombre, long cuit, String email, Direccion direccion, Coordenada coordenadas) {
-        setId();
+    public Cliente(int id, String nombre, long cuit, String email, Direccion direccion, Coordenada coordenadas) {
+        setId(id);
         setNombre(nombre);
         setCuit(cuit);
         setEmail(email);
@@ -22,8 +20,8 @@ public class Cliente implements EventListener {
     }
 
     //getters-setter
-    public void setId() {
-        this.id = ++contadorId;
+    public void setId(int id) {
+        this.id = id;
     }
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -79,71 +77,6 @@ public class Cliente implements EventListener {
     public boolean idIgual(int id){
         return this.getId() == id;
     }
-    //nose se usa mas este metodo de abajo
-//    public Pedido generarPedido(Vendedor vendedor){
-//        Pedido pedido = new Pedido(this,vendedor);
-//        System.out.println("Los items disponibles del vendedor "+ vendedor.getNombre() + " son: ");
-//        vendedor.printAllItemMenu();
-//        System.out.println("Elija los productos que desee, poner 0 para finalizar: ");
-//        int idProducto = -1;
-//
-//        while (idProducto == -1) {
-//            System.out.print("Ingrese el ID del producto: ");
-//            Scanner sc = new Scanner(System.in);
-//            idProducto = sc.nextInt();
-//
-//            if (idProducto != 0) {
-//                try {
-//                    // Intenta obtener el producto por su ID
-//                    ItemMenu item = vendedor.getItemMenu(idProducto);
-//
-//                    ItemPedido itemPedido = new ItemPedido(item, pedido);
-//                    pedido.addItemPedido(itemPedido);
-//                    System.out.println("Producto agregado al pedido: " + item.getNombre());
-//                    idProducto = -1;
-//
-//                } catch (ItemPedidoNoEncontradoException e) {
-//                    // Captura la excepción si no se encuentra el producto
-//                    System.out.println("No existe producto con ese id, ingreselo nuevamente.");
-//                    idProducto = -1;
-//                }
-//            }
-//
-//        }
-//        this.metodoPago(pedido);
-//        System.out.println("Pedido generado con éxito.");
-//        vendedor.addPedido(pedido);
-//
-//        return pedido;
-//
-//    }
-//    public void metodoPago(Pedido pedido){
-//        System.out.println("Elegir metodo de pago: |  1=Transferencia  |  2=MercadoPago  |  3=Efectivo  |");
-//
-//        while (true) {
-//            Scanner sc = new Scanner(System.in);
-//            int i  = sc.nextInt();
-//            sc.nextLine();
-//
-//            if (i == 1) {
-//                pedido.pagarTransferencia();
-//                pedido.getPago().obtenerInformacion();
-//                break;
-//            } else if (i == 2) {
-//                pedido.pagarMercadoPago();
-//                pedido.getPago().obtenerInformacion();
-//                break;
-//            } else if(i == 3){
-//                pedido.pagarEfectivo();
-//                pedido.getPago().obtenerInformacion();
-//                break;
-//            } else {
-//                System.out.println("Metodo incorrecto ingrese uno valido.");
-//                System.out.println("Elegir metodo de pago:  1=Transferencia  |  2=MercadoPago  |  3=Efectivo");
-//            }
-//
-//        }
-//    }
     public void modificarAtributos(String nombre, long cuit, Direccion direccion,String email,Coordenada coordenadas){
 
         if(!nombre.equals("")) setNombre(nombre);
