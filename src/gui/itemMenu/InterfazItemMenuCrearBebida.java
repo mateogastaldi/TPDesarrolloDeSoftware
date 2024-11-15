@@ -463,7 +463,7 @@ public class InterfazItemMenuCrearBebida extends javax.swing.JFrame {
             boolean aptoCelaico = false;
             boolean aptoVegano = false;
             if(aptoCeliacoCheckBox.isSelected()){
-                boolean aptoCeliaco = true;
+                aptoCelaico = true;
             }
             if(aptoVeganoCheckBox.isSelected()){
                 aptoVegano = true;

@@ -1,9 +1,9 @@
 package controller;
 import DAO.FACTORY.DAOFactory;
 import exceptions.cliente.ClienteNoEncontradoException;
-import model.*;
 import java.sql.SQLException;
 import java.util.List;
+import model.*;
 
 
 public class ClientesController {
@@ -38,7 +38,7 @@ public class ClientesController {
     public List<Cliente> getClientes() throws ClienteNoEncontradoException, SQLException {
         return DAOFactory.getInstance().getClienteDAO().getClientes();
     }
-    public void modificarCliente(int id, String nombre, String cuit, String email, String calle, int altura, String ciudad, String pais, double lat, double lng) throws ClienteNoEncontradoException {
+    public void modificarCliente(int id, String nombre, Long cuit, String email, String calle, int altura, String ciudad, String pais, double lat, double lng) throws ClienteNoEncontradoException {
         Direccion direccion = new Direccion(calle, altura, ciudad, pais);
         Coordenada coordenadas = new Coordenada(lat, lng);
         DAOFactory.getInstance().getClienteDAO().modificarCliente(id, nombre, cuit, email, direccion, coordenadas);

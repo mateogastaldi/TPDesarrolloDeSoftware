@@ -453,7 +453,7 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
 
     private void descripcionItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcionItemActionPerformed
         // TODO add your handling code here:
-      
+    
     }//GEN-LAST:event_descripcionItemActionPerformed
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
@@ -477,11 +477,12 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
         // Verifica si el item es apto para veganos o celíacos
         boolean aptoCeliaco = aptoCeliacoCheckBox.isSelected();
         boolean aptoVegano = aptoVeganoCheckBox.isSelected();
-    
+        
         try {
             // Llama al método para editar el item
             // Recuerda que la lógica para editar la bebida usa los parámetros específicos de esta clase
-            bebida.editarItem(nombre, descripcion, precioIngresado, aptoVegano, aptoCeliaco, categoria, vendedor, graduacionAlcoholicaIngresada, tamanioIngresado);
+            ItemMenusController.getInstance().editarItemMenu(bebida.getId(), nombre, descripcion, precioIngresado, aptoVegano, aptoCeliaco, categoria, vendedor, graduacionAlcoholicaIngresada, tamanioIngresado);
+            // bebida.editarItem(nombre, descripcion, precioIngresado, aptoVegano, aptoCeliaco, categoria, vendedor, graduacionAlcoholicaIngresada, tamanioIngresado);
     
             // Redirige a la interfaz de items del menú
             InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();

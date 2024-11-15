@@ -1,19 +1,17 @@
 package mySQL;
 
 import DAO.CategoriaDAO;
-import model.Bebida;
-import model.Categoria;
-import model.ItemMenu;
-import model.Plato;
-
-import java.sql.PreparedStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import java.util.List;
+import model.Bebida;
+import model.Categoria;
+import model.ItemMenu;
+import model.Plato;
 
 public class CategoriaMySQL implements CategoriaDAO {
 
@@ -86,7 +84,6 @@ public class CategoriaMySQL implements CategoriaDAO {
 
             }
         } catch (SQLException e) {
-            System.out.println("Error al obtener categorías: " + e.getMessage());
             throw e; // Propagar la excepción si es necesario
         } finally {
             ConexionMySQL.cerrarConexion();
@@ -118,7 +115,8 @@ public class CategoriaMySQL implements CategoriaDAO {
             PreparedStatement pstmt = con.prepareStatement("SELECT * FROM categoria WHERE descripcion = ?");
         ) {
             pstmt.setString(1, nombre); // Establecer el valor del parámetro
-            try (ResultSet rs = pstmt.executeQuery()) {
+            try (
+                ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     int id = rs.getInt("id");
                     String descripcion = rs.getString("descripcion");
@@ -135,7 +133,6 @@ public class CategoriaMySQL implements CategoriaDAO {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error al obtener categorías: " + e.getMessage());
             throw e; // Propagar la excepción si es necesario
         } finally {
             ConexionMySQL.cerrarConexion();
@@ -173,10 +170,11 @@ public class CategoriaMySQL implements CategoriaDAO {
         Connection mySQL = ConexionMySQL.conectar();
         String tipoItem = tipoClase.getSimpleName();
         try (
-                PreparedStatement pstmt = mySQL
-                        .prepareStatement("SELECT * FROM categoria WHERE tipo_item = " + tipoItem);) {
+                PreparedStatement pstmt = mySQL.prepareStatement("SELECT * FROM categoria WHERE tipo_item = ?");
+            ) {
             pstmt.setString(1, tipoClase.getSimpleName());
-            try (ResultSet rs = pstmt.executeQuery()) {
+            try (
+                ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     int id = rs.getInt("id");
                     String descripcion = rs.getString("descripcion");

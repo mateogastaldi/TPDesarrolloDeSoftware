@@ -32,6 +32,7 @@ public class InterfazCategoria extends javax.swing.JFrame {
      * Creates new form InterfazVendedores
      */
     public InterfazCategoria() {initComponents();}
+
     public void mostrar(String nombre){
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Nombre");
@@ -76,6 +77,8 @@ public class InterfazCategoria extends javax.swing.JFrame {
         if(nombre != null){
             try{
                 List<Categoria> categoria = ItemMenusController.getInstance().filtrarCategoriaPorNombre(nombre);
+                System.out.println("Categorias: " + categoria);
+                System.err.println("Nombre: " + nombre);
                 Iterator<Categoria> iterator = categoria.iterator();
                 while(iterator.hasNext()){
                     Categoria cat = iterator.next();
@@ -84,17 +87,13 @@ public class InterfazCategoria extends javax.swing.JFrame {
                             cat.getId(),
                             cat.getTipoItem().getSimpleName(),
                     });
-
-
                 }
-
             }catch(CategoriaNoEncontradaException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
-
             }
         }
         else{
-
+            System.err.println("Entro al else");
             try{
                 List<Categoria> categorias =ItemMenusController.getInstance().getCategorias();
                 Iterator<Categoria> iterator = categorias.iterator();
@@ -119,9 +118,6 @@ public class InterfazCategoria extends javax.swing.JFrame {
         tablaCategoria.setModel(model);
 
         ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaCategoria,actionEliminar,3);
-
-
-
 
 
     }
@@ -410,8 +406,9 @@ public class InterfazCategoria extends javax.swing.JFrame {
 
     private void BuscarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarBotonActionPerformed
         // TODO add your handling code here:
-        if(nombreCategoria.getText().equalsIgnoreCase("")){mostrar(null);}
-        else{mostrar(nombreCategoria.getText());}
+        System.err.println("Entro al boton buscar con el nombre: " + Buscador.getText());
+        if(Buscador.getText().equalsIgnoreCase("")){mostrar(null);}
+        else{mostrar(Buscador.getText());}
     }//GEN-LAST:event_BuscarBotonActionPerformed
 
     private void BotonClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonClienteActionPerformed

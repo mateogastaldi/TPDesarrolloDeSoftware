@@ -71,6 +71,7 @@ public class InterfazClientes extends javax.swing.JFrame {
                 if (cliente != null) {
                     InterfazClienteEditar editarClienteFrame = new InterfazClienteEditar(cliente);
                     editarClienteFrame.setVisible(true);
+                    InterfazClientes.this.setVisible(false);
                 }
             }
         };
@@ -82,7 +83,6 @@ public class InterfazClientes extends javax.swing.JFrame {
                 int modelRow = Integer.valueOf(e.getActionCommand());
                 // Obtiene el ID del cliente desde la tabla en la columna correspondiente
                 Object clienteId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
-
                 int confirm = JOptionPane.showConfirmDialog(
                         null,
                         "¿Deseas eliminar el cliente?",
@@ -91,21 +91,16 @@ public class InterfazClientes extends javax.swing.JFrame {
                         JOptionPane.QUESTION_MESSAGE
                 );
                 if(confirm == JOptionPane.YES_OPTION){
-
                     try{
                         ClientesController.getInstance().eliminarCliente((int) clienteId);
                         if(nombre == null){mostrar(null);}
                         else{mostrar(nombre);}
-
-
                     }catch (ClienteNoEncontradoException | SQLException ex){
                         JOptionPane.showMessageDialog(null,ex.getMessage());
                     }
                 }
             };
         };
-
-
 
         if(nombre != null){
             try{
@@ -121,13 +116,9 @@ public class InterfazClientes extends javax.swing.JFrame {
                             cliente.getDireccion().getCalle(),
                             cliente.getDireccion().getAltura()
                     });
-
-
                 }
-
             }catch(ClienteNoEncontradoException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
-
             }
         }
         else{
@@ -144,25 +135,18 @@ public class InterfazClientes extends javax.swing.JFrame {
                             cliente.getDireccion().getCalle(),
                             cliente.getDireccion().getAltura()
                     });
-
-    
                 }
-
             }catch(ClienteNoEncontradoException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
-
             }
         }
         // Crear la tabla con el modelo
         tablaClientes.setModel(model);
         ButtonColumn buttonColumnEditar = new ButtonColumn(tablaClientes,actionEditar,6);
         ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaClientes,actionEliminar,7);
-
-
-
-
-
     }
+
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

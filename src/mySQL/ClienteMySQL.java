@@ -2,12 +2,12 @@ package mySQL;
 
 import DAO.ClienteDAO;
 import exceptions.cliente.ClienteNoEncontradoException;
-import model.Cliente;
-import model.Coordenada;
-import model.Direccion;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import model.Cliente;
+import model.Coordenada;
+import model.Direccion;
 
 public class ClienteMySQL implements ClienteDAO {
 
@@ -180,15 +180,13 @@ public class ClienteMySQL implements ClienteDAO {
     }
 
     @Override
-    public void modificarCliente(int id, String nombre, String cuit, String email, Direccion direccion,
-            Coordenada coordenadas) throws ClienteNoEncontradoException {
+    public void modificarCliente(int id, String nombre, long cuit, String email, Direccion direccion, Coordenada coordenadas) throws ClienteNoEncontradoException {
         Connection MySql = ConexionMySQL.conectar();
-        String sql = "UPDATE cliente SET nombre = ?, cuit = ?, email = ?, altura = ?, ciudad = ?,ciudad = ?,pais = ?, lat = ?, lng = ? WHERE id = "
-                + id;
+        String sql = "UPDATE cliente SET nombre = ?, cuit = ?, email = ?, altura = ?, ciudad = ?,ciudad = ?,pais = ?, lat = ?, lng = ? WHERE id = " + id;
         try (
                 PreparedStatement pstmt = MySql.prepareStatement(sql)) {
             pstmt.setString(1, nombre);
-            pstmt.setString(2, cuit);
+            pstmt.setLong(2, cuit);
             pstmt.setString(3, email);
             pstmt.setInt(4, direccion.getAltura());
             pstmt.setString(5, direccion.getCalle());

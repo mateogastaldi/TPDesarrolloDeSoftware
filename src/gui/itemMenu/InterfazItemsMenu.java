@@ -30,6 +30,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
     public InterfazItemsMenu() {initComponents();}
 
     public void mostrar(String nombre){
+
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Nombre");
         model.addColumn("ID");
@@ -405,9 +406,13 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_CrearNuevoBebidaActionPerformed
 
     private void BuscarBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarBotonActionPerformed
+        System.err.println("Entro al boton buscar con el nombre: " + BuscadorDeItemMenu.getText());
         // TODO add your handling code here:
-        if(BuscadorDeItemMenu.getText().equalsIgnoreCase("")){mostrar(null);}
-        else{mostrar(BuscadorDeItemMenu.getText());}
+        if(BuscadorDeItemMenu.getText().equalsIgnoreCase("")){
+            mostrar(null);}
+        else{
+            mostrar(BuscadorDeItemMenu.getText());
+        }
     }//GEN-LAST:event_BuscarBotonActionPerformed
 
     private void BotonClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonClienteActionPerformed

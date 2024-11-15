@@ -98,7 +98,7 @@ public class ItemMenuMySQL implements ItemsMenuDAO {
 
     public void addItemMenu(ItemMenu itemMenu) throws SQLException {
         Connection mySQL = ConexionMySQL.conectar();
-        String query = "INSERT INTO itemmenu (nombre, descripcion, precio, aptoVegano, aptoCeliaco, id_categoria, id_vendedor,calorias,peso,gradAlcoholica,tamanio,tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?)";
+        String query = "INSERT INTO itemmenu (nombre, descripcion, precio, aptoVegano, aptoCeliaco, id_categoria, id_vendedor,calorias,peso,gradAlcoholica,tamanio,tipo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (
                 PreparedStatement pstmt = mySQL.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, itemMenu.getNombre());
@@ -144,8 +144,11 @@ public class ItemMenuMySQL implements ItemsMenuDAO {
         List<ItemMenu> itemMenus = new ArrayList<>();
         Connection mySQL = ConexionMySQL.conectar();
         try (
-                PreparedStatement pstmt = mySQL.prepareStatement("SELECT * FROM itemmenu WHERE nombre = " + nombre);
-                ResultSet rs = pstmt.executeQuery()) {
+                PreparedStatement pstmt = mySQL.prepareStatement("SELECT * FROM itemmenu WHERE nombre = ?");
+            )
+            {
+            pstmt.setString(1, nombre);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String nombreItem = rs.getString("nombre");
@@ -506,10 +509,11 @@ public class ItemMenuMySQL implements ItemsMenuDAO {
             boolean aptoCeliaco, Categoria categoria, Vendedor vendedor, Double espe1, Double espe2)
             throws SQLException {
         Connection mySQL = ConexionMySQL.conectar();
-        String query = "UPDATE itemmenu SET nombre = ?, descripcion = ?, precio = ?, aptoVegano = ?, aptoCeliaco = ?, id_categoria = ?, id_vendedor = ?, calorias = ?, peso = ?, gradAlcoholica = ?, tamanio = ?,tipo = ? WHERE id = "
-                + id;
+        String query = "UPDATE itemmenu SET nombre = ?, descripcion = ?, precio = ?, aptoVegano = ?, aptoCeliaco = ?, id_categoria = ?, id_vendedor = ?, calorias = ?, peso = ?, gradAlcoholica = ?, tamanio = ?,tipo = ? WHERE id = ?";
         try (
-                PreparedStatement pstmt = mySQL.prepareStatement(query)) {
+                PreparedStatement pstmt = mySQL.prepareStatement(query)
+            ) 
+            {
             pstmt.setString(1, nombre);
             pstmt.setString(2, descripcion);
             pstmt.setDouble(3, precio);
@@ -530,6 +534,7 @@ public class ItemMenuMySQL implements ItemsMenuDAO {
                 pstmt.setDouble(11, espe2);
                 pstmt.setString(12, "Bebida");
             }
+            pstmt.setInt(13, id);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error al editar itemMenu: " + e.getMessage());

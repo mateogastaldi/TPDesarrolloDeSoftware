@@ -1,5 +1,5 @@
 
-CREATE TABLE Cliente(
+CREATE TABLE cliente(
 id int auto_increment primary key,
 nombre varchar(50),
 cuit long,
@@ -13,13 +13,13 @@ lng double
 );
     
 
-CREATE TABLE Categoria (
+CREATE TABLE categoria (
     id INT AUTO_INCREMENT PRIMARY KEY,
     descripcion VARCHAR(255) NOT NULL,
     tipo_item VARCHAR(50) NOT NULL  -- Para almacenar el tipo de ItemMenu
 );
 
-CREATE TABLE Vendedor (
+CREATE TABLE vendedor (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
     calle varchar(50),
@@ -31,7 +31,7 @@ CREATE TABLE Vendedor (
     );
 
 
-create table ItemMenu(
+create table itemmenu(
 id int auto_increment primary key,
 nombre varchar(50),
 descripcion varchar(50),
@@ -39,30 +39,30 @@ precio double,
 aptoVegano boolean,
 aptoCeliaco boolean,
 id_categoria int,
-foreign key (id_categoria) references Categoria(id),
-id_vendedor int references Vendedor(id),
+foreign key (id_categoria) references categoria(id),
+id_vendedor int references vendedor(id),
 calorias double,
 peso double,
 gradAlcoholica double,
 tamanio double,
 tipo enum('Plato','Bebida') );
 
-CREATE TABLE Pago(
+CREATE TABLE pago(
 id int auto_increment primary key,
 monto double,
 metodoDePago enum("MERCADO PAGO","TRANSFERENCIA","EFECTIVO"));
 
-CREATE TABLE Pedido(
+CREATE TABLE pedido(
 id int auto_increment primary key,
-cliente int references Cliente(id),
+cliente int references cliente(id),
 estado ENUM('RECIBIDO','ACEPTADO', 'PREPARADO', 'ENVIADO') NOT NULL,
-pago int references Pago(id),
-vendedor int references Vendedor(id)
+pago int references pago(id),
+vendedor int references vendedor(id)
 );
 
 
-CREATE TABLE itemPedido(
+CREATE TABLE itempedido(
 id int auto_increment primary key,
-itemMenu int references ItemMenu(id),
-pedido int references Pedido(id)
+itemMenu int references itemmenu(id),
+pedido int references pedido(id)
 );

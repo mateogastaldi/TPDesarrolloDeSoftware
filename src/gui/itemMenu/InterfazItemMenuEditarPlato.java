@@ -471,7 +471,6 @@ public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
     String nombre = nombreItem.getText();
     double pesoIngresado = Double.parseDouble(peso.getText());
     String descripcion = descripcionItem.getText();
-
     double caloriasIngresadas = Double.parseDouble(Calorias.getText());
     double precioIngresado = Double.parseDouble(precio.getText());
 
@@ -481,24 +480,23 @@ public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
 	try {
         vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
 		categoria = (Categoria) ItemMenusController.getInstance().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
-	} catch (CategoriaNoEncontradaException | SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+	}        catch(Exception e){
+        JOptionPane.showMessageDialog(null, e.getMessage());
+    }
 
     // Verifica si el plato es apto para veganos o celíacos
     boolean aptoCeliaco = aptoCeliacoCheckBox.isSelected();
     boolean aptoVegano = aptoVeganoCheckBox.isSelected();
 
     try {
-                // Obtén el plato existente y actualízalo
-        plato.editarItem(nombre, descripcion, precioIngresado, aptoVegano, aptoCeliaco, categoria, vendedor, caloriasIngresadas, pesoIngresado);
+        // Obtén el plato existente y actualízalo
+        ItemMenusController.getInstance().editarItemMenu(plato.getId(), nombre, descripcion, precioIngresado, aptoVegano, aptoCeliaco, categoria, vendedor, caloriasIngresadas, pesoIngresado);
 
         // Redirige a la interfaz de items del menú
         InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();
         interfazItemsMenu.setVisible(true);
         this.setVisible(false);
-    } catch (ItemMenuNoEncontradoException e) {
+    } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_botonConfirmarActionPerformed

@@ -40,27 +40,27 @@ public class InterfazVendedores extends javax.swing.JFrame {
         Action actionEditar = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JTable table = (JTable) e.getSource();
-                int modelRow = Integer.valueOf(e.getActionCommand());
+            JTable table = (JTable) e.getSource();
+            int modelRow = Integer.valueOf(e.getActionCommand());
 
-                // Obtiene el ID del vendedor desde la tabla en la columna correspondiente
-                Object vendedorId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
+            // Obtiene el ID del vendedor desde la tabla en la columna correspondiente
+            Object vendedorId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
-                // Recupera los datos completos del vendedor con el ID obtenido
-                Vendedor vendedor = null;
-                try{
-                    vendedor = VendedoresController.getInstance().filtrarVendedorPorId((int) vendedorId);
-                }catch(VendedorNoEncontradoException | SQLException ex){
-                    JOptionPane.showMessageDialog(null,ex.getMessage());
-                }
-
-                // Crea y muestra una nueva interfaz para editar los datos del vendedor
-                if (vendedor != null) {
-                    InterfazVendedoresEditar interfazVendedoresEditar = new InterfazVendedoresEditar(vendedor);
-                    interfazVendedoresEditar.setVisible(true);
-                }
+            // Recupera los datos completos del vendedor con el ID obtenido
+            Vendedor vendedor = null;
+            try{
+                vendedor = VendedoresController.getInstance().filtrarVendedorPorId((int) vendedorId);
+            }catch(VendedorNoEncontradoException | SQLException ex){
+                JOptionPane.showMessageDialog(null,ex.getMessage());
             }
-            
+
+            // Crea y muestra una nueva interfaz para editar los datos del vendedor
+            if (vendedor != null) {
+                InterfazVendedoresEditar interfazVendedoresEditar = new InterfazVendedoresEditar(vendedor);
+                interfazVendedoresEditar.setVisible(true);
+                InterfazVendedores.this.setVisible(false);
+            }
+            }
         };
         Action actionEliminar = new AbstractAction() {
             @Override

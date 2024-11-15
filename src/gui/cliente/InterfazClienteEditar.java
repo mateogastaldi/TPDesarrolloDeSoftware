@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package gui.cliente;
+import controller.ClientesController;
 import model.Cliente;
 import model.Coordenada;
 import model.Direccion;
@@ -446,39 +447,33 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
-        String nombre = nombreCliente.getText();
-        String pais = paisCliente.getText();
-        String ciudad = ciudadCliente.getText();
-        String calle = calleCliente.getText();
-        String email = mailCliente.getText();
-        
-        int altura;
-        if(alturaCliente.getText().equals("")){
-        altura = -1;
 
-        }else  { altura = Integer.parseInt(alturaCliente.getText());}
-        long cuit;
-        if(cuitCliente.getText().equals("")){cuit = -1;}
-        else { cuit = Long.parseLong(cuitCliente.getText());}
-        if(pais.equals("")) pais = cliente.getDireccion().getPais();
-        if(altura == -1) altura = cliente.getDireccion().getAltura();
-        if(ciudad.equals("")) ciudad = cliente.getDireccion().getCiudad();
-        if(calle.equals("")) calle = cliente.getDireccion().getCalle();
-        Direccion direccion = new Direccion(calle,altura,ciudad,pais);
-        if(email.equals("")) email = cliente.getEmail();
-        double longitud;
-        if(lonCliente.getText().equals("")){ longitud = cliente.getCoordenadas().getLng();}
-        else { longitud = Double.parseDouble(lonCliente.getText());}
-        double latitud;
-        if(latCliente.getText().equals("")){ latitud = cliente.getCoordenadas().getLat();}
-        else { latitud = Double.parseDouble(latCliente.getText());}
-        Coordenada coordenada = new Coordenada(latitud,longitud);
-
-        cliente.modificarAtributos(nombre,cuit,direccion,email,coordenada);
-        InterfazClientes clientesFrame = new InterfazClientes();
-        clientesFrame.setVisible(true);
+        String nombre = cliente.getNombre();
+        if(nombreCliente.getText()!=null && !nombreCliente.getText().equals("")) {nombre = nombreCliente.getText();}
+        String pais = cliente.getDireccion().getPais();
+        if(paisCliente.getText()!=null && !paisCliente.getText().equals("")) {pais = paisCliente.getText();}
+        String ciudad = cliente.getDireccion().getCiudad();
+        if(ciudadCliente.getText()!=null && !ciudadCliente.getText().equals("")) {ciudad = ciudadCliente.getText();}
+        String calle = cliente.getDireccion().getCalle();
+        if(calleCliente.getText()!=null && !calleCliente.getText().equals("")) {calle = calleCliente.getText();}
+        String mail = cliente.getEmail();
+        if(mailCliente.getText()!=null && !mailCliente.getText().equals("")) {mail = mailCliente.getText();}
+        int altura = cliente.getDireccion().getAltura();
+        if(alturaCliente.getText()!=null && !alturaCliente.getText().equals("")) {altura = Integer.parseInt(alturaCliente.getText());}
+        long cuit = cliente.getCuit();
+        if(cuitCliente.getText()!=null && !cuitCliente.getText().equals("")) {cuit = Long.parseLong(cuitCliente.getText());}
+        double lat = cliente.getCoordenadas().getLat();
+        if(latCliente.getText()!=null && !latCliente.getText().equals("")) {lat = Double.parseDouble(latCliente.getText());}
+        double lng = cliente.getCoordenadas().getLng();
+        if(lonCliente.getText()!=null && !lonCliente.getText().equals("")) {lng = Double.parseDouble(lonCliente.getText());}
+        try {
+            ClientesController.getInstance().modificarCliente(cliente.getId(), nombre, cuit, mail, calle, altura, ciudad, pais, lat, lng);
+        } catch (Exception e) {
+            System.out.println("Error al editar cliente: " + e.getMessage());
+        }
+        InterfazClientes intClientes = new InterfazClientes();
+        intClientes.setVisible(true);
         this.setVisible(false);
-        
     }//GEN-LAST:event_botonConfirmarActionPerformed
 
     private void mailClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mailClienteActionPerformed
