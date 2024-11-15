@@ -12,28 +12,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PagoMySQL implements PagoDAO {
-    // UTILIZAMOS PATRON SINGLETON PARA LA CREACION DEL MEMORY
+    // Singleton --------------------------------------------------------------------------------------
     private static PagoMySQL PAGO_INSTANCE;
-
-    // constructores
-    private PagoMySQL() {
-    }
-
-    // getters
-
+    private PagoMySQL() {}
     public static PagoMySQL getInstance() {
         if (PAGO_INSTANCE == null) {
             PAGO_INSTANCE = new PagoMySQL();
         }
         return PAGO_INSTANCE;
     }
+    // ------------------------------------------------------------------------------------------------
 
-    // metodos
+    // Métodos ----------------------------------------------------------------------------------------
     @Override
     public List<Pago> getPagos() throws SQLException {
         Connection con = ConexionMySQL.conectar();
         List<Pago> pagos = new ArrayList<>();
-        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pagos"); ResultSet rs = prst.executeQuery()) {
+        try (
+            PreparedStatement prst = con.prepareStatement("SELECT * FROM pagos"); 
+            ResultSet rs = prst.executeQuery()) {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 double monto = rs.getDouble("monto");
@@ -54,12 +51,12 @@ public class PagoMySQL implements PagoDAO {
         }
         ConexionMySQL.cerrarConexion();
         return pagos;
-
     }
 
     public void addPago(Pago p) throws SQLException {
         Connection con = ConexionMySQL.conectar();
-        try (PreparedStatement prst = con.prepareStatement("INSERT INTO pagos (monto,metodo) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS)) {
+        try (
+            PreparedStatement prst = con.prepareStatement("INSERT INTO pagos (monto,metodo) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS)) {
             prst.setDouble(1, p.getMonto());
             if (p.getMetodoDePago() instanceof Efectivo) {
                 prst.setString(2, "EFECTIVO");
@@ -88,7 +85,8 @@ public class PagoMySQL implements PagoDAO {
     public Pago filtrarPagoPorId(int id) throws SQLException {
         Connection con = ConexionMySQL.conectar();
         Pago p = null;
-        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pagos WHERE id = ?")) {
+        try (
+            PreparedStatement prst = con.prepareStatement("SELECT * FROM pagos WHERE id = ?")) {
             prst.setInt(1, id);
             ResultSet rs = prst.executeQuery();
             if (rs.next()) {
@@ -112,4 +110,6 @@ public class PagoMySQL implements PagoDAO {
         }
         return p;
     }
+
+    // ------------------------------------------------------------------------------------------------
 }

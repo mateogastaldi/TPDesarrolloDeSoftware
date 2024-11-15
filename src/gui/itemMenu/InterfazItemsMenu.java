@@ -17,6 +17,7 @@ import model.Plato;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -51,9 +52,14 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 Object itemId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
                 // Recupera los datos completos del item con el ID obtenido
-                ItemMenu itemMenu = ItemMenusController.getInstance().filtrarItemMenuPorId((int) itemId);
+                ItemMenu itemMenu = null; 
+                try{
+                    itemMenu = ItemMenusController.getInstance().filtrarItemMenuPorId((int) itemId);
+                }catch(ItemMenuNoEncontradoException | SQLException ex){
+                    JOptionPane.showMessageDialog(null,ex.getMessage());
+                }
 
-
+                
                 // Crea y muestra una nueva interfaz para editar los datos del cliente
                 if (itemMenu != null) {
                     if(itemMenu.getCategoria().getTipoItem().equals(Plato.class)){
@@ -68,6 +74,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 }
             }
         };
+
         Action actionEliminar = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -75,7 +82,6 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                 int modelRow = Integer.valueOf(e.getActionCommand());
                 // Obtiene el ID del item desde la tabla en la columna correspondiente
                 Object itemId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
-
                 int confirm = JOptionPane.showConfirmDialog(
                         null,
                         "¿Deseas eliminar el item?",
@@ -84,14 +90,11 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
                         JOptionPane.QUESTION_MESSAGE
                 );
                 if(confirm == JOptionPane.YES_OPTION){
-
                     try{
                         ItemMenusController.getInstance().eliminarItemMenu((int) itemId);
                         if(nombre == null){mostrar(null);}
                         else{mostrar(nombre);}
-
-
-                    }catch (ItemMenuNoEncontradoException ex){
+                    }catch (ItemMenuNoEncontradoException | SQLException ex){
                         JOptionPane.showMessageDialog(null,ex.getMessage());
                     }
                 }
@@ -120,7 +123,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
                 }
 
-            }catch(ItemMenuNoEncontradoException e){
+            }catch(ItemMenuNoEncontradoException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }
@@ -145,7 +148,7 @@ public class InterfazItemsMenu extends javax.swing.JFrame {
 
                 }
 
-            }catch(ItemMenuNoEncontradoException e){
+            }catch(ItemMenuNoEncontradoException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }

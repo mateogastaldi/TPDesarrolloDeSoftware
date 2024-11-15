@@ -383,10 +383,12 @@ public class InterfazVendedoresCrear extends javax.swing.JFrame {
         String ciudad = ciudadVendedor.getText();
         String calle = calleVendedor.getText();
         int altura = Integer.parseInt(alturaVendedor.getText());
-
-
-
-        VendedoresController.getInstance().addVendedor(nombre,calle, altura, ciudad,pais, latitud, longitud);
+        try{
+            VendedoresController.getInstance().addVendedor(nombre,calle, altura, ciudad,pais, latitud, longitud);
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        
         InterfazVendedores interfazVendedores = new InterfazVendedores();
         interfazVendedores.setVisible(true);
         this.setVisible(false);

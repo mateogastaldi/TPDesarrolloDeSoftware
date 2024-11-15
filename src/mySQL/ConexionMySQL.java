@@ -8,8 +8,8 @@ public class ConexionMySQL {
     private static Connection con;
     private static final String driver = "com.mysql.cj.jdbc.Driver"; // Cambia a "com.mysql.cj.jdbc.Driver" si usas MySQL Connector/J 8.0 o superior
     private static final String url = "jdbc:mysql://localhost:3306/tpdesarrollo";
-    private static final String user = "mateo";
-    private static final String password = "mateo";
+    private static final String user = "root";
+    private static final String password = "mateomysql15";
 
     public static Connection conectar() {
         try {

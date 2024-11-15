@@ -1,7 +1,7 @@
 package mySQL;
 import DAO.ItemPedidoDAO;
 import exceptions.itemPedido.ItemPedidoNoEncontradoException;
-import controller.*;
+
 import model.*;
 import java.sql.*;
 import java.util.*;
@@ -43,22 +43,177 @@ public class ItemPedidoMySQL implements ItemPedidoDAO {
         }
     }
 
+    // -----------------------------------------------------------------------------------------------
 
     @Override
     public List<ItemPedido> getItemsPedidos() throws SQLException {
         List<ItemPedido> itemsPedidos = new ArrayList<>();
-        Connection MySql = ConexionMySQL.conectar();
-        String query = "SELECT * FROM itempedido";
-        try (PreparedStatement stmt = MySql.prepareStatement(query)) {
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Pedido pedido = PedidosController.getInstance().filtrarPedidoPorId(rs.getInt("pedido"));
-                ItemMenu itemMenu = ItemMenusController.getInstance().filtrarItemMenuPorId(rs.getInt("itemMenu"));    
-                ItemPedido itemPedido = new ItemPedido(itemMenu, pedido);
-                itemPedido.setId(rs.getInt("id"));
+        Connection mySQL = ConexionMySQL.conectar();
+        try(
+            PreparedStatement pstmt = mySQL.prepareStatement("SELECT * FROM itempedido");
+        ){
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()){
+                Pedido pedidoItemPedido = null;
+                ItemMenu itemMenuDeItemPedido = null;
+                // Obtengo los datos del itemPedido
+                int idItemPedido = rs.getInt("id");
+                int ItemMenuId = rs.getInt("itemmenu");
+                int PedidoId = rs.getInt("pedido");
+                // Obtengo el itemMenu del item pedido -------------------------------------------------------------------------
+                PreparedStatement pstmtItemMenu = mySQL.prepareStatement("SELECT * FROM itemmenu WHERE id = " + ItemMenuId);
+                ResultSet rsItemMenu = pstmtItemMenu.executeQuery();
+                if(rsItemMenu.next()){
+                    // Obtengo los datos del itemMenu
+                    int idItemMenu = rsItemMenu.getInt("id");
+                    String nombre = rsItemMenu.getString("nombre");
+                    String descripcion = rsItemMenu.getString("descripcion");
+                    double precio = rsItemMenu.getDouble("precio");
+                    boolean aptoVegano = rsItemMenu.getBoolean("aptovegano");
+                    boolean aptoCeliaco = rsItemMenu.getBoolean("aptoceliaco");
+                    int idCategoria = rsItemMenu.getInt("categoria");
+                    int idVendedor = rsItemMenu.getInt("vendedor");
+                    double calorias = rs.getDouble("calorias");
+                    double peso = rs.getDouble("peso");
+                    double gradAlcoholica = rs.getDouble("gradAlcoholica");
+                    double tamanio = rs.getDouble("tamanio");
+                    String tipo = rs.getString("tipo");
+                    // Obtengo los datos del vendedor del itemMenu
+                    Vendedor vendedor = null;
+                    PreparedStatement pstm2 = mySQL.prepareStatement("SELECT * FROM vendedor WHERE id = " + idVendedor);
+                    ResultSet rs1 = pstm2.executeQuery();
+                    if (rs1.next()) {
+                        String nombreVendedor = rs1.getString("nombre");
+                        String calle = rs1.getString("calle");
+                        int altura = rs1.getInt("altura");
+                        String ciudad = rs1.getString("ciudad");
+                        String pais = rs1.getString("pais");
+                        double latitud = rs1.getDouble("lat");
+                        double longitud = rs1.getDouble("lng");
+                        // Creo el vendedor
+                        Direccion direccion = new Direccion(calle, altura, ciudad, pais);
+                        Coordenada coordenadas = new Coordenada(latitud, longitud);
+                        vendedor = new Vendedor(nombreVendedor, direccion, coordenadas);
+                        vendedor.setId(idVendedor);
+                    }
+                    // Obtengo los datos de la categoria de itemMenu 
+                    PreparedStatement pstm3 = mySQL.prepareStatement("SELECT * FROM categoria WHERE id = " + idCategoria);
+                    ResultSet rs2 = pstm3.executeQuery();
+                    if (rs2.next()) {
+                        String descripcionCategoria = rs2.getString("descripcion");
+                        // Creo la categoria y agrego el itemMenu a la lista
+                        if (tipo.equals("Plato")) {
+                            Categoria categoria = new Categoria(descripcionCategoria, Plato.class);
+                            categoria.setId(idCategoria);
+                            Plato plato = new Plato(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor, calorias, peso);
+                            plato.setId(idItemMenu);
+                            itemMenuDeItemPedido = plato;
+                        } else if (tipo.equals("Bebida")) {
+                            Categoria categoria = new Categoria(descripcionCategoria, Bebida.class);
+                            categoria.setId(idCategoria);
+                            Bebida bebida = new Bebida(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor, gradAlcoholica, tamanio);
+                            bebida.setId(idItemMenu);
+                            itemMenuDeItemPedido = bebida;
+                        }
+                    }
+
+                }
+                // -------------------------------------------------------------------------------------------------------------
+                
+                // Obtengo el pedido del item pedido ---------------------------------------------------------------------------
+                PreparedStatement pstmtPedido = mySQL.prepareStatement("SELECT * FROM pedido WHERE id = " + PedidoId);
+                ResultSet rsPedido = pstmtPedido.executeQuery();
+                if(rsPedido.next()){
+                    // Obtengo los datos del pedido
+                    int idPedido = rsPedido.getInt("id");
+                    int idCliente = rsPedido.getInt("cliente"); 
+                    Estado estado = null;
+                    if (rs.getString("pedido.estado").equals("RECIBIDO")) {
+                        estado = new EstadoRECIBIDO();
+                    } else if (rs.getString("pedido.estado").equals("ENVIADO")) {
+                        estado = new EstadoENVIADO();
+                    } else if (rs.getString("pedido.estado").equals("PREPARADO")) {
+                        estado = new EstadoPREPARADO();
+                    } else if (rs.getString("pedido.estado").equals("ACEPTADO")) {
+                        estado = new EstadoACEPTADO();
+                    }
+                    int pago = rsPedido.getInt("pago");
+                    int idVendedor = rsPedido.getInt("vendedor");
+                    // Obtengo los datos del cliente del pedido
+                    Cliente cliente = null;
+                    PreparedStatement pstmtCliente = mySQL.prepareStatement("SELECT * FROM cliente WHERE id = " + idCliente);
+                    ResultSet rsCliente = pstmtCliente.executeQuery();
+                    if(rsCliente.next()){
+                        int idCliente2  = rsCliente.getInt("id");
+                        String nombreCliente = rsCliente.getString("nombre");
+                        long cuit = rsCliente.getLong("cuit");
+                        String email = rsCliente.getString("email");
+                        String calle = rsCliente.getString("calle");
+                        int altura = rsCliente.getInt("altura");
+                        String ciudad = rsCliente.getString("ciudad");
+                        String pais = rsCliente.getString("pais");
+                        double latitud = rsCliente.getDouble("lat");
+                        double longitud = rsCliente.getDouble("lng");
+                        // Creo el cliente
+                        Coordenada coordenadaCliente = new Coordenada(latitud, longitud);
+                        Direccion direccionCliente = new Direccion(calle, altura, ciudad, pais);
+                        cliente = new Cliente(nombreCliente , cuit, email, direccionCliente, coordenadaCliente);
+                        cliente.setId(idCliente2);
+                    }
+                    // Obtengo los datos del vendedor del pedido
+                    Vendedor vendedorPedido = null;
+                    PreparedStatement pstmtVendedor = mySQL.prepareStatement("SELECT * FROM vendedor WHERE id = " + idVendedor);
+                    ResultSet rsVendedor = pstmtVendedor.executeQuery();
+                    if(rsVendedor.next()){
+                        int idVendedor2 = rsVendedor.getInt("id");
+                        String nombreVendedor = rsVendedor.getString("nombre");
+                        String calle = rsVendedor.getString("calle");
+                        int altura = rsVendedor.getInt("altura");
+                        String ciudad = rsVendedor.getString("ciudad");
+                        String pais = rsVendedor.getString("pais");
+                        double latitud = rsVendedor.getDouble("lat");
+                        double longitud = rsVendedor.getDouble("lng");
+                        // Creo el vendedor
+                        Coordenada coordenadaVendedor = new Coordenada(latitud, longitud);
+                        Direccion direccionVendedor = new Direccion(calle, altura, ciudad, pais);
+                        vendedorPedido = new Vendedor(nombreVendedor, direccionVendedor, coordenadaVendedor);
+                        vendedorPedido.setId(idVendedor2);
+                    }
+                    // Obtenego los datos del pago del pedido
+                    Pago pagoPedido = null;
+                    PreparedStatement pstmtPago = mySQL.prepareStatement("SELECT * FROM pago WHERE id = " + pago);
+                    ResultSet rsPago = pstmtPago.executeQuery();
+                    if(rsPago.next()){
+                        int idPago = rs.getInt("pago.id");
+                        double monto = rs.getDouble("pago.monto");	
+                        PagoStrategy metodoDePago = null;
+                        if (rs.getString("pago.metodoDePago").equalsIgnoreCase("EFECTIVO")) {
+                            metodoDePago = new Efectivo();
+                        } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("MERCADO PAGO")) {
+                            metodoDePago = new MercadoPago();
+                        } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
+                            metodoDePago = new Transferencia();
+                        }
+                        // Creo el pago
+                        pagoPedido = new Pago( metodoDePago,monto);
+                        pagoPedido.setId(idPago);
+                        
+                    }
+
+                    // Creo el pedido
+                    pedidoItemPedido = new Pedido(cliente, vendedorPedido, pagoPedido, estado);
+                    pedidoItemPedido.setId(idPedido);   
+                }
+                // ---------------------------------------------------------------------------------------------------
+                    
+                // Creo el itemPedido y lo agrego a la lista
+                ItemPedido itemPedido = new ItemPedido(itemMenuDeItemPedido, pedidoItemPedido);
+                itemPedido.setId(idItemPedido);
                 itemsPedidos.add(itemPedido);
+                // ---------------------------------------------------------------------------------------------------
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.out.println("Error al obtener itemsPedidos: " + e.getMessage());
             throw e;
         } finally {
@@ -67,46 +222,183 @@ public class ItemPedidoMySQL implements ItemPedidoDAO {
         return itemsPedidos;
     }
 
+    // -----------------------------------------------------------------------------------------------
+
     public ItemPedido getItemPedido(int idAux) throws SQLException {
-        Connection MySql = ConexionMySQL.conectar();
         ItemPedido itemPedido = null;
-        String query = "SELECT * FROM itempedido WHERE id = "+ idAux;
-        try (PreparedStatement stmt = MySql.prepareStatement(query)) {
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                Pedido pedido = PedidosController.getInstance().filtrarPedidoPorId(rs.getInt("pedido"));
-                ItemMenu itemMenu = ItemMenusController.getInstance().filtrarItemMenuPorId(rs.getInt("itemMenu"));    
-                itemPedido = new ItemPedido(itemMenu, pedido);
-                itemPedido.setId(rs.getInt("id"));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al obtener itemPedido: " + e.getMessage());
+        Connection mySQL = ConexionMySQL.conectar();
+        try(
+            PreparedStatement pstmt = mySQL.prepareStatement("SELECT * FROM itempedido WHERE id = " + idAux);
+        ){
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()){
+                Pedido pedidoItemPedido = null;
+                ItemMenu itemMenuDeItemPedido = null;
+                // Obtengo los datos del itemPedido
+                int idItemPedido = rs.getInt("id");
+                int ItemMenuId = rs.getInt("itemmenu");
+                int PedidoId = rs.getInt("pedido");
+
+                // Obtengo el itemMenu del item pedido -------------------------------------------------------------------------
+                PreparedStatement pstmtItemMenu = mySQL.prepareStatement("SELECT * FROM itemmenu WHERE id = " + ItemMenuId);
+                ResultSet rsItemMenu = pstmtItemMenu.executeQuery();
+                if(rsItemMenu.next()){
+                    // Obtengo los datos del itemMenu
+                    int idItemMenu = rsItemMenu.getInt("id");
+                    String nombre = rsItemMenu.getString("nombre");
+                    String descripcion = rsItemMenu.getString("descripcion");
+                    double precio = rsItemMenu.getDouble("precio");
+                    boolean aptoVegano = rsItemMenu.getBoolean("aptovegano");
+                    boolean aptoCeliaco = rsItemMenu.getBoolean("aptoceliaco");
+                    int idCategoria = rsItemMenu.getInt("categoria");
+                    int idVendedor = rsItemMenu.getInt("vendedor");
+                    double calorias = rs.getDouble("calorias");
+                    double peso = rs.getDouble("peso");
+                    double gradAlcoholica = rs.getDouble("gradAlcoholica");
+                    double tamanio = rs.getDouble("tamanio");
+                    String tipo = rs.getString("tipo");
+                    // Obtengo los datos del vendedor del itemMenu
+                    Vendedor vendedor = null;
+                    PreparedStatement pstm2 = mySQL.prepareStatement("SELECT * FROM vendedor WHERE id = " + idVendedor);
+                    ResultSet rs1 = pstm2.executeQuery();
+                    if (rs1.next()) {
+                        String nombreVendedor = rs1.getString("nombre");
+                        String calle = rs1.getString("calle");
+                        int altura = rs1.getInt("altura");
+                        String ciudad = rs1.getString("ciudad");
+                        String pais = rs1.getString("pais");
+                        double latitud = rs1.getDouble("lat");
+                        double longitud = rs1.getDouble("lng");
+                        // Creo el vendedor
+                        Direccion direccion = new Direccion(calle, altura, ciudad, pais);
+                        Coordenada coordenadas = new Coordenada(latitud, longitud);
+                        vendedor = new Vendedor(nombreVendedor, direccion, coordenadas);
+                        vendedor.setId(idVendedor);
+                    }
+                    // Obtengo los datos de la categoria de itemMenu
+                    PreparedStatement pstm3 = mySQL.prepareStatement("SELECT * FROM categoria WHERE id = " + idCategoria);
+                    ResultSet rs2 = pstm3.executeQuery();
+                    if (rs2.next()) {
+                        String descripcionCategoria = rs2.getString("descripcion");
+                        // Creo la categoria y agrego el itemMenu a la lista
+                        if (tipo.equals("Plato")) {
+                            Categoria categoria = new Categoria(descripcionCategoria, Plato.class);
+                            categoria.setId(idCategoria);
+                            Plato plato = new Plato(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor, calorias, peso);
+                            plato.setId(idItemMenu);
+                            itemMenuDeItemPedido = plato;
+                        } else if (tipo.equals("Bebida")) {
+                            Categoria categoria = new Categoria(descripcionCategoria, Bebida.class);
+                            categoria.setId(idCategoria);
+                            Bebida bebida = new Bebida(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor, gradAlcoholica, tamanio);
+                            bebida.setId(idItemMenu);
+                            itemMenuDeItemPedido = bebida;
+                        }
+                    }
+
+                }
+                // -------------------------------------------------------------------------------------------------------------
+                // Obtengo el pedido del item pedido ---------------------------------------------------------------------------
+                PreparedStatement pstmtPedido = mySQL.prepareStatement("SELECT * FROM pedido WHERE id = " + PedidoId);
+                ResultSet rsPedido = pstmtPedido.executeQuery();
+                if(rsPedido.next()){
+                    // Obtengo los datos del pedido
+                    int idPedido = rsPedido.getInt("id");
+                    int idCliente = rsPedido.getInt("cliente"); 
+                    Estado estado = null;
+                    if (rs.getString("pedido.estado").equals("RECIBIDO")) {
+                        estado = new EstadoRECIBIDO();
+                    } else if (rs.getString("pedido.estado").equals("ENVIADO")) {
+                        estado = new EstadoENVIADO();
+                    } else if (rs.getString("pedido.estado").equals("PREPARADO")) {
+                        estado = new EstadoPREPARADO();
+                    } else if (rs.getString("pedido.estado").equals("ACEPTADO")) {
+                        estado = new EstadoACEPTADO();
+                    }
+                    int pago = rsPedido.getInt("pago");
+                    int idVendedor = rsPedido.getInt("vendedor");
+                    // Obtengo los datos del cliente del pedido
+                    Cliente cliente = null;
+                    PreparedStatement pstmtCliente = mySQL.prepareStatement("SELECT * FROM cliente WHERE id = " + idCliente);
+                    ResultSet rsCliente = pstmtCliente.executeQuery();
+                    if(rsCliente.next()){
+                        int idCliente2  = rsCliente.getInt("id");
+                        String nombreCliente = rsCliente.getString("nombre");
+                        long cuit = rsCliente.getLong("cuit");
+                        String email = rsCliente.getString("email");
+                        String calle = rsCliente.getString("calle");
+                        int altura = rsCliente.getInt("altura");
+                        String ciudad = rsCliente.getString("ciudad");
+                        String pais = rsCliente.getString("pais");
+                        double latitud = rsCliente.getDouble("lat");
+                        double longitud = rsCliente.getDouble("lng");
+                        // Creo el cliente
+                        Coordenada coordenadaCliente = new Coordenada(latitud, longitud);
+                        Direccion direccionCliente = new Direccion(calle, altura, ciudad, pais);
+                        cliente = new Cliente(nombreCliente , cuit, email, direccionCliente, coordenadaCliente);
+                        cliente.setId(idCliente2);
+                    }
+                    // Obtengo los datos del vendedor del pedido
+                    Vendedor vendedorPedido = null;
+                    PreparedStatement pstmtVendedor = mySQL.prepareStatement("SELECT * FROM vendedor WHERE id = " + idVendedor);
+                    ResultSet rsVendedor = pstmtVendedor.executeQuery();
+                    if(rsVendedor.next()){
+                        int idVendedor2 = rsVendedor.getInt("id");
+                        String nombreVendedor = rsVendedor.getString("nombre");
+                        String calle = rsVendedor.getString("calle");
+                        int altura = rsVendedor.getInt("altura");
+                        String ciudad = rsVendedor.getString("ciudad");
+                        String pais = rsVendedor.getString("pais");
+                        double latitud = rsVendedor.getDouble("lat");
+                        double longitud = rsVendedor.getDouble("lng");
+                        // Creo el vendedor
+                        Coordenada coordenadaVendedor = new Coordenada(latitud, longitud);
+                        Direccion direccionVendedor = new Direccion(calle, altura, ciudad, pais);
+                        vendedorPedido = new Vendedor(nombreVendedor, direccionVendedor, coordenadaVendedor);
+                        vendedorPedido.setId(idVendedor2);
+                    }
+                    // Obtenego los datos del pago del pedido
+                    Pago pagoPedido = null;
+                    PreparedStatement pstmtPago = mySQL.prepareStatement("SELECT * FROM pago WHERE id = " + pago);
+                    ResultSet rsPago = pstmtPago.executeQuery();
+                    if(rsPago.next()){
+                        int idPago = rs.getInt("pago.id");
+                        double monto = rs.getDouble("pago.monto");	
+                        PagoStrategy metodoDePago = null;
+                        if (rs.getString("pago.metodoDePago").equalsIgnoreCase("EFECTIVO")) {
+                            metodoDePago = new Efectivo();
+                        } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("MERCADO PAGO")) {
+                            metodoDePago = new MercadoPago();
+                        } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
+                            metodoDePago = new Transferencia();
+                        }
+                        // Creo el pago
+                        pagoPedido = new Pago( metodoDePago,monto);
+                        pagoPedido.setId(idPago);
+                        
+                    }
+
+                    // Creo el pedido
+                    pedidoItemPedido = new Pedido(cliente, vendedorPedido, pagoPedido, estado);
+                    pedidoItemPedido.setId(idPedido);   
+                }
+    // ---------------------------------------------------------------------------------------------------
+
+    // Creo el itemPedido y lo agrego a la lista
+                itemPedido = new ItemPedido(itemMenuDeItemPedido, pedidoItemPedido);
+                itemPedido.setId(idItemPedido);
+                
+    // ---------------------------------------------------------------------------------------------------
+        }
+            
+        }
+        catch (SQLException e) {
+            System.out.println("Error al obtener itemsPedidos: " + e.getMessage());
             throw e;
         } finally {
             ConexionMySQL.cerrarConexion();
         }
         return itemPedido;
-    }
-
-    public List<ItemPedido> filtrarPorPedido(Pedido pedido) throws SQLException {
-        Connection MySql = ConexionMySQL.conectar();
-        List<ItemPedido> itemsPedidos = new ArrayList<>();
-        String query = "SELECT * FROM itempedido WHERE pedido = " + pedido.getId();
-        try (PreparedStatement stmt = MySql.prepareStatement(query)) {
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                ItemMenu itemMenu = ItemMenusController.getInstance().filtrarItemMenuPorId(rs.getInt("itemMenu"));    
-                ItemPedido itemPedido = new ItemPedido(itemMenu, pedido);
-                itemPedido.setId(rs.getInt("id"));
-                itemsPedidos.add(itemPedido);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error al filtrar itemsPedidos por pedido: " + e.getMessage());
-            throw e;
-        } finally {
-            ConexionMySQL.cerrarConexion();
-        }
-        return itemsPedidos;
     }
 
     public void remove(ItemPedido itemPedido) throws ItemPedidoNoEncontradoException, SQLException {
@@ -126,4 +418,181 @@ public class ItemPedidoMySQL implements ItemPedidoDAO {
         }
     }
     // -----------------------------------------------------------------------------------------------
+
+    // -----------------------------------------------------------------------------------------------
+    public List<ItemPedido> filtrarPorPedido(Pedido pedido) throws ItemPedidoNoEncontradoException, SQLException{
+        List<ItemPedido> itemsPedidos = new ArrayList<>();
+        Connection mySQL = ConexionMySQL.conectar();
+        try(
+            PreparedStatement pstmt = mySQL.prepareStatement("SELECT * FROM itempedido WHERE pedido = " + pedido.getId());
+        ){
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()){
+                Pedido pedidoItemPedido = null;
+                ItemMenu itemMenuDeItemPedido = null;
+                // Obtengo los datos del itemPedido
+                int idItemPedido = rs.getInt("id");
+                int ItemMenuId = rs.getInt("itemmenu");
+                int PedidoId = rs.getInt("pedido");
+                // Obtengo el itemMenu del item pedido -------------------------------------------------------------------------
+                PreparedStatement pstmtItemMenu = mySQL.prepareStatement("SELECT * FROM itemmenu WHERE id = " + ItemMenuId);
+                ResultSet rsItemMenu = pstmtItemMenu.executeQuery();
+                if(rsItemMenu.next()){
+                    // Obtengo los datos del itemMenu
+                    int idItemMenu = rsItemMenu.getInt("id");
+                    String nombre = rsItemMenu.getString("nombre");
+                    String descripcion = rsItemMenu.getString("descripcion");
+                    double precio = rsItemMenu.getDouble("precio");
+                    boolean aptoVegano = rsItemMenu.getBoolean("aptovegano");
+                    boolean aptoCeliaco = rsItemMenu.getBoolean("aptoceliaco");
+                    int idCategoria = rsItemMenu.getInt("categoria");
+                    int idVendedor = rsItemMenu.getInt("vendedor");
+                    double calorias = rs.getDouble("calorias");
+                    double peso = rs.getDouble("peso");
+                    double gradAlcoholica = rs.getDouble("gradAlcoholica");
+                    double tamanio = rs.getDouble("tamanio");
+                    String tipo = rs.getString("tipo");
+                    // Obtengo los datos del vendedor del itemMenu
+                    Vendedor vendedor = null;
+                    PreparedStatement pstm2 = mySQL.prepareStatement("SELECT * FROM vendedor WHERE id = " + idVendedor);
+                    ResultSet rs1 = pstm2.executeQuery();
+                    if (rs1.next()) {
+                        String nombreVendedor = rs1.getString("nombre");
+                        String calle = rs1.getString("calle");
+                        int altura = rs1.getInt("altura");
+                        String ciudad = rs1.getString("ciudad");
+                        String pais = rs1.getString("pais");
+                        double latitud = rs1.getDouble("lat");
+                        double longitud = rs1.getDouble("lng");
+                        // Creo el vendedor
+                        Direccion direccion = new Direccion(calle, altura, ciudad, pais);
+                        Coordenada coordenadas = new Coordenada(latitud, longitud);
+                        vendedor = new Vendedor(nombreVendedor, direccion, coordenadas);
+                        vendedor.setId(idVendedor);
+                    }
+                    // Obtengo los datos de la categoria de itemMenu 
+                    PreparedStatement pstm3 = mySQL.prepareStatement("SELECT * FROM categoria WHERE id = " + idCategoria);
+                    ResultSet rs2 = pstm3.executeQuery();
+                    if (rs2.next()) {
+                        String descripcionCategoria = rs2.getString("descripcion");
+                        // Creo la categoria y agrego el itemMenu a la lista
+                        if (tipo.equals("Plato")) {
+                            Categoria categoria = new Categoria(descripcionCategoria, Plato.class);
+                            categoria.setId(idCategoria);
+                            Plato plato = new Plato(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor, calorias, peso);
+                            plato.setId(idItemMenu);
+                            itemMenuDeItemPedido = plato;
+                        } else if (tipo.equals("Bebida")) {
+                            Categoria categoria = new Categoria(descripcionCategoria, Bebida.class);
+                            categoria.setId(idCategoria);
+                            Bebida bebida = new Bebida(nombre, descripcion, precio, aptoVegano, aptoCeliaco, categoria, vendedor, gradAlcoholica, tamanio);
+                            bebida.setId(idItemMenu);
+                            itemMenuDeItemPedido = bebida;
+                        }
+                    }
+
+                }
+                // -------------------------------------------------------------------------------------------------------------
+                
+                // Obtengo el pedido del item pedido ---------------------------------------------------------------------------
+                PreparedStatement pstmtPedido = mySQL.prepareStatement("SELECT * FROM pedido WHERE id = " + PedidoId);
+                ResultSet rsPedido = pstmtPedido.executeQuery();
+                if(rsPedido.next()){
+                    // Obtengo los datos del pedido
+                    int idPedido = rsPedido.getInt("id");
+                    int idCliente = rsPedido.getInt("cliente"); 
+                    Estado estado = null;
+                    if (rs.getString("pedido.estado").equals("RECIBIDO")) {
+                        estado = new EstadoRECIBIDO();
+                    } else if (rs.getString("pedido.estado").equals("ENVIADO")) {
+                        estado = new EstadoENVIADO();
+                    } else if (rs.getString("pedido.estado").equals("PREPARADO")) {
+                        estado = new EstadoPREPARADO();
+                    } else if (rs.getString("pedido.estado").equals("ACEPTADO")) {
+                        estado = new EstadoACEPTADO();
+                    }
+                    int pago = rsPedido.getInt("pago");
+                    int idVendedor = rsPedido.getInt("vendedor");
+                    // Obtengo los datos del cliente del pedido
+                    Cliente cliente = null;
+                    PreparedStatement pstmtCliente = mySQL.prepareStatement("SELECT * FROM cliente WHERE id = " + idCliente);
+                    ResultSet rsCliente = pstmtCliente.executeQuery();
+                    if(rsCliente.next()){
+                        int idCliente2  = rsCliente.getInt("id");
+                        String nombreCliente = rsCliente.getString("nombre");
+                        long cuit = rsCliente.getLong("cuit");
+                        String email = rsCliente.getString("email");
+                        String calle = rsCliente.getString("calle");
+                        int altura = rsCliente.getInt("altura");
+                        String ciudad = rsCliente.getString("ciudad");
+                        String pais = rsCliente.getString("pais");
+                        double latitud = rsCliente.getDouble("lat");
+                        double longitud = rsCliente.getDouble("lng");
+                        // Creo el cliente
+                        Coordenada coordenadaCliente = new Coordenada(latitud, longitud);
+                        Direccion direccionCliente = new Direccion(calle, altura, ciudad, pais);
+                        cliente = new Cliente(nombreCliente , cuit, email, direccionCliente, coordenadaCliente);
+                        cliente.setId(idCliente2);
+                    }
+                    // Obtengo los datos del vendedor del pedido
+                    Vendedor vendedorPedido = null;
+                    PreparedStatement pstmtVendedor = mySQL.prepareStatement("SELECT * FROM vendedor WHERE id = " + idVendedor);
+                    ResultSet rsVendedor = pstmtVendedor.executeQuery();
+                    if(rsVendedor.next()){
+                        int idVendedor2 = rsVendedor.getInt("id");
+                        String nombreVendedor = rsVendedor.getString("nombre");
+                        String calle = rsVendedor.getString("calle");
+                        int altura = rsVendedor.getInt("altura");
+                        String ciudad = rsVendedor.getString("ciudad");
+                        String pais = rsVendedor.getString("pais");
+                        double latitud = rsVendedor.getDouble("lat");
+                        double longitud = rsVendedor.getDouble("lng");
+                        // Creo el vendedor
+                        Coordenada coordenadaVendedor = new Coordenada(latitud, longitud);
+                        Direccion direccionVendedor = new Direccion(calle, altura, ciudad, pais);
+                        vendedorPedido = new Vendedor(nombreVendedor, direccionVendedor, coordenadaVendedor);
+                        vendedorPedido.setId(idVendedor2);
+                    }
+                    // Obtenego los datos del pago del pedido
+                    Pago pagoPedido = null;
+                    PreparedStatement pstmtPago = mySQL.prepareStatement("SELECT * FROM pago WHERE id = " + pago);
+                    ResultSet rsPago = pstmtPago.executeQuery();
+                    if(rsPago.next()){
+                        int idPago = rs.getInt("pago.id");
+                        double monto = rs.getDouble("pago.monto");	
+                        PagoStrategy metodoDePago = null;
+                        if (rs.getString("pago.metodoDePago").equalsIgnoreCase("EFECTIVO")) {
+                            metodoDePago = new Efectivo();
+                        } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("MERCADO PAGO")) {
+                            metodoDePago = new MercadoPago();
+                        } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
+                            metodoDePago = new Transferencia();
+                        }
+                        // Creo el pago
+                        pagoPedido = new Pago( metodoDePago,monto);
+                        pagoPedido.setId(idPago);
+                        
+                    }
+
+                    // Creo el pedido
+                    pedidoItemPedido = new Pedido(cliente, vendedorPedido, pagoPedido, estado);
+                    pedidoItemPedido.setId(idPedido);   
+                }
+                // ---------------------------------------------------------------------------------------------------
+                    
+                // Creo el itemPedido y lo agrego a la lista
+                ItemPedido itemPedido = new ItemPedido(itemMenuDeItemPedido, pedidoItemPedido);
+                itemPedido.setId(idItemPedido);
+                itemsPedidos.add(itemPedido);
+                // ---------------------------------------------------------------------------------------------------
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("Error al obtener itemsPedidos: " + e.getMessage());
+            throw e;
+        } finally {
+            ConexionMySQL.cerrarConexion();
+        }
+        return itemsPedidos;
+    }
 }

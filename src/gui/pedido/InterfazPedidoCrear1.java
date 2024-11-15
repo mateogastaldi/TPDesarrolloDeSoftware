@@ -4,17 +4,18 @@
  */
 package gui.pedido;
 
-
 import controller.ItemMenusController;
 import controller.PedidosController;
 import controller.VendedoresController;
 import exceptions.Pedido.PedidoNoEncontradoException;
+import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import gui.ButtonColumn;
 import model.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,20 +28,20 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
     public List<ItemPedido> listaItemPedidos = new ArrayList<>();
     List<ItemMenu> itemsDelLocal = new ArrayList<>();
 
-
-
-
     public InterfazPedidoCrear1(Vendedor vendedor, PagoStrategy mediosDePagos, Cliente cliente) {
 
         vendedorGlobal = vendedor;
         clienteGlobal = cliente;
-        itemsDelLocal = ItemMenusController.getInstance().filtrarPorIdVendedor(vendedorGlobal.getId());
+        try{
+            itemsDelLocal = ItemMenusController.getInstance().filtrarPorIdVendedor(vendedorGlobal.getId());
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        
         mp = mediosDePagos;
-        pedido = PedidosController.getInstance().crearPedido(clienteGlobal,vendedorGlobal);
-        pedido.pagarPagoStrategy(mediosDePagos);
         initComponents();
     }
-
 
     public void mostrar() {
         DefaultTableModel model = new DefaultTableModel();
@@ -70,7 +71,7 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
                     try {
                         pedido.removeItemPedido( PedidosController.getInstance().getItemPedido((int) itemId));
                         mostrar();
-                    } catch (PedidoNoEncontradoException ex) {
+                    } catch (PedidoNoEncontradoException | SQLException ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage());
                     }
                 }
@@ -78,41 +79,44 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
 
             ;
         };
+        try{
+            Iterator<ItemPedido> ip = PedidosController.getInstance().filtrarPorPedido(pedido).iterator();
+            while (ip.hasNext()) {
+                ItemPedido itemPedido = ip.next();
+                model.addRow(new Object[]{
+                        itemPedido.getItemMenu().getNombre(),
+                        itemPedido.getId(),
 
-        Iterator<ItemPedido> ip = PedidosController.getInstance().filtrarPorPedido(pedido).iterator();
-        while (ip.hasNext()) {
-            ItemPedido itemPedido = ip.next();
-            model.addRow(new Object[]{
-                    itemPedido.getItemMenu().getNombre(),
-                    itemPedido.getId(),
-
-            });
+                });
+            }
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
+
+        
 
         // Crear la tabla con el modelo
         tabalaItemsPedido.setModel(model);
         ButtonColumn buttonColumnEliminar = new ButtonColumn(tabalaItemsPedido,actionEliminar,2);
     }
 
-
-
-
-    public DefaultComboBoxModel<String> modeloDropDownListItems(){
+    public DefaultComboBoxModel<String> modeloDropDownListItems() {
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
-        try{
+        try {
             Iterator<ItemMenu> item = itemsDelLocal.iterator();
             while (item.hasNext()) {
                 modelo.addElement(item.next().getNombre());
             }
 
-        }catch(Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
         return modelo;
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -175,130 +179,157 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
         });
 
         tabalaItemsPedido.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "ItemPedido", "Eliminar"
-            }
-        ));
+                new Object[][] {
+                        { null, null },
+                        { null, null },
+                        { null, null },
+                        { null, null }
+                },
+                new String[] {
+                        "ItemPedido", "Eliminar"
+                }));
         jScrollPane1.setViewportView(tabalaItemsPedido);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jTextField1)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(381, 381, 381)
-                        .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(22, 22, 22))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(97, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(44, 44, 44)
-                        .addComponent(dropItems, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(agregarItem, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 529, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(84, 84, 84))
-        );
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jTextField1)
+                                                .addContainerGap())
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout
+                                                .createSequentialGroup()
+                                                .addGap(381, 381, 381)
+                                                .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 89,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(22, 22, 22))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addContainerGap(97, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 122,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(44, 44, 44)
+                                                .addComponent(dropItems, javax.swing.GroupLayout.PREFERRED_SIZE, 182,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(agregarItem, javax.swing.GroupLayout.PREFERRED_SIZE, 101,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 529,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(84, 84, 84)));
         jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dropItems, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(agregarItem, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 44,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(26, 26, 26)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 52,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(dropItems, javax.swing.GroupLayout.PREFERRED_SIZE, 38,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(agregarItem, javax.swing.GroupLayout.PREFERRED_SIZE, 36,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(30, 30, 30)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82,
+                                        Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(botonConfirmar, javax.swing.GroupLayout.PREFERRED_SIZE, 34,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(botonCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 34,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap()));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(297, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(118, 118, 118))
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap(297, Short.MAX_VALUE)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(118, 118, 118)));
         jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap()));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
 
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }// GEN-LAST:event_jTextField1ActionPerformed
 
-    private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
+    private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
-        if(!listaItemPedidos.isEmpty()) {
-            PedidosController.getInstance().addPedido(clienteGlobal,vendedorGlobal,listaItemPedidos);
+        if (!listaItemPedidos.isEmpty()) {
+            double precio = 0 ;
+            for (ItemPedido itemPedido : listaItemPedidos) {
+                precio += itemPedido.getItemMenu().getPrecio();
+            }
+            Pago pago = new Pago(mp,precio);
+            try{
+                PedidosController.getInstance().addPedido(clienteGlobal, vendedorGlobal, listaItemPedidos,pago);
+            }catch (Exception e){
+                JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            
             InterfazPedidos interfazPedidos = new InterfazPedidos();
             interfazPedidos.setVisible(true);
             this.setVisible(false);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "No hay items agregado en el pedido");
         }
 
+    }// GEN-LAST:event_botonConfirmarActionPerformed
 
-    }//GEN-LAST:event_botonConfirmarActionPerformed
-
-    private void agregarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarItemActionPerformed
+    private void agregarItemActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_agregarItemActionPerformed
         // TODO add your handling code here:
-        ItemMenu itemMenu = (ItemMenu) ItemMenusController.getInstance().filtrarItemMenuPorNombre((String) dropItems.getSelectedItem()).stream().findFirst().orElse(null);
-        ItemPedido itemPedido = new ItemPedido(itemMenu,pedido);
+        ItemMenu itemMenu= null;
+        try {
+            itemMenu = (ItemMenu) ItemMenusController.getInstance().filtrarItemMenuPorNombre((String) dropItems.getSelectedItem()).stream().findFirst().orElse(null);
+        } catch (ItemMenuNoEncontradoException | SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        ItemPedido itemPedido = new ItemPedido(itemMenu, pedido);
         listaItemPedidos.add(itemPedido);
         mostrar();
+    }// GEN-LAST:event_agregarItemActionPerformed
 
-
-    }//GEN-LAST:event_agregarItemActionPerformed
-
-    private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCancelarActionPerformed
+    private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_botonCancelarActionPerformed
         // TODO add your handling code here:
         InterfazPedidos interfazPedidos = new InterfazPedidos();
         interfazPedidos.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_botonCancelarActionPerformed
+    }// GEN-LAST:event_botonCancelarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregarItem;

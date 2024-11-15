@@ -3,23 +3,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package gui.cliente;
-
 import model.Cliente;
 import model.Coordenada;
 import model.Direccion;
 
-/**
- *
- * @author mateo
- */
 public class InterfazClienteEditar extends javax.swing.JFrame {
     Cliente cliente;
 
-
     public InterfazClienteEditar(Cliente c) {
+        cliente = c;
         initComponents();
-        this.cliente = c;
+        cargarDatosCliente();    
     }
+
+    public void cargarDatosCliente(){
+        nombreCliente.setText(cliente.getNombre());
+        paisCliente.setText(cliente.getDireccion().getPais());
+        ciudadCliente.setText(cliente.getDireccion().getCiudad());
+        calleCliente.setText(cliente.getDireccion().getCalle());
+        mailCliente.setText(cliente.getEmail());
+        alturaCliente.setText(String.valueOf(cliente.getDireccion().getAltura()));
+        cuitCliente.setText(String.valueOf(cliente.getCuit()));
+        latCliente.setText(String.valueOf(cliente.getCoordenadas().getLat()));
+        lonCliente.setText(String.valueOf(cliente.getCoordenadas().getLng()));
+    }
+
 
 
 
@@ -433,7 +441,7 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
 
     private void cuitClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuitClienteActionPerformed
         // TODO add your handling code here:
-      
+    
     }//GEN-LAST:event_cuitClienteActionPerformed
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
@@ -446,13 +454,12 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
         
         int altura;
         if(alturaCliente.getText().equals("")){
-             altura = -1;
+        altura = -1;
 
         }else  { altura = Integer.parseInt(alturaCliente.getText());}
         long cuit;
-        if(cuitCliente.getText().equals("")){
-             cuit = -1;
-        }else  { cuit = Long.parseLong(cuitCliente.getText());}
+        if(cuitCliente.getText().equals("")){cuit = -1;}
+        else { cuit = Long.parseLong(cuitCliente.getText());}
         if(pais.equals("")) pais = cliente.getDireccion().getPais();
         if(altura == -1) altura = cliente.getDireccion().getAltura();
         if(ciudad.equals("")) ciudad = cliente.getDireccion().getCiudad();
@@ -466,8 +473,6 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
         if(latCliente.getText().equals("")){ latitud = cliente.getCoordenadas().getLat();}
         else { latitud = Double.parseDouble(latCliente.getText());}
         Coordenada coordenada = new Coordenada(latitud,longitud);
-        
-
 
         cliente.modificarAtributos(nombre,cuit,direccion,email,coordenada);
         InterfazClientes clientesFrame = new InterfazClientes();
@@ -520,7 +525,7 @@ public class InterfazClienteEditar extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_botonCancelarActionPerformed
 
-   
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

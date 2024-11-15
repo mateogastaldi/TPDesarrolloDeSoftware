@@ -38,7 +38,7 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
 
-             Iterator<Categoria<ItemMenu>> c = ItemMenusController.getInstance().filtrarPorTipoItem(Bebida.class).iterator();
+            Iterator<Categoria> c = ItemMenusController.getInstance().filtrarPorTipoItem(Bebida.class).iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getDescripcion());
             }
@@ -465,9 +465,15 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
         double tamanioIngresado = Double.parseDouble(tamanio.getText());
     
         // Obtén el vendedor y la categoría seleccionados
-        Vendedor vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String) DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
-        Categoria categoria = (Categoria) ItemMenusController.getInstance().filtrarCategoriaPorNombre((String) DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
-    
+        Vendedor vendedor = null;
+        Categoria categoria = null;
+        try{
+            vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String) DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
+            categoria = (Categoria) ItemMenusController.getInstance().filtrarCategoriaPorNombre((String) DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
+        }
+        catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
         // Verifica si el item es apto para veganos o celíacos
         boolean aptoCeliaco = aptoCeliacoCheckBox.isSelected();
         boolean aptoVegano = aptoVeganoCheckBox.isSelected();
@@ -539,7 +545,7 @@ public class InterfazItemMenuEditarBebida extends javax.swing.JFrame {
         if( (c<'0' || c>'9') && c!='.') evt.consume();
     }//GEN-LAST:event_tamanioKeyTyped
 
-   
+
 
 
 

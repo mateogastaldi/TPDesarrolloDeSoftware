@@ -35,7 +35,7 @@ public class InterfazItemMenuCrearBebida extends javax.swing.JFrame {
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
 
-             Iterator<Categoria<ItemMenu>> c = ItemMenusController.getInstance().filtrarPorTipoItem(Bebida.class).iterator();
+            Iterator<Categoria> c = ItemMenusController.getInstance().filtrarPorTipoItem(Bebida.class).iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getDescripcion());
             }
@@ -450,8 +450,16 @@ public class InterfazItemMenuCrearBebida extends javax.swing.JFrame {
             String nombre = nombreItem.getText();
 
             double precioIngresado = Double.parseDouble(precio.getText());
-            Vendedor vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
-            Categoria categoria =(Categoria) ItemMenusController.getInstance().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
+            Vendedor vendedor = null;
+            Categoria categoria = null;
+            try{
+                vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
+                categoria =(Categoria) ItemMenusController.getInstance().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+            
             boolean aptoCelaico = false;
             boolean aptoVegano = false;
             if(aptoCeliacoCheckBox.isSelected()){
@@ -461,8 +469,12 @@ public class InterfazItemMenuCrearBebida extends javax.swing.JFrame {
                 aptoVegano = true;
             }
             String descripcion = descripcionItem.getText();
-            ItemMenusController.getInstance().addBebida(nombre,descripcion,precioIngresado,aptoVegano,aptoCelaico,categoria,vendedor,gradAlcoholica,tamanioIngresado);
-
+            try{
+                ItemMenusController.getInstance().addBebida(nombre,descripcion,precioIngresado,aptoVegano,aptoCelaico,categoria,vendedor,gradAlcoholica,tamanioIngresado);
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
 
             InterfazItemsMenu interfazItemsMenu = new InterfazItemsMenu();
             interfazItemsMenu.setVisible(true);

@@ -3,23 +3,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package gui.vendedores;
-
+import javax.swing.JOptionPane;
 import controller.VendedoresController;
 import model.Coordenada;
 import model.Direccion;
 import model.Vendedor;
 
-/**
- *
- * @author mateo
- */
+
 public class InterfazVendedoresEditar extends javax.swing.JFrame {
     Vendedor vendedor;
 
     public InterfazVendedoresEditar(Vendedor v) {
-
         vendedor = v;
         initComponents();
+        cargarDatosVendedor();
+    }
+
+    public void cargarDatosVendedor(){
+        nombreVendedor.setText(vendedor.getNombre());
+        paisVendedor.setText(vendedor.getDireccion().getPais());
+        ciudadVendedor.setText(vendedor.getDireccion().getCiudad());
+        calleVendedor.setText(vendedor.getDireccion().getCalle());
+        alturaVendedor.setText(String.valueOf(vendedor.getDireccion().getAltura()));
+        latVendedor.setText(String.valueOf(vendedor.getCoordenadas().getLat()));
+        lonVendedor.setText(String.valueOf(vendedor.getCoordenadas().getLng()));
     }
 
 
@@ -393,7 +400,11 @@ public class InterfazVendedoresEditar extends javax.swing.JFrame {
         if(calleVendedor.getText()!=null && !calleVendedor.getText().equals("")) {calle = calleVendedor.getText();}
         int altura = vendedor.getDireccion().getAltura();
         if(alturaVendedor.getText()!=null && !alturaVendedor.getText().equals("")) {altura = Integer.parseInt(alturaVendedor.getText());}
-        VendedoresController.getInstance().modificarVendedor(vendedor.getId(),nombre,calle,altura,ciudad,pais,latitud,longitud);
+        try{
+            VendedoresController.getInstance().modificarVendedor(vendedor.getId(),nombre,calle,altura,ciudad,pais,latitud,longitud);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
         InterfazVendedores interfazVendedores = new InterfazVendedores();
         interfazVendedores.setVisible(true);
         this.setVisible(false);

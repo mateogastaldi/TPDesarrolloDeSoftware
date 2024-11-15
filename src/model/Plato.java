@@ -9,7 +9,7 @@ public class Plato extends ItemMenu{
     // ------------------------------------------------------------------------------------------------
 
     // Constructor ------------------------------------------------------------------------------------
-    public Plato(String nombre, String descripcion, double precio,boolean aptoVegano, Categoria categoria,Vendedor vendedor, double calorias, boolean aptoCeliaco, double peso){
+    public Plato(String nombre, String descripcion, double precio, boolean aptoVegano, boolean aptoCeliaco, Categoria categoria, Vendedor vendedor, double calorias, double peso){
         super(nombre,descripcion,precio, aptoVegano,aptoCeliaco,categoria,vendedor);
         setCalorias(calorias);
         setPeso(peso);

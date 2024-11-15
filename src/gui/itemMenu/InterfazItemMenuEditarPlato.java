@@ -8,9 +8,12 @@ package gui.itemMenu;
 import controller.ItemMenusController;
 import controller.VendedoresController;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
+import exceptions.itemMenu.categoria.CategoriaNoEncontradaException;
 import model.*;
 
 import javax.swing.*;
+
+import java.sql.SQLException;
 import java.util.Iterator;
 
 /**
@@ -18,6 +21,7 @@ import java.util.Iterator;
  * @author mateo
  */
 public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
+    
     private ItemMenu iM = null;
     private Plato plato = null;
 
@@ -38,8 +42,7 @@ public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
     public DefaultComboBoxModel<String> modeloDropDownListCategoria(){
         DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
         try{
-
-            Iterator<Categoria<ItemMenu>> c = ItemMenusController.getInstance().filtrarPorTipoItem(Plato.class).iterator();
+            Iterator<Categoria> c = ItemMenusController.getInstance().filtrarPorTipoItem(Plato.class).iterator();
             while (c.hasNext()) {
                 modelo.addElement(c.next().getDescripcion());
             }
@@ -459,7 +462,7 @@ public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
 
     private void descripcionItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_descripcionItemActionPerformed
         // TODO add your handling code here:
-      
+    
     }//GEN-LAST:event_descripcionItemActionPerformed
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
@@ -473,8 +476,15 @@ public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
     double precioIngresado = Double.parseDouble(precio.getText());
 
     // Obtén el vendedor y la categoría seleccionados
-    Vendedor vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
-    Categoria categoria = (Categoria) ItemMenusController.getInstance().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
+    Vendedor vendedor = null;     
+    Categoria categoria = null;
+	try {
+        vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String)DropDownListVendedor.getSelectedItem()).stream().findFirst().orElse(null);
+		categoria = (Categoria) ItemMenusController.getInstance().filtrarCategoriaPorNombre((String)DropDownListCategoria.getSelectedItem()).stream().findFirst().orElse(null);
+	} catch (CategoriaNoEncontradaException | SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 
     // Verifica si el plato es apto para veganos o celíacos
     boolean aptoCeliaco = aptoCeliacoCheckBox.isSelected();
@@ -491,7 +501,6 @@ public class InterfazItemMenuEditarPlato extends javax.swing.JFrame {
     } catch (ItemMenuNoEncontradoException e) {
         JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
-   
     }//GEN-LAST:event_botonConfirmarActionPerformed
 
     private void descripcionItemKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descripcionItemKeyTyped

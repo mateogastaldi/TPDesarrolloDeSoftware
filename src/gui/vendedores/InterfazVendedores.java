@@ -15,6 +15,7 @@ import model.Vendedor;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import java.util.List;
  * @author mateo
  */
 public class InterfazVendedores extends javax.swing.JFrame {
+
     public void mostrar(String nombre){
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("Nombre");
@@ -45,7 +47,12 @@ public class InterfazVendedores extends javax.swing.JFrame {
                 Object vendedorId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
                 // Recupera los datos completos del vendedor con el ID obtenido
-                Vendedor vendedor = VendedoresController.getInstance().filtrarVendedorPorId((int) vendedorId);
+                Vendedor vendedor = null;
+                try{
+                    vendedor = VendedoresController.getInstance().filtrarVendedorPorId((int) vendedorId);
+                }catch(VendedorNoEncontradoException | SQLException ex){
+                    JOptionPane.showMessageDialog(null,ex.getMessage());
+                }
 
                 // Crea y muestra una nueva interfaz para editar los datos del vendedor
                 if (vendedor != null) {
@@ -53,6 +60,7 @@ public class InterfazVendedores extends javax.swing.JFrame {
                     interfazVendedoresEditar.setVisible(true);
                 }
             }
+            
         };
         Action actionEliminar = new AbstractAction() {
             @Override
@@ -77,7 +85,7 @@ public class InterfazVendedores extends javax.swing.JFrame {
                         else{mostrar(nombre);}
 
 
-                    }catch (VendedorNoEncontradoException ex){
+                    }catch (VendedorNoEncontradoException | SQLException ex){
                         JOptionPane.showMessageDialog(null,ex.getMessage());
                     }
                 }
@@ -101,7 +109,7 @@ public class InterfazVendedores extends javax.swing.JFrame {
 
                 }
 
-            }catch(VendedorNoEncontradoException e){
+            }catch(VendedorNoEncontradoException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }
@@ -124,7 +132,7 @@ public class InterfazVendedores extends javax.swing.JFrame {
 
                 }
 
-            }catch(VendedorNoEncontradoException e){
+            }catch(VendedorNoEncontradoException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }
@@ -133,10 +141,6 @@ public class InterfazVendedores extends javax.swing.JFrame {
         tablaVendedores.setModel(model);
         ButtonColumn buttonColumnEditar = new ButtonColumn(tablaVendedores,actionEditar,6);
         ButtonColumn buttonColumnEliminar = new ButtonColumn(tablaVendedores,actionEliminar,7);
-
-
-
-
 
     }
 

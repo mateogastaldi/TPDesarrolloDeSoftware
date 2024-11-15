@@ -434,7 +434,7 @@ public class InterfazClienteCrear extends javax.swing.JFrame {
 
     private void cuitClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuitClienteActionPerformed
         // TODO add your handling code here:
-      
+    
     }//GEN-LAST:event_cuitClienteActionPerformed
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
@@ -448,8 +448,7 @@ public class InterfazClienteCrear extends javax.swing.JFrame {
         String ciudad = ciudadCliente.getText();
         String calle = calleCliente.getText();
         int altura = Integer.parseInt(alturaCliente.getText());
-        Direccion direccion = new Direccion(calle,altura,ciudad,pais);
-
+        ClientesController.getInstance().addCliente( nombre, cuit, email, calle, altura, ciudad, pais, latitud, longitud);
         InterfazClientes intClientes = new InterfazClientes();
         intClientes.setVisible(true);
         this.setVisible(false);

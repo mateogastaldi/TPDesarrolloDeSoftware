@@ -1,11 +1,11 @@
 package mySQL;
 
 import DAO.CategoriaDAO;
-
 import model.Bebida;
 import model.Categoria;
 import model.ItemMenu;
 import model.Plato;
+
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -17,7 +17,8 @@ import java.util.List;
 
 public class CategoriaMySQL implements CategoriaDAO {
 
-    // Singleton -------------------------------------------------------------------------------------
+    // Singleton
+    // -------------------------------------------------------------------------------------
     private static CategoriaMySQL CATEGORIAMYSQL_INSTANCE;
 
     private CategoriaMySQL() {
@@ -31,31 +32,27 @@ public class CategoriaMySQL implements CategoriaDAO {
     }
     // ------------------------------------------------------------------------------------------------
 
-    // Methods Category --------------------------------------------------------------------------------
+    // Methods Category
+    // --------------------------------------------------------------------------------
     public List<Categoria> getCategorias() throws SQLException {
         List<Categoria> categorias = new ArrayList<>();
         Connection con = ConexionMySQL.conectar();
-
         try (
                 PreparedStatement pstmt = con.prepareStatement("SELECT * FROM categoria");
                 ResultSet rs = pstmt.executeQuery()) {
-
             while (rs.next()) {
-                // Supongamos que la tabla "categoria" tiene columnas "id" y "nombre"
-                int id = rs.getInt("id");
-                String nombre = rs.getString("nombre");
-                String tipo_item = rs.getString("tipo_item");
 
-                if (tipo_item.equals("Plato")) {
-                    Categoria categoria = new Categoria(nombre, Plato.class);
+                int id = rs.getInt("id");
+                String descripcion = rs.getString("descripcion");
+                if (rs.getString("tipo_item").equals("Plato")) {
+                    Categoria categoria = new Categoria(descripcion, Plato.class);
                     categoria.setId(id);
                     categorias.add(categoria);
                 } else {
-                    Categoria categoria = new Categoria(nombre, Bebida.class);
+                    Categoria categoria = new Categoria(descripcion, Bebida.class);
                     categoria.setId(id);
                     categorias.add(categoria);
                 }
-
             }
         } catch (SQLException e) {
             System.out.println("Error al obtener categorías: " + e.getMessage());
@@ -63,7 +60,6 @@ public class CategoriaMySQL implements CategoriaDAO {
         } finally {
             ConexionMySQL.cerrarConexion();
         }
-
         return categorias;
     }
 
@@ -77,15 +73,13 @@ public class CategoriaMySQL implements CategoriaDAO {
             while (rs.next()) {
                 // Supongamos que la tabla "categoria" tiene columnas "id" y "nombre"
                 int id = rs.getInt("id");
-                String nombre = rs.getString("nombre");
-                String tipo_item = rs.getString("tipo_item");
-
-                if (tipo_item.equals("Plato")) {
-                    categoria = new Categoria(nombre, Plato.class);
+                String descripcion = rs.getString("descripcion");
+                if (rs.getString("tipo_item").equals("Plato")) {
+                    categoria = new Categoria(descripcion, Plato.class);
                     categoria.setId(id);
 
                 } else {
-                    categoria = new Categoria(nombre, Bebida.class);
+                    categoria = new Categoria(descripcion, Bebida.class);
                     categoria.setId(id);
 
                 }
@@ -104,8 +98,10 @@ public class CategoriaMySQL implements CategoriaDAO {
     public void eliminarCategoria(int id) throws SQLException {
         Connection con = ConexionMySQL.conectar();
         try (
-                PreparedStatement pstmt = con.prepareStatement("DELETE FROM categoria WHERE id = " + id);) {
-            pstmt.executeUpdate();
+                PreparedStatement pstmt = con.prepareStatement("DELETE FROM categoria WHERE id = ?");) {
+                    pstmt.setInt(1, id); // Establecer el valor del parámetro
+                    pstmt.executeUpdate();
+                
         } catch (SQLException e) {
             System.out.println("Error al eliminar categoría: " + e.getMessage());
             throw e; // Propagar la excepción si es necesario
@@ -119,23 +115,24 @@ public class CategoriaMySQL implements CategoriaDAO {
         List<Categoria> categorias = new ArrayList<>();
         Connection con = ConexionMySQL.conectar();
         try (
-                PreparedStatement pstmt = con.prepareStatement("SELECT * FROM categoria WHERE descripcion = " + nombre);
-                ResultSet rs = pstmt.executeQuery()) {
-            while (rs.next()) {
-                // Supongamos que la tabla "categoria" tiene columnas "id" y "nombre"
-                int id = rs.getInt("id");
-                String nombreCategoria = rs.getString("descripcion");
-                String tipo_item = rs.getString("tipo_item");
-                if (tipo_item.equals("Plato")) {
-                    Categoria categoria = new Categoria(nombreCategoria, Plato.class);
-                    categoria.setId(id);
-                    categorias.add(categoria);
-                } else {
-                    Categoria categoria = new Categoria(nombreCategoria, Bebida.class);
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM categoria WHERE descripcion = ?");
+        ) {
+            pstmt.setString(1, nombre); // Establecer el valor del parámetro
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    String descripcion = rs.getString("descripcion");
+                    Categoria categoria;
+    
+                    // Determinar el tipo de categoría según "tipo_item"
+                    if (rs.getString("tipo_item").equals("Plato")) {
+                        categoria = new Categoria(descripcion, Plato.class);
+                    } else {
+                        categoria = new Categoria(descripcion, Bebida.class);
+                    }
                     categoria.setId(id);
                     categorias.add(categoria);
                 }
-
             }
         } catch (SQLException e) {
             System.out.println("Error al obtener categorías: " + e.getMessage());
@@ -143,7 +140,6 @@ public class CategoriaMySQL implements CategoriaDAO {
         } finally {
             ConexionMySQL.cerrarConexion();
         }
-
         return categorias;
     }
 
@@ -183,16 +179,15 @@ public class CategoriaMySQL implements CategoriaDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     int id = rs.getInt("id");
-                    String nombre = rs.getString("nombre");
-                    if (tipoClase.equals(Plato.class)) {
-                        Categoria c = new Categoria(nombre, Plato.class);
-                        c.setId(id);
-                        categorias.add(c);
-
-                    } else if (tipoClase.equals(Bebida.class)) {
-                        Categoria c = new Categoria(nombre, Bebida.class);
-                        c.setId(id);
-                        categorias.add(c);
+                    String descripcion = rs.getString("descripcion");
+                    if (rs.getString("tipo_item").equals("Plato")) {
+                        Categoria categoria = new Categoria(descripcion, Plato.class);
+                        categoria.setId(id);
+                        categorias.add(categoria);
+                    } else {
+                        Categoria categoria = new Categoria(descripcion, Bebida.class);
+                        categoria.setId(id);
+                        categorias.add(categoria);
                     }
                 }
             }

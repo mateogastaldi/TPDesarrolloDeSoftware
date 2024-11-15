@@ -219,7 +219,12 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
 
-        Vendedor vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String) dropVendedores.getSelectedItem()).getFirst();
+        Vendedor vendedor = null;
+        try{
+            VendedoresController.getInstance().filtrarVendedorPorNombre((String) dropVendedores.getSelectedItem()).getFirst();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
 
         PagoStrategy mediosDePagos = null;
         if(((String) dropDownListMetodosDePago.getSelectedItem()).equals(MediosDePagos.MERCADO_PAGO.name())){ mediosDePagos = new MercadoPago() ;}
@@ -230,7 +235,13 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
             }
         }
 
-        Cliente cliente = ClientesController.getInstance().filtrarClientePorNombre((String) dropDownListCliente.getSelectedItem()).getFirst();
+        Cliente cliente = null;
+        try{
+            cliente = ClientesController.getInstance().filtrarClientePorNombre((String) dropDownListCliente.getSelectedItem()).getFirst();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        
 
         InterfazPedidoCrear1 interfazPedidoCrear1 = new InterfazPedidoCrear1(vendedor, mediosDePagos, cliente);
         interfazPedidoCrear1.setVisible(true);

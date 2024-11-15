@@ -19,6 +19,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.Iterator;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 
 /**
@@ -58,16 +59,22 @@ public class InterfazClientes extends javax.swing.JFrame {
                 Object clienteId = table.getModel().getValueAt(modelRow, 1); // Columna "ID"
 
                 // Recupera los datos completos del cliente con el ID obtenido
-                Cliente cliente = ClientesController.getInstance().filtrarClientePorId((int) clienteId);
-
+                Cliente cliente = null;
+                try{
+                    cliente = ClientesController.getInstance().filtrarClientePorId((int) clienteId);
+                }catch(ClienteNoEncontradoException | SQLException ex){
+                    JOptionPane.showMessageDialog(null,ex.getMessage());
+                }
 
                 // Crea y muestra una nueva interfaz para editar los datos del cliente
+            
                 if (cliente != null) {
                     InterfazClienteEditar editarClienteFrame = new InterfazClienteEditar(cliente);
                     editarClienteFrame.setVisible(true);
                 }
             }
         };
+
         Action actionEliminar = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -91,7 +98,7 @@ public class InterfazClientes extends javax.swing.JFrame {
                         else{mostrar(nombre);}
 
 
-                    }catch (ClienteNoEncontradoException ex){
+                    }catch (ClienteNoEncontradoException | SQLException ex){
                         JOptionPane.showMessageDialog(null,ex.getMessage());
                     }
                 }
@@ -118,7 +125,7 @@ public class InterfazClientes extends javax.swing.JFrame {
 
                 }
 
-            }catch(ClienteNoEncontradoException e){
+            }catch(ClienteNoEncontradoException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }
@@ -141,7 +148,7 @@ public class InterfazClientes extends javax.swing.JFrame {
     
                 }
 
-            }catch(ClienteNoEncontradoException e){
+            }catch(ClienteNoEncontradoException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }

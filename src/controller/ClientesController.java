@@ -1,18 +1,14 @@
 package controller;
-
 import DAO.FACTORY.DAOFactory;
 import exceptions.cliente.ClienteNoEncontradoException;
-import model.Cliente;
-import model.Coordenada;
-import model.Direccion;
-
+import model.*;
 import java.sql.SQLException;
 import java.util.List;
 
 
 public class ClientesController {
 
-    // Singleton -------------------------------------------------------------
+    // Singleton --------------------------------------------------------------------------------------
     private static ClientesController instance;
     private ClientesController() {}
     public static ClientesController getInstance() {
@@ -21,9 +17,9 @@ public class ClientesController {
         }
         return instance;
     }
-    // -----------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------
 
-    // Methods ---------------------------------------------------------------
+    // Metodos ----------------------------------------------------------------------------------------
     public void addCliente(String nombre,long cuit,String email,String calle,int altura,String ciudad,String pais,double latitud,double longitud){
         Coordenada coord = new Coordenada(cuit,latitud);
         Direccion direccion = new Direccion(calle, altura, ciudad, pais);
@@ -47,5 +43,5 @@ public class ClientesController {
         Coordenada coordenadas = new Coordenada(lat, lng);
         DAOFactory.getInstance().getClienteDAO().modificarCliente(id, nombre, cuit, email, direccion, coordenadas);
     }
-    // -----------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------
 }

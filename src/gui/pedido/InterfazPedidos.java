@@ -15,6 +15,7 @@ import model.Pedido;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,13 +48,18 @@ public class InterfazPedidos extends javax.swing.JFrame {
                 Object pedidoId = table.getModel().getValueAt(modelRow, 0); // Columna "ID"
 
                 // Recupera los datos completos del pedido con el ID obtenido
-                Pedido pedido = PedidosController.getInstance().filtrarPedidoPorId((int) pedidoId);
+                Pedido pedido = null;
+                try{
+                    pedido = PedidosController.getInstance().filtrarPedidoPorId((int) pedidoId);
+                }catch (PedidoNoEncontradoException | SQLException ex){
+                    JOptionPane.showMessageDialog(null,ex.getMessage());
+                }
 
 
                 // Crea y muestra una nueva interfaz para actualizar el estado pedido
                 if (pedido != null) {
-                      pedido.actualizarEstado();
-                      mostrar(id,vendedor,cliente);
+                    pedido.actualizarEstado();
+                    mostrar(id,vendedor,cliente);
                 }
             }
         };
@@ -73,13 +79,10 @@ public class InterfazPedidos extends javax.swing.JFrame {
                         JOptionPane.QUESTION_MESSAGE
                 );
                 if(confirm == JOptionPane.YES_OPTION){
-
                     try{
                         PedidosController.getInstance().eliminarPedido((int) pedidoId);
                         mostrar(id,vendedor,cliente);
-
-
-                    }catch (PedidoNoEncontradoException ex){
+                    }catch (PedidoNoEncontradoException | SQLException ex){
                         JOptionPane.showMessageDialog(null,ex.getMessage());
                     }
                 }
@@ -102,7 +105,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
                         pedido.getEstado().stringEstado()
                 });
             }
-        }catch (PedidoNoEncontradoException ex){
+        }catch (PedidoNoEncontradoException | SQLException ex){
             JOptionPane.showMessageDialog(null,ex.getMessage());
         }
 

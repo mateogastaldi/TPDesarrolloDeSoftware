@@ -2,7 +2,7 @@ package DAO.FACTORY;
 
 import DAO.*;
 import memory.*;
-
+import mySQL.*;
 public class DAOFactory {
     private static DAOFactory instance;
     private CategoriaDAO categoriaDAO;
@@ -14,13 +14,13 @@ public class DAOFactory {
     private PagoDAO pagoDAO;
 
     private DAOFactory() {
-        this.categoriaDAO = CategoriaMemory.getInstance();
-        this.clienteDAO = ClienteMemory.getInstance();
-        this.itemsMenuDAO = ItemsMenuMemory.getInstance();
-        this.itemsPedidoDAO = ItemPedidoMemory.getInstance();
-        this.pedidosDAO = PedidosMemory.getInstance();
-        this.vendedorDAO = VendedorMemory.getInstance();
-        this.pagoDAO = PagoMemory.getInstance();
+        this.categoriaDAO = CategoriaMySQL.getInstance();
+        this.clienteDAO = ClienteMySQL.getInstance();
+        this.itemsMenuDAO = ItemMenuMySQL.getInstance();
+        this.itemsPedidoDAO = ItemPedidoMySQL.getInstance();
+        this.pedidosDAO = PedidosMySQL.getInstance();
+        this.vendedorDAO = VendedorMySQL.getInstance();
+        this.pagoDAO = PagoMySQL.getInstance();
 
     }
     public static DAOFactory getInstance() {

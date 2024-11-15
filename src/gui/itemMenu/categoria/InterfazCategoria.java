@@ -18,6 +18,7 @@ import model.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class InterfazCategoria extends javax.swing.JFrame {
                         else{mostrar(nombre);}
 
 
-                    }catch (CategoriaNoEncontradaException ex){
+                    }catch (CategoriaNoEncontradaException | SQLException ex){
                         JOptionPane.showMessageDialog(null,ex.getMessage());
                     }
                 }
@@ -87,7 +88,7 @@ public class InterfazCategoria extends javax.swing.JFrame {
 
                 }
 
-            }catch(CategoriaNoEncontradaException e){
+            }catch(CategoriaNoEncontradaException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }
@@ -109,7 +110,7 @@ public class InterfazCategoria extends javax.swing.JFrame {
 
                 }
 
-            }catch(CategoriaNoEncontradaException e){
+            }catch(CategoriaNoEncontradaException | SQLException e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
 
             }
@@ -443,7 +444,7 @@ public class InterfazCategoria extends javax.swing.JFrame {
             }
 
 
-        } catch (CategoriaNoEncontradaException e) {
+        } catch (CategoriaNoEncontradaException | SQLException e) {
             throw new CategoriaNoCreadaException(e.getMessage());
         }
 

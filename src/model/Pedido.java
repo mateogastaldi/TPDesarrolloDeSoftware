@@ -3,19 +3,22 @@ package model;
 import DAO.FACTORY.DAOFactory;
 import controller.ItemMenusController;
 import controller.PedidosController;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class Pedido extends EventManager {
+    // Atributes ----------------------------------------------------------------------------------------
     private int id;
     private Cliente cliente;
     private List<ItemPedido> itemsPedidos;
     private Estado estado;
     private Pago pago;
     private Vendedor vendedor;
+    // --------------------------------------------------------------------------------------------------
 
-    // constructores-------------------------------------------------------------------------------------
+    // Constructor --------------------------------------------------------------------------------------
     public Pedido(Cliente cliente, Vendedor vendedor, Pago pago, Estado estado) {
         super();
         setCliente(cliente);
@@ -25,7 +28,6 @@ public class Pedido extends EventManager {
             this.estado = new EstadoRECIBIDO();
         else
             this.estado = estado;
-
     }
 
     public Pedido(Cliente cliente, List<ItemPedido> itemsPedidos, Vendedor vendedor, Pago pago) {
@@ -35,9 +37,9 @@ public class Pedido extends EventManager {
         this.estado = new EstadoRECIBIDO();
         setVendedor(vendedor);
     }
-    // -------------------------------------------------------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------
 
-    // getters-------------------------------------------------------------------------------------------
+    // Getters -------------------------------------------------------------------------------------------
     public Cliente getCliente() {
         return cliente;
     }
@@ -63,7 +65,7 @@ public class Pedido extends EventManager {
     }
     // -------------------------------------------------------------------------------------------------
 
-    // setters-------------------------------------------------------------------------------------------
+    // Setters -----------------------------------------------------------------------------------------
     private void setCliente(Cliente cliente) {
         this.cliente = cliente;
         this.addEventListener(cliente);
@@ -91,7 +93,7 @@ public class Pedido extends EventManager {
     }
     // -------------------------------------------------------------------------------------------------
 
-    // metodos-------------------------------------------------------------------------------------------
+    // Methods -----------------------------------------------------------------------------------------
     public TipoEstado estado() {
         return estado.getEstado();
     }
@@ -99,7 +101,18 @@ public class Pedido extends EventManager {
     public void actualizarEstado() {
         estado.siguiente();
         if (estado.equals(TipoEstado.ENVIADO)) {
-            PedidosController.getInstance().addPago(pago.getMetodoDePago(), pago.getMonto());
+            try{
+                PedidosController.getInstance().addPago(pago.getMetodoDePago(), pago.getMonto());
+            }
+            catch(Exception e){
+                JOptionPane.showMessageDialog(null, "Error al realizar el pago");
+                try{
+                    PedidosController.getInstance().eliminarPedido(id);
+                }catch(Exception e2){
+                    JOptionPane.showMessageDialog(null, "Error al eliminar el pedido");
+                }
+            }
+            
         }
         this.notifyListeners(this);
     }
