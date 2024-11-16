@@ -21,13 +21,16 @@ public class PedidosMySQL implements PedidosDAO {
     // Métodos ----------------------------------------------------------------------------------------
     public List<Pedido> getPedido() throws SQLException {
         Connection con = ConexionMySQL.conectar();
+        System.out.println("Entro en todos los pedidos");
         List<Pedido> pedidos = new ArrayList<>();
         try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido,cliente,vendedor,pago WHERE pedido.cliente=cliente.id AND pedido.vendedor=vendedor.id AND pago.id = pedido.pago");
                 ResultSet rs = prst.executeQuery()) {
+
             while (rs.next()) {
+                System.out.println("Entro en pedidos");
                 int id = rs.getInt("pedido.id");
                 int idVendedor = rs.getInt("pedido.vendedor");
-                int idCliente = rs.getInt("pedido.idCliente");
+                int idCliente = rs.getInt("pedido.cliente");
                 Cliente cliente = null;
                 Vendedor vendedor = null;
                 Pago pago = null;
@@ -53,7 +56,11 @@ public class PedidosMySQL implements PedidosDAO {
                 } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
                     metodoDePago = new Transferencia();
                 }
-                pago = new Pago(metodoDePago, monto);
+                String cbu = rs.getString("pago.cbu");
+                String alias = rs.getString("pago.alias");
+                long cuit = rs.getLong("pago.cuit");
+                boolean pagado = rs.getBoolean("pago.pagado");
+                pago = new Pago(metodoDePago, monto,pagado,cbu,cuit,alias);
                 pago.setId(idpago);
                 
                 //Atributos cliente
@@ -64,13 +71,13 @@ public class PedidosMySQL implements PedidosDAO {
                 int alturaCliente = rs.getInt("cliente.altura");
                 String ciudadCliente = rs.getString("cliente.ciudad");
                 String paisCliente = rs.getString("cliente.pais");
-                double latitudCliente = rs.getDouble("cliente.latitud");
-                double longitudCliente = rs.getDouble("cliente.longitud");
+                double latitudCliente = rs.getDouble("cliente.lat");
+                double longitudCliente = rs.getDouble("cliente.lng");
                 
                 //Atributos vendedor
                 String nombreVendedor = rs.getString("vendedor.nombre");
-                double latitudVendedor = rs.getDouble("vendedor.latitud");
-                double longitudVendedor = rs.getDouble("vendedor.longitud");
+                double latitudVendedor = rs.getDouble("vendedor.lat");
+                double longitudVendedor = rs.getDouble("vendedor.lng");
                 String calleVendedor = rs.getString("vendedor.calle");
                 int alturaVendedor = rs.getInt("vendedor.altura");
                 String ciudadVendedor = rs.getString("vendedor.ciudad");
@@ -126,12 +133,14 @@ public class PedidosMySQL implements PedidosDAO {
     public Pedido filtrarPedidoPorId(int idAUX) throws SQLException {
         Connection con = ConexionMySQL.conectar();
         Pedido pedido = null;
-        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido, cliente, vendedor, pago WHERE pedido.id_cliente = cliente.id AND pedido.id_vendedor = vendedor.id AND pedido.pago = pago.id AND pedido.id = " + idAUX);
-                ResultSet rs = prst.executeQuery()) {
+        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido, cliente, vendedor, pago WHERE pedido.cliente = cliente.id AND pedido.vendedor = vendedor.id AND pedido.pago = pago.id AND pedido.id = ?");
+                ) {
+            prst.setInt(1, idAUX);
+            ResultSet rs = prst.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("pedido.id");
                 int idVendedor = rs.getInt("pedido.vendedor");
-                int idCliente = rs.getInt("pedido.idCliente");
+                int idCliente = rs.getInt("pedido.cliente");
                 Cliente cliente = null;
                 Vendedor vendedor = null;
                 Pago pago = null;
@@ -157,7 +166,11 @@ public class PedidosMySQL implements PedidosDAO {
                 } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
                     metodoDePago = new Transferencia();
                 }
-                pago = new Pago(metodoDePago, monto);
+                String cbu = rs.getString("pago.cbu");
+                String alias = rs.getString("pago.alias");
+                long cuit = rs.getLong("pago.cuit");
+                boolean pagado = rs.getBoolean("pago.pagado");
+                pago = new Pago(metodoDePago, monto,pagado,cbu,cuit,alias);
                 pago.setId(idpago);
                 
                 //Atributos cliente
@@ -168,13 +181,13 @@ public class PedidosMySQL implements PedidosDAO {
                 int alturaCliente = rs.getInt("cliente.altura");
                 String ciudadCliente = rs.getString("cliente.ciudad");
                 String paisCliente = rs.getString("cliente.pais");
-                double latitudCliente = rs.getDouble("cliente.latitud");
-                double longitudCliente = rs.getDouble("cliente.longitud");
+                double latitudCliente = rs.getDouble("cliente.lat");
+                double longitudCliente = rs.getDouble("cliente.lng");
                 
                 //Atributos vendedor
                 String nombreVendedor = rs.getString("vendedor.nombre");
-                double latitudVendedor = rs.getDouble("vendedor.latitud");
-                double longitudVendedor = rs.getDouble("vendedor.longitud");
+                double latitudVendedor = rs.getDouble("vendedor.lat");
+                double longitudVendedor = rs.getDouble("vendedor.lng");
                 String calleVendedor = rs.getString("vendedor.calle");
                 int alturaVendedor = rs.getInt("vendedor.altura");
                 String ciudadVendedor = rs.getString("vendedor.ciudad");
@@ -210,7 +223,7 @@ public class PedidosMySQL implements PedidosDAO {
             while (rs.next()) {
                 int id = rs.getInt("pedido.id");
                 int idVendedor = rs.getInt("pedido.vendedor");
-                int idCliente = rs.getInt("pedido.idCliente");
+                int idCliente = rs.getInt("pedido.cliente");
                 Cliente cliente = null;
                 Vendedor vendedor = null;
                 Pago pago = null;
@@ -236,7 +249,11 @@ public class PedidosMySQL implements PedidosDAO {
                 } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
                     metodoDePago = new Transferencia();
                 }
-                pago = new Pago(metodoDePago, monto);
+                String cbu = rs.getString("pago.cbu");
+                String alias = rs.getString("pago.alias");
+                long cuit = rs.getLong("pago.cuit");
+                boolean pagado = rs.getBoolean("pago.pagado");
+                pago = new Pago(metodoDePago, monto,pagado,cbu,cuit,alias);
                 pago.setId(idpago);
                 
                 //Atributos cliente
@@ -247,13 +264,13 @@ public class PedidosMySQL implements PedidosDAO {
                 int alturaCliente = rs.getInt("cliente.altura");
                 String ciudadCliente = rs.getString("cliente.ciudad");
                 String paisCliente = rs.getString("cliente.pais");
-                double latitudCliente = rs.getDouble("cliente.latitud");
-                double longitudCliente = rs.getDouble("cliente.longitud");
+                double latitudCliente = rs.getDouble("cliente.lat");
+                double longitudCliente = rs.getDouble("cliente.lng");
                 
                 //Atributos vendedor
                 String nombreVendedor = rs.getString("vendedor.nombre");
-                double latitudVendedor = rs.getDouble("vendedor.latitud");
-                double longitudVendedor = rs.getDouble("vendedor.longitud");
+                double latitudVendedor = rs.getDouble("vendedor.lat");
+                double longitudVendedor = rs.getDouble("vendedor.lng");
                 String calleVendedor = rs.getString("vendedor.calle");
                 int alturaVendedor = rs.getInt("vendedor.altura");
                 String ciudadVendedor = rs.getString("vendedor.ciudad");
@@ -290,7 +307,7 @@ public class PedidosMySQL implements PedidosDAO {
             while (rs.next()) {
                 int id = rs.getInt("pedido.id");
                 int idVendedor = rs.getInt("pedido.vendedor");
-                int idCliente = rs.getInt("pedido.idCliente");
+                int idCliente = rs.getInt("pedido.cliente");
                 Cliente cliente = null;
                 Vendedor vendedor = null;
                 Pago pago = null;
@@ -316,7 +333,11 @@ public class PedidosMySQL implements PedidosDAO {
                 } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
                     metodoDePago = new Transferencia();
                 }
-                pago = new Pago(metodoDePago, monto);
+                String cbu = rs.getString("pago.cbu");
+                String alias = rs.getString("pago.alias");
+                long cuit = rs.getLong("pago.cuit");
+                boolean pagado = rs.getBoolean("pago.pagado");
+                pago = new Pago(metodoDePago, monto,pagado,cbu,cuit,alias);
                 pago.setId(idpago);
                 
                 //Atributos cliente
@@ -327,13 +348,13 @@ public class PedidosMySQL implements PedidosDAO {
                 int alturaCliente = rs.getInt("cliente.altura");
                 String ciudadCliente = rs.getString("cliente.ciudad");
                 String paisCliente = rs.getString("cliente.pais");
-                double latitudCliente = rs.getDouble("cliente.latitud");
-                double longitudCliente = rs.getDouble("cliente.longitud");
+                double latitudCliente = rs.getDouble("cliente.lat");
+                double longitudCliente = rs.getDouble("cliente.lng");
                 
                 //Atributos vendedor
                 String nombreVendedor = rs.getString("vendedor.nombre");
-                double latitudVendedor = rs.getDouble("vendedor.latitud");
-                double longitudVendedor = rs.getDouble("vendedor.longitud");
+                double latitudVendedor = rs.getDouble("vendedor.lat");
+                double longitudVendedor = rs.getDouble("vendedor.lng");
                 String calleVendedor = rs.getString("vendedor.calle");
                 int alturaVendedor = rs.getInt("vendedor.altura");
                 String ciudadVendedor = rs.getString("vendedor.ciudad");
@@ -376,12 +397,12 @@ public class PedidosMySQL implements PedidosDAO {
         Connection con = ConexionMySQL.conectar();
         List<Pedido> pedidos = new ArrayList<>();
         
-        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido, cliente, vendedor, pago WHERE pedido.id_cliente=cliente.id AND pedido.id_vendedor = vendedor.id AND pedido.pago = pago.id vendedor.nombre = " + vendedorNombreAUX);
+        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido, cliente, vendedor, pago WHERE pedido.cliente=cliente.id AND pedido.vendedor = vendedor.id AND pedido.pago = pago.id vendedor.nombre = " + vendedorNombreAUX);
                 ResultSet rs = prst.executeQuery()) {
             while (rs.next()) {
                 int id = rs.getInt("pedido.id");
                 int idVendedor = rs.getInt("pedido.vendedor");
-                int idCliente = rs.getInt("pedido.idCliente");
+                int idCliente = rs.getInt("pedido.cliente");
                 Cliente cliente = null;
                 Vendedor vendedor = null;
                 Pago pago = null;
@@ -407,7 +428,11 @@ public class PedidosMySQL implements PedidosDAO {
                 } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
                     metodoDePago = new Transferencia();
                 }
-                pago = new Pago(metodoDePago, monto);
+                String cbu = rs.getString("pago.cbu");
+                String alias = rs.getString("pago.alias");
+                long cuit = rs.getLong("pago.cuit");
+                boolean pagado = rs.getBoolean("pago.pagado");
+                pago = new Pago(metodoDePago, monto,pagado,cbu,cuit,alias);
                 pago.setId(idpago);
                 
                 //Atributos cliente
@@ -418,13 +443,13 @@ public class PedidosMySQL implements PedidosDAO {
                 int alturaCliente = rs.getInt("cliente.altura");
                 String ciudadCliente = rs.getString("cliente.ciudad");
                 String paisCliente = rs.getString("cliente.pais");
-                double latitudCliente = rs.getDouble("cliente.latitud");
-                double longitudCliente = rs.getDouble("cliente.longitud");
+                double latitudCliente = rs.getDouble("cliente.lat");
+                double longitudCliente = rs.getDouble("cliente.lng");
                 
                 //Atributos vendedor
                 String nombreVendedor = rs.getString("vendedor.nombre");
-                double latitudVendedor = rs.getDouble("vendedor.latitud");
-                double longitudVendedor = rs.getDouble("vendedor.longitud");
+                double latitudVendedor = rs.getDouble("vendedor.lat");
+                double longitudVendedor = rs.getDouble("vendedor.lng");
                 String calleVendedor = rs.getString("vendedor.calle");
                 int alturaVendedor = rs.getInt("vendedor.altura");
                 String ciudadVendedor = rs.getString("vendedor.ciudad");
@@ -451,6 +476,29 @@ public class PedidosMySQL implements PedidosDAO {
             ConexionMySQL.cerrarConexion();
         }
         return pedidos;
+    }
+
+    public void cambioEstado(Pedido p) throws SQLException{
+        Connection con = ConexionMySQL.conectar();
+        String sql = "UPDATE pedido SET estado = ? WHERE id = ?";
+        try(PreparedStatement prst = con.prepareStatement(sql)){
+            if(p.getEstado() instanceof EstadoRECIBIDO){
+                prst.setString(1,"RECIBIDO");
+            } else if (p.getEstado() instanceof EstadoACEPTADO) {
+                prst.setString(1,"ACEPTADO");
+            } else if (p.getEstado() instanceof EstadoENVIADO) {
+                prst.setString(1,"ENVIADO");
+            } else if (p.getEstado() instanceof EstadoPREPARADO) {
+                prst.setString(1,"PREPARADO");
+            }
+            prst.setInt(2,p.getId());
+            prst.executeUpdate();
+        }
+        catch (SQLException e){
+            throw new SQLException("Error al obtener pedidos: " + e.getMessage());
+        }finally {
+            ConexionMySQL.cerrarConexion();
+        }
     }
     // ------------------------------------------------------------------------------------------------
 }

@@ -22,6 +22,7 @@ public class Pedido extends EventManager {
     public Pedido(Cliente cliente, Vendedor vendedor, Pago pago, Estado estado) {
         super();
         setCliente(cliente);
+        setPago(pago);
         setVendedor(vendedor);
         itemsPedidos = new ArrayList<>();
         if (estado == null)
@@ -36,6 +37,7 @@ public class Pedido extends EventManager {
         setItemsPedidos(itemsPedidos);
         this.estado = new EstadoRECIBIDO();
         setVendedor(vendedor);
+        setPago(pago);
     }
     // ---------------------------------------------------------------------------------------------------
 
@@ -91,6 +93,10 @@ public class Pedido extends EventManager {
     public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
     }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
     // -------------------------------------------------------------------------------------------------
 
     // Methods -----------------------------------------------------------------------------------------
@@ -99,10 +105,20 @@ public class Pedido extends EventManager {
     }
 
     public void actualizarEstado() {
-        estado.siguiente();
-        if (estado.equals(TipoEstado.ENVIADO)) {
+        setEstado(estado.siguiente());
+
+        System.out.println("Estado actualizado: " + estado.stringEstado());
+        System.out.println("Estado del pedido " + this.getEstado().stringEstado());
+        try{
+            PedidosController.getInstance().cambioEstado(this);
+            System.out.println("Estado actualizado: " + this.getEstado().stringEstado());
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
+        if (this.getEstado() instanceof EstadoENVIADO) {
             try{
-                PedidosController.getInstance().addPago(pago.getMetodoDePago(), pago.getMonto());
+                pago.pagar();
             }
             catch(Exception e){
                 JOptionPane.showMessageDialog(null, "Error al realizar el pago");
@@ -129,9 +145,9 @@ public class Pedido extends EventManager {
         return pago.getMonto();
     }
 
-    public void pagarPagoStrategy(PagoStrategy ps) {
-        this.setPago(new Pago(ps, calcularPrecioBase()));
-    }
+    //public void pagarPagoStrategy(PagoStrategy ps) {
+    //    this.setPago(new Pago(ps, calcularPrecioBase()));
+    //}
 
     public void printItemsPedidos() {
         for (ItemPedido itemPedido : itemsPedidos) {

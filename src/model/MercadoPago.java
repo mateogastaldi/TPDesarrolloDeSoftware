@@ -1,5 +1,7 @@
 package model;
 
+import gui.pedido.pago.InterfazPagoMercadoPago;
+
 import java.util.Scanner;
 
 public class MercadoPago implements PagoStrategy{
@@ -12,10 +14,10 @@ public class MercadoPago implements PagoStrategy{
         return precio * 1.04;
     }
     @Override
-    public void obtenerInformacion() {
-        System.out.println("Vas a pagar con " + this.getMedioDePago() + " ingresar alias:");
-        Scanner sc = new Scanner(System.in);
-        String alias = sc.nextLine();
+    public void obtenerInformacion(Pago pago) {
+        System.out.println("Vas a pagar con " + this.getMedioDePago());
+        InterfazPagoMercadoPago interfazPago = new InterfazPagoMercadoPago(pago);
+        interfazPago.setVisible(true);
 
     }
 

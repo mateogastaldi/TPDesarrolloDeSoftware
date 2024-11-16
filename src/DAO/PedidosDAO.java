@@ -14,4 +14,5 @@ public interface PedidosDAO {
     List<Pedido> filtrarPorIdCliente(int id) throws PedidoNoEncontradoException,SQLException;
     void eliminarPedido(int id) throws PedidoNoEncontradoException,SQLException;
     List<Pedido> filtrarPedidoPorVendedor(String vendedor) throws PedidoNoEncontradoException,SQLException;
+    void cambioEstado(Pedido pedido) throws PedidoNoEncontradoException,SQLException;
 }

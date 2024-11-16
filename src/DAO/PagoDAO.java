@@ -9,4 +9,5 @@ public interface PagoDAO {
     void addPago(Pago p) throws SQLException;
     List<Pago> getPagos() throws SQLException;
     Pago filtrarPagoPorId(int id) throws SQLException;
+    void addInfo(Pago p) throws SQLException;
 }

@@ -6,7 +6,6 @@ package gui.pedido;
 
 import controller.ItemMenusController;
 import controller.PedidosController;
-import controller.VendedoresController;
 import exceptions.Pedido.PedidoNoEncontradoException;
 import exceptions.itemMenu.ItemMenuNoEncontradoException;
 import gui.ButtonColumn;
@@ -24,12 +23,12 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
     public Vendedor vendedorGlobal;
     public Cliente clienteGlobal;
     public PagoStrategy mp;
-    Pedido pedido;
-    public List<ItemPedido> listaItemPedidos = new ArrayList<>();
+    Pedido pedido = null;
+    public List<ItemMenu> listaItemMenu = new ArrayList<>();
     List<ItemMenu> itemsDelLocal = new ArrayList<>();
 
-    public InterfazPedidoCrear1(Vendedor vendedor, PagoStrategy mediosDePagos, Cliente cliente) {
 
+    public InterfazPedidoCrear1(Vendedor vendedor, PagoStrategy mediosDePagos, Cliente cliente) {
         vendedorGlobal = vendedor;
         clienteGlobal = cliente;
         try{
@@ -38,7 +37,6 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
         catch (Exception e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
-        
         mp = mediosDePagos;
         initComponents();
     }
@@ -69,7 +67,13 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
                 if (confirm == JOptionPane.YES_OPTION) {
 
                     try {
-                        pedido.removeItemPedido( PedidosController.getInstance().getItemPedido((int) itemId));
+                        ItemMenu iMenu = ItemMenusController.getInstance().filtrarItemMenuPorId((int) itemId);
+                        for(ItemMenu items : listaItemMenu){
+                            if(items.getId() == iMenu.getId()){
+                                listaItemMenu.remove(items);
+                                break;
+                            }
+                        }
                         mostrar();
                     } catch (PedidoNoEncontradoException | SQLException ex) {
                         JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -80,12 +84,12 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
             ;
         };
         try{
-            Iterator<ItemPedido> ip = PedidosController.getInstance().filtrarPorPedido(pedido).iterator();
+            Iterator<ItemMenu> ip = listaItemMenu.iterator();
             while (ip.hasNext()) {
-                ItemPedido itemPedido = ip.next();
+                ItemMenu itemMenu = ip.next();
                 model.addRow(new Object[]{
-                        itemPedido.getItemMenu().getNombre(),
-                        itemPedido.getId(),
+                        itemMenu.getNombre(),
+                        itemMenu.getId(),
 
                 });
             }
@@ -289,16 +293,26 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
 
     private void botonConfirmarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_botonConfirmarActionPerformed
         // TODO add your handling code here:
-        if (!listaItemPedidos.isEmpty()) {
+        if (!listaItemMenu.isEmpty()) {
             double precio = 0 ;
-            for (ItemPedido itemPedido : listaItemPedidos) {
-                precio += itemPedido.getItemMenu().getPrecio();
+            for (ItemMenu itemMenu : listaItemMenu) {
+                precio += itemMenu.getPrecio();
             }
-            Pago pago = new Pago(mp,precio);
+
             try{
-                PedidosController.getInstance().addPedido(clienteGlobal, vendedorGlobal, listaItemPedidos,pago);
+                Pago pago = PedidosController.getInstance().addPago(mp,precio);
+
+                 pedido = PedidosController.getInstance().addPedido(clienteGlobal, vendedorGlobal,pago);
             }catch (Exception e){
                 JOptionPane.showMessageDialog(null, e.getMessage());
+            }
+            for(ItemMenu itemMenu : listaItemMenu){
+                try{
+                    PedidosController.getInstance().addItemPedido(itemMenu,pedido);
+                }catch (Exception e){
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
+
             }
             
             InterfazPedidos interfazPedidos = new InterfazPedidos();
@@ -319,13 +333,14 @@ public class InterfazPedidoCrear1 extends javax.swing.JFrame {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        ItemPedido itemPedido = new ItemPedido(itemMenu, pedido);
-        listaItemPedidos.add(itemPedido);
+
+        listaItemMenu.add(itemMenu);
         mostrar();
     }// GEN-LAST:event_agregarItemActionPerformed
 
     private void botonCancelarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_botonCancelarActionPerformed
         // TODO add your handling code here:
+
         InterfazPedidos interfazPedidos = new InterfazPedidos();
         interfazPedidos.setVisible(true);
         this.setVisible(false);

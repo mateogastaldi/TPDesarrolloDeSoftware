@@ -6,13 +6,7 @@ import java.util.List;
 import DAO.FACTORY.DAOFactory;
 import exceptions.Pedido.PedidoNoEncontradoException;
 import exceptions.itemPedido.ItemPedidoNoEncontradoException;
-import model.Cliente;
-import model.ItemMenu;
-import model.ItemPedido;
-import model.Pago;
-import model.PagoStrategy;
-import model.Pedido;
-import model.Vendedor;
+import model.*;
 
 public class PedidosController {
     // Singleton --------------------------------------------------------------------------------------
@@ -30,14 +24,16 @@ public class PedidosController {
     public List<Pedido> getPedido() throws PedidoNoEncontradoException,SQLException{
         return DAOFactory.getInstance().getPedidosDAO().getPedido();
     }
-    public void addPedido(Cliente cliente,Vendedor vendedor,Pago pago) throws PedidoNoEncontradoException,SQLException{
+    public Pedido addPedido(Cliente cliente,Vendedor vendedor,Pago pago) throws PedidoNoEncontradoException,SQLException{
         Pedido pedido = new Pedido(cliente, vendedor,pago,null);
         DAOFactory.getInstance().getPedidosDAO().addPedido(pedido);
+        return pedido;
     }
     public void addPedido(Cliente cliente,Vendedor vendedor,List<ItemPedido> itemsPedido,Pago pago) throws PedidoNoEncontradoException,SQLException{
         Pedido pedido = new Pedido(cliente,itemsPedido, vendedor,pago);
         DAOFactory.getInstance().getPedidosDAO().addPedido(pedido);
     }
+
     public Pedido filtrarPedidoPorId(int id) throws PedidoNoEncontradoException,SQLException{
         return DAOFactory.getInstance().getPedidosDAO().filtrarPedidoPorId(id);
     }
@@ -75,11 +71,19 @@ public class PedidosController {
     // --------------------------------------------------------------------
 
     // Methods Pago--------------------------------------------------------
-    public void addPago(PagoStrategy ps, double precioBase) throws SQLException{
+    public Pago addPago(PagoStrategy ps, double precioBase) throws SQLException{
         double precio = ps.precio(precioBase);
-        Pago pago = new Pago(ps, precio);
+        Pago pago = new Pago(ps, precio,false,null,0,null);
         DAOFactory.getInstance().getPagoDAO().addPago(pago);
+        return pago;
         
+    }
+
+    public void addInformacionPago(Pago p ) throws SQLException{
+        DAOFactory.getInstance().getPagoDAO().addInfo(p);
+    }
+    public void cambioEstado(Pedido p) throws SQLException{
+        DAOFactory.getInstance().getPedidosDAO().cambioEstado(p);
     }
     // --------------------------------------------------------------------
     

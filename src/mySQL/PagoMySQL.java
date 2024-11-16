@@ -42,7 +42,11 @@ public class PagoMySQL implements PagoDAO {
                 } else if (rs.getString("metodo").equalsIgnoreCase("TARJETA")) {
                     metodo = new Transferencia();
                 }
-                Pago p = new Pago( metodo, monto);
+                String alias = rs.getString("alias");
+                String cbu = rs.getString("cbu");
+                long cuit = rs.getLong("cuit");
+                boolean pagado = rs.getBoolean("pagado");
+                Pago p = new Pago( metodo, monto,pagado,cbu,cuit,alias);
                 p.setId(id);
                 pagos.add(p);
             }
@@ -56,16 +60,19 @@ public class PagoMySQL implements PagoDAO {
     public void addPago(Pago p) throws SQLException {
         Connection con = ConexionMySQL.conectar();
         try (
-            PreparedStatement prst = con.prepareStatement("INSERT INTO pagos (monto,metodo) VALUES (?,?)",Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement prst = con.prepareStatement("INSERT INTO pago (monto,metodoDePago,alias,cbu,cuit,pagado) VALUES (?,?,null,null,0,false)",Statement.RETURN_GENERATED_KEYS)) {
             prst.setDouble(1, p.getMonto());
             if (p.getMetodoDePago() instanceof Efectivo) {
                 prst.setString(2, "EFECTIVO");
             } else if (p.getMetodoDePago() instanceof MercadoPago) {
-                prst.setString(2, "MERCADOPAGO");
+                prst.setString(2, "MERCADO PAGO");
             } else {
                 prst.setString(2, "TRANSFERENCIA");
             }
+
+
             int affectedRows = prst.executeUpdate();
+
             if(affectedRows>0){
                 try(ResultSet generatedKeys = prst.getGeneratedKeys()){
                     if(generatedKeys.next()){
@@ -74,6 +81,7 @@ public class PagoMySQL implements PagoDAO {
                     }
                 }
             }
+            System.out.println("No hubo error hasta nose");
         } catch (Exception e) {
             throw new SQLException("Error al agregar el pago");
         }
@@ -99,7 +107,11 @@ public class PagoMySQL implements PagoDAO {
                 } else if (rs.getString("metodo").equalsIgnoreCase("TARJETA")) {
                     metodo = new Transferencia();
                 }
-                p = new Pago( metodo, monto);
+                String alias = rs.getString("alias");
+                String cbu = rs.getString("cbu");
+                long cuit = rs.getLong("cuit");
+                boolean pagado = rs.getBoolean("pagado");
+                p = new Pago( metodo, monto,pagado,cbu,cuit,alias);
                 p.setId(id);
             }
         } catch (Exception e) {
@@ -110,6 +122,28 @@ public class PagoMySQL implements PagoDAO {
         }
         return p;
     }
+
+    public void addInfo(Pago p) throws SQLException {
+        Connection con = ConexionMySQL.conectar();
+        String sql = "UPDATE pago SET pagado = ?, cuit = ?, cbu = ?, alias = ? WHERE id = ?";
+        try (PreparedStatement prst = con.prepareStatement(sql)) {
+            prst.setBoolean(1,p.isPagado());
+            prst.setLong(2,p.getCuit());
+            prst.setString(3,p.getCbu());
+            prst.setString(4,p.getAlias());
+            prst.setInt(5,p.getId());
+            prst.executeUpdate();
+
+        }
+        catch (SQLException e) {
+            throw new SQLException("Error info del pago");
+        }
+        finally {
+            ConexionMySQL.cerrarConexion();
+        }
+    }
+
+
 
     // ------------------------------------------------------------------------------------------------
 }

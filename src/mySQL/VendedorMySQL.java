@@ -73,14 +73,15 @@ public class VendedorMySQL implements VendedorDAO {
     }
 
     @Override
-    public List<Vendedor> filtrarVendedorPorNombre(String nombre) throws VendedorNoEncontradoException {
+    public List<Vendedor> filtrarVendedorPorNombre(String nombreAUX) throws VendedorNoEncontradoException {
         ArrayList<Vendedor> vendedores = new ArrayList<>();
         Connection MySql = ConexionMySQL.conectar();
         try (
             PreparedStatement pstmt = MySql.prepareStatement("SELECT * FROM vendedor WHERE nombre = ?");
         ) {
-            pstmt.setString(1, nombre);
-            ResultSet rs = pstmt.executeQuery(); 
+            pstmt.setString(1, nombreAUX);
+            ResultSet rs = pstmt.executeQuery();
+
             while (rs.next()) {
                     int id = rs.getInt("id");
                     String nombreVendedor = rs.getString("nombre");

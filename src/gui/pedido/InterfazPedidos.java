@@ -30,6 +30,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
      */
     public void mostrar(int id,String vendedor, String cliente){
         DefaultTableModel model = new DefaultTableModel();
+        System.out.println("Mostrar");
         model.addColumn("ID");
         model.addColumn("Cliente");
         model.addColumn("Vendedor");
@@ -92,6 +93,7 @@ public class InterfazPedidos extends javax.swing.JFrame {
 
         try{
             List<Pedido> pedidoList = PedidosController.getInstance().getPedido();
+            System.out.println(pedidoList.size());
             if(id > 0) {pedidoList.retainAll((List<Pedido>)PedidosController.getInstance().filtrarPedidoPorId(id));}
             if(vendedor != null && !vendedor.equals("")) {pedidoList.retainAll(PedidosController.getInstance().filtrarPedidoPorVendedor(vendedor));}
             if(cliente != null && !cliente.equals("")) {pedidoList.retainAll(PedidosController.getInstance().filtrarPorNombreCliente(cliente));}

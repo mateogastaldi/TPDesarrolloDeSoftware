@@ -1,5 +1,7 @@
 package model;
 
+import gui.pedido.pago.InterfazPagoTRANSFERENCIA;
+
 import java.util.Scanner;
 
 public class Transferencia implements PagoStrategy{
@@ -13,12 +15,10 @@ public class Transferencia implements PagoStrategy{
         return precio * 1.02;
     }
     @Override
-    public void obtenerInformacion() {
-        System.out.println("Vas a pagar con: " + this.getMedioDePago() + ", ingrese su CUIT:");
-        Scanner sc = new Scanner(System.in);
-        String cuit = sc.nextLine();
-        System.out.println("Ingrese el CBU:");
-        String cbu = sc.nextLine();
+    public void obtenerInformacion(Pago pago) {
+        System.out.println("Vas a pagar con: " + this.getMedioDePago() );
+        InterfazPagoTRANSFERENCIA interfaz = new InterfazPagoTRANSFERENCIA(pago);
+        interfaz.setVisible(true);
 
 
     }

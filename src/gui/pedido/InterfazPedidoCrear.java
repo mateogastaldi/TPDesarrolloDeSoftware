@@ -221,7 +221,7 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
 
         Vendedor vendedor = null;
         try{
-            VendedoresController.getInstance().filtrarVendedorPorNombre((String) dropVendedores.getSelectedItem()).getFirst();
+            vendedor = VendedoresController.getInstance().filtrarVendedorPorNombre((String) dropVendedores.getSelectedItem()).getFirst();
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
@@ -242,7 +242,6 @@ public class InterfazPedidoCrear extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e.getMessage());
         }
         
-
         InterfazPedidoCrear1 interfazPedidoCrear1 = new InterfazPedidoCrear1(vendedor, mediosDePagos, cliente);
         interfazPedidoCrear1.setVisible(true);
         this.setVisible(false);

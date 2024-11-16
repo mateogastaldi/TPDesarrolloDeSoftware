@@ -23,7 +23,7 @@ public class ItemPedidoMySQL implements ItemPedidoDAO {
     @Override
     public void addItemPedido(ItemPedido itemPedido) {
         Connection MySql = ConexionMySQL.conectar();
-        String sql = "INSERT INTO itempedido (id_pedido, id_item_menu) VALUES (?, ?)";
+        String sql = "INSERT INTO itempedido (pedido, itemMenu) VALUES (?, ?)";
         try (PreparedStatement pstmt = MySql.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, itemPedido.getPedido().getId());
             pstmt.setInt(2, itemPedido.getItemMenu().getId());
@@ -194,8 +194,13 @@ public class ItemPedidoMySQL implements ItemPedidoDAO {
                         } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
                             metodoDePago = new Transferencia();
                         }
+                        String alias = rs.getString("alias");
+                        String cbu = rs.getString("cbu");
+                        long cuit = rs.getLong("cuit");
+                        boolean pagado = rs.getBoolean("pagado");
+
                         // Creo el pago
-                        pagoPedido = new Pago( metodoDePago,monto);
+                        pagoPedido = new Pago( metodoDePago,monto,pagado,cbu,cuit,alias);
                         pagoPedido.setId(idPago);
                         
                     }
@@ -372,8 +377,13 @@ public class ItemPedidoMySQL implements ItemPedidoDAO {
                         } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
                             metodoDePago = new Transferencia();
                         }
+                        String alias = rs.getString("alias");
+                        String cbu = rs.getString("cbu");
+                        long cuit = rs.getLong("cuit");
+                        boolean pagado = rs.getBoolean("pagado");
+
                         // Creo el pago
-                        pagoPedido = new Pago( metodoDePago,monto);
+                        pagoPedido = new Pago( metodoDePago,monto,pagado,cbu,cuit,alias);
                         pagoPedido.setId(idPago);
                         
                     }
@@ -568,8 +578,13 @@ public class ItemPedidoMySQL implements ItemPedidoDAO {
                         } else if (rs.getString("pago.metodoDePago").equalsIgnoreCase("TRANSFERENCIA")) {
                             metodoDePago = new Transferencia();
                         }
+                        String alias = rs.getString("alias");
+                        String cbu = rs.getString("cbu");
+                        long cuit = rs.getLong("cuit");
+                        boolean pagado = rs.getBoolean("pagado");
+
                         // Creo el pago
-                        pagoPedido = new Pago( metodoDePago,monto);
+                        pagoPedido = new Pago( metodoDePago,monto,pagado,cbu,cuit,alias);
                         pagoPedido.setId(idPago);
                         
                     }
