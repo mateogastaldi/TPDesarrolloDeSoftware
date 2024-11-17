@@ -2,7 +2,6 @@ package model;
 
 import gui.pedido.pago.InterfazPagoMercadoPago;
 
-import java.util.Scanner;
 
 public class MercadoPago implements PagoStrategy{
     @Override
