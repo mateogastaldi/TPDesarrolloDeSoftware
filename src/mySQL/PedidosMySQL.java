@@ -218,8 +218,10 @@ public class PedidosMySQL implements PedidosDAO {
         Connection con = ConexionMySQL.conectar();
         List<Pedido> pedidos = new ArrayList<>();
         
-        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido,cliente,vendedor,pago WHERE pedido.id_cliente=cliente.id AND pedido.id_vendedor = vendedor.id AND pedido.pago = pago.id AND cliente.nombre = " + nombreAUX);
-                ResultSet rs = prst.executeQuery()) {
+        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido,cliente,vendedor,pago WHERE pedido.cliente=cliente.id AND pedido.vendedor = vendedor.id AND pedido.pago = pago.id AND cliente.nombre = ?");
+                ) {
+            prst.setString(1, nombreAUX);
+            ResultSet rs = prst.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("pedido.id");
                 int idVendedor = rs.getInt("pedido.vendedor");
@@ -302,7 +304,7 @@ public class PedidosMySQL implements PedidosDAO {
     public List<Pedido> filtrarPorIdCliente(int idAUX) throws SQLException {
         Connection con = ConexionMySQL.conectar();
         List<Pedido> pedidos = new ArrayList<>();
-        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido, cliente, vendedor, pago WHERE pedido.id_cliente=cliente.id AND pedido.id_vendedor = vendedor.id AND pedido.pago = pago.id AND pedido.id_cliente = " + idAUX);
+        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido, cliente, vendedor, pago WHERE pedido.cliente=cliente.id AND pedido.vendedor = vendedor.id AND pedido.pago = pago.id AND pedido.id_cliente = " + idAUX);
                 ResultSet rs = prst.executeQuery()) {
             while (rs.next()) {
                 int id = rs.getInt("pedido.id");
@@ -397,8 +399,10 @@ public class PedidosMySQL implements PedidosDAO {
         Connection con = ConexionMySQL.conectar();
         List<Pedido> pedidos = new ArrayList<>();
         
-        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido, cliente, vendedor, pago WHERE pedido.cliente=cliente.id AND pedido.vendedor = vendedor.id AND pedido.pago = pago.id vendedor.nombre = " + vendedorNombreAUX);
-                ResultSet rs = prst.executeQuery()) {
+        try (PreparedStatement prst = con.prepareStatement("SELECT * FROM pedido, cliente, vendedor, pago WHERE pedido.cliente=cliente.id AND pedido.vendedor = vendedor.id AND pedido.pago = pago.id AND vendedor.nombre = ?");
+                ) {
+            prst.setString(1, vendedorNombreAUX);
+            ResultSet rs = prst.executeQuery();
             while (rs.next()) {
                 int id = rs.getInt("pedido.id");
                 int idVendedor = rs.getInt("pedido.vendedor");
