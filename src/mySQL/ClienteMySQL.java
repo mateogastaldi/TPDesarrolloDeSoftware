@@ -201,6 +201,23 @@ public class ClienteMySQL implements ClienteDAO {
             ConexionMySQL.cerrarConexion();
         }
     }
+
+    public boolean existeCliente(long cuit,String email){
+        Connection MySql = ConexionMySQL.conectar();
+        String sql = "SELECT * FROM cliente WHERE email = ? OR cuit = ?";
+        boolean retorno = false;
+        try(PreparedStatement prst = MySql.prepareStatement(sql)){
+            prst.setString(1, email);
+            prst.setLong(2, cuit);
+            ResultSet rs = prst.executeQuery();
+            retorno = rs.next();
+        }catch (SQLException e){
+            System.out.println("Error al obtener el cliente: " + e.getMessage());
+        }finally {
+            ConexionMySQL.cerrarConexion();
+        }
+        return retorno;
+    }
     // Methods
     // ClienteDao----------------------------------------------------------------------------
 

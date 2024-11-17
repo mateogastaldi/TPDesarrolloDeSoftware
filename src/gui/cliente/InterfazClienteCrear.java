@@ -6,9 +6,12 @@ package gui.cliente;
 
 
 import controller.ClientesController;
+import exceptions.cliente.ClienteNoCreadoException;
 import model.Cliente;
 import model.Coordenada;
 import model.Direccion;
+
+import javax.swing.*;
 
 /**
  *
@@ -448,10 +451,15 @@ public class InterfazClienteCrear extends javax.swing.JFrame {
         String ciudad = ciudadCliente.getText();
         String calle = calleCliente.getText();
         int altura = Integer.parseInt(alturaCliente.getText());
-        ClientesController.getInstance().addCliente( nombre, cuit, email, calle, altura, ciudad, pais, latitud, longitud);
-        InterfazClientes intClientes = new InterfazClientes();
-        intClientes.setVisible(true);
-        this.setVisible(false);
+        try{
+            ClientesController.getInstance().addCliente( nombre, cuit, email, calle, altura, ciudad, pais, latitud, longitud);
+            InterfazClientes intClientes = new InterfazClientes();
+            intClientes.setVisible(true);
+            this.setVisible(false);
+        }catch (ClienteNoCreadoException e){
+            JOptionPane.showMessageDialog(null, e.getMessage(),"Datos Reepetidos",JOptionPane.ERROR_MESSAGE);
+        }
+
         
     }//GEN-LAST:event_botonConfirmarActionPerformed
 

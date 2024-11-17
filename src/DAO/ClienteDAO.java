@@ -1,6 +1,7 @@
 
 package DAO;
 
+import exceptions.cliente.ClienteNoCreadoException;
 import exceptions.cliente.ClienteNoEncontradoException;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,4 +19,5 @@ public interface ClienteDAO {
     List<Cliente> getClientes() throws ClienteNoEncontradoException , SQLException;
     void eliminarCliente(int id) throws ClienteNoEncontradoException, SQLException;
     void modificarCliente(int id, String nombre, long cuit, String email, Direccion direccion, Coordenada coordenadas) throws ClienteNoEncontradoException;
+    boolean existeCliente(long cuit, String email);
 }

@@ -1,5 +1,6 @@
 package controller;
 import DAO.FACTORY.DAOFactory;
+import exceptions.cliente.ClienteNoCreadoException;
 import exceptions.cliente.ClienteNoEncontradoException;
 import java.sql.SQLException;
 import java.util.List;
@@ -20,11 +21,16 @@ public class ClientesController {
     // ------------------------------------------------------------------------------------------------
 
     // Metodos ----------------------------------------------------------------------------------------
-    public void addCliente(String nombre,long cuit,String email,String calle,int altura,String ciudad,String pais,double latitud,double longitud){
-        Coordenada coord = new Coordenada(cuit,latitud);
-        Direccion direccion = new Direccion(calle, altura, ciudad, pais);
-        Cliente cliente = new Cliente(nombre,cuit,email,direccion,coord);
-        DAOFactory.getInstance().getClienteDAO().addCliente(cliente);
+    public void addCliente(String nombre,long cuit,String email,String calle,int altura,String ciudad,String pais,double latitud,double longitud) throws ClienteNoCreadoException{
+        if(DAOFactory.getInstance().getClienteDAO().existeCliente(cuit,email)){
+            throw new ClienteNoCreadoException("Cuit o Email repetidos en el sistema, ingreselos nuevamente");
+        }else{
+            Coordenada coord = new Coordenada(latitud,longitud);
+            Direccion direccion = new Direccion(calle, altura, ciudad, pais);
+            Cliente cliente = new Cliente(nombre,cuit,email,direccion,coord);
+            DAOFactory.getInstance().getClienteDAO().addCliente(cliente);
+        }
+
     }
     public List<Cliente> filtrarClientePorNombre(String nombre) throws ClienteNoEncontradoException , SQLException{
         return DAOFactory.getInstance().getClienteDAO().filtrarClientePorNombre(nombre);
